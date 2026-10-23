@@ -125,10 +125,10 @@ Storage and models first, so every adapter writes the same shape.
 
 ## Phase 4 — Quality and more people (3–4 days)
 
-- [ ] **Labels:** 30–50 jobs per person as Good / Maybe / No in `tests/labels/`; ~15 kept aside as a holdout set
-- [ ] **Baseline comparison:** keyword-overlap ranker vs AI matcher; keep AI only if its top 5 has clearly more Good jobs on the holdout set
+- [ ] **Labels:** 30–50 jobs per person as Good / Maybe / No in `tests/labels/`; ~15 kept aside as a holdout set *(tool ready; needs real profiles)*
+- [ ] **Baseline comparison:** keyword-overlap ranker vs AI matcher; keep AI only if its top 5 has clearly more Good jobs on the holdout set *(tool ready; needs labels)*
 - [ ] Tune prompts and rules (bump `RUBRIC_VERSION` on every change)
-- [ ] **Tests** (offline, `tests/fixtures/` with saved real feed responses):
+- [x] **Tests** (offline, `tests/fixtures/` with saved real feed responses):
   - Parsing for each ATS; job identity (same job twice → one row)
   - India eligibility: India / remote-global / remote-US-only examples
   - Hostile job description: hidden injection text doesn't change the match; off-domain apply link rejected
@@ -137,9 +137,17 @@ Storage and models first, so every adapter writes the same shape.
   - Dead source → marked failed, closes no jobs; suspicious zero flagged
   - `llm.py` with bad JSON / timeout → jobs stay unscored
 - [ ] Add remaining people and companies
-- [ ] **README:** add a person or company in under 5 minutes; how to run; where data lives; how to delete someone's data
+- [x] **README:** add a person or company in under 5 minutes; how to run; where data lives; how to delete someone's data
 
 **Done when:** most of each person's top 5 are jobs they'd actually apply to.
+
+**Status (2026-10-24): tools, tests and README done; labelling waits on real profiles (#5) and a few days of collected jobs.** 145 offline tests pass.
+- `uv run python -m src.evaluate export <person>` adds 50 jobs that pass the person's rules to `tests/labels/<person>.csv` (15 marked holdout) and saves a copy of each job, so results don't shift as the pool changes. Posting age is ignored when picking, so older jobs can be labelled on day one. Running it again adds more and keeps existing labels.
+- `uv run python -m src.evaluate compare <person> [--train]` ranks the labelled jobs with `src/baseline.py` (title + skill keyword overlap) and with the AI (same order as the daily list), prints both top 5s, the jobs labelled No that the AI rated strong/good, and a verdict: keep the AI only if its top 5 has 3+ Good and more than the baseline. AI results are cached per `RUBRIC_VERSION` and profile.
+- Label files are git-ignored, like profiles.
+- New tests: second run at the same time exits; bad AI output leaves jobs unscored; baseline, labelling and comparison; `forget`.
+- `uv run python -m src.main forget <person>` deletes a person's matches, AI call log, export, labels and cache (refuses while their profile exists).
+- Not testable offline: whether hidden injection text actually changes the AI's rating. Worth one live check with a planted job once the AI is in use.
 
 ---
 

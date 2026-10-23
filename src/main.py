@@ -6,6 +6,7 @@
     uv run python -m src.main digest [--dry-run] send (or just print) each person's list
     uv run python -m src.main taps               save Applied/Skipped button taps (the hourly job)
     uv run python -m src.main health [--send]    print (or send to the owner) the weekly health summary
+    uv run python -m src.main forget <person>    delete everything stored about someone (remove their profile first)
 """
 
 import fcntl
@@ -160,6 +161,22 @@ def taps() -> None:
     print(f"Taps saved: {counts['taps']}, ignored: {counts['ignored']}, /start replies: {counts['messages']}")
 
 
+def forget(conn, person: str) -> None:
+    """Delete a person's matches, AI call log, list export, labels and cached AI results."""
+    from src import evaluate  # only needed here
+
+    if (ROOT / "config" / "profiles" / f"{person}.yaml").exists():
+        sys.exit(f"Delete config/profiles/{person}.yaml (and their resume) first, or the next run adds them back.")
+    removed = store.forget_profile(conn, person)
+    files = [digest.EXPORTS / f"{person}.csv", evaluate.labels_path(person), evaluate.jobs_path(person),
+             evaluate.CACHE_DIR / f"{person}.json"]
+    deleted = [f for f in files if f.exists()]
+    for f in deleted:
+        f.unlink()
+    print(f"Deleted for {person}: " + ", ".join(f"{k} {v}" for k, v in removed.items())
+          + (f"; files: {', '.join(str(f.relative_to(ROOT)) for f in deleted)}" if deleted else "; no files"))
+
+
 def main(argv: list[str]) -> None:
     load_env()
     command = argv[1] if len(argv) > 1 else "daily"
@@ -185,6 +202,8 @@ def main(argv: list[str]) -> None:
             health.tell_owner(text)
         else:
             print(text)
+    elif command == "forget" and len(argv) > 2:
+        forget(conn, argv[2])
     else:
         sys.exit(f"Unknown command: {command}")
 

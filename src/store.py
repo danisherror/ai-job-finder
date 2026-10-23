@@ -407,3 +407,16 @@ def delete_old_logs(conn, days: int = KEEP_LOGS_DAYS) -> dict:
         runs = conn.execute(f"DELETE FROM runs WHERE run_id IN ({old_runs})", (cutoff,)).rowcount
         calls = conn.execute("DELETE FROM llm_calls WHERE at < ?", (cutoff,)).rowcount
     return {"runs": runs, "source_runs": source_runs, "llm_calls": calls}
+
+
+def forget_profile(conn, profile_id: str) -> dict:
+    """Delete everything stored about one person. Jobs and run logs are shared, so they stay."""
+    with conn:
+        removed = {
+            "matches": conn.execute("DELETE FROM matches WHERE profile_id = ?", (profile_id,)).rowcount,
+            "ai calls": conn.execute("DELETE FROM llm_calls WHERE profile_id = ?", (profile_id,)).rowcount,
+            "state": conn.execute("DELETE FROM state WHERE key IN (?, ?)",
+                                  (f"digest_day:{profile_id}", f"alert:send_{profile_id}")).rowcount,
+            "profile": conn.execute("DELETE FROM profiles WHERE profile_id = ?", (profile_id,)).rowcount,
+        }
+    return removed

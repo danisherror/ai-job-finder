@@ -16,3 +16,7 @@ __pycache__/
 # Real profiles hold personal details; only the template is committed
 config/profiles/*.yaml
 !config/profiles/example.yaml
+
+# Labels show what each person wants; keep them local like profiles
+tests/labels/*
+!tests/labels/.gitkeep
