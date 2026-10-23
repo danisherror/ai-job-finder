@@ -96,7 +96,8 @@ Storage and models first, so every adapter writes the same shape.
 - Jobs that fail the rules get no `matches` row and are re-checked each run, so profile edits apply to recent jobs. Only AI scores are stored ("scored once").
 - Other changes: remote jobs limited to one region ("U.S. Anywhere", "Remote - EMEA") now count as not open to India; profile fields `stretch_up`, `require_keywords`, `exclude_title_keywords`, `max_age_days`; apply links must be on the ATS or the company's usual careers host, else the plain ATS job page is sent; the bot replies to `/start` with the person's chat ID; taps use their own lock so the hourly job can't block the daily run.
 - Install steps for the schedule: `launchd/README.md` (needs `sudo` for `pmset`, and Full Disk Access for `uv` because the project is in `~/Desktop`).
-- Noticed, not changed: weak "fill" slots can be clearly off-target jobs (e.g. an executive assistant role); the experience regex takes the first number it finds (Rubrik: read 1 year, posting says 8+).
+- Fixed after testing: weak "fill" slots could be clearly off-target jobs (e.g. an executive assistant role). The AI now has a fourth level, `no` (different kind of work), which is never sent, only listed in the CSV (`RUBRIC_VERSION` 2026-10-24.2).
+- Fixed after testing: the experience regex took the first number it found (Rubrik: read 1–2 years, posting says 8+). It now takes the largest requirement, keeps a stated range when the bigger number falls inside it, and ignores "preferred / nice to have" sections.
 
 ---
 

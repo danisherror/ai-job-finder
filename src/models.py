@@ -39,7 +39,7 @@ class Job(BaseModel):
 
 
 Seniority = Literal["intern", "junior", "mid", "senior", "lead"]
-Fit = Literal["strong", "good", "weak"]
+Fit = Literal["strong", "good", "weak", "no"]  # "no" is stored but never sent
 
 
 class Profile(BaseModel):

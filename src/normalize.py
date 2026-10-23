@@ -165,17 +165,43 @@ _MIN_RE = re.compile(
 )
 
 
-def experience_range(text: str) -> tuple[int | None, int | None]:
-    """Years of experience asked for, e.g. '3-5 years' -> (3, 5), '4+ years' -> (4, None)."""
-    if not text:
-        return None, None
-    m = _RANGE_RE.search(text)
-    if m:
+# Text after one of these headings lists extras, not requirements.
+_OPTIONAL_RE = re.compile(
+    r"(?:preferred|desired|bonus|additional)\s+(?:qualifications|skills|experience|requirements)"
+    r"|nice[- ]to[- ]haves?|good[- ]to[- ]haves?|bonus points|it'?s a plus",
+    re.I,
+)
+
+
+def _mentions(text: str) -> list[tuple[int, int | None]]:
+    """Every experience requirement in the text, as (min, max) pairs."""
+    out: list[tuple[int, int | None]] = []
+    for m in _RANGE_RE.finditer(text):
         lo, hi = int(m.group(1)), int(m.group(2))
         if 0 <= lo <= hi <= 30:
-            return lo, hi
+            out.append((lo, hi))
     for m in _MIN_RE.finditer(text):
         n = next(int(g) for g in m.groups() if g)
         if 0 <= n <= 30:
-            return n, None
-    return None, None
+            out.append((n, None))
+    return out
+
+
+def experience_range(text: str) -> tuple[int | None, int | None]:
+    """Overall years of experience asked for, e.g. '3-5 years' -> (3, 5), '4+ years' -> (4, None).
+
+    Postings often name smaller numbers for one part of the job ("8+ years overall, 1-2 years with AI tools"),
+    so the largest requirement wins. A number inside a stated range keeps that range ("5-7 years ... 7 years of
+    experience" -> (5, 7)). Preferred / nice-to-have sections are ignored when the rest names a requirement.
+    """
+    if not text:
+        return None, None
+    optional = _OPTIONAL_RE.search(text)
+    mentions = (_mentions(text[:optional.start()]) if optional else []) or _mentions(text)
+    if not mentions:
+        return None, None
+    top = max(lo for lo, _ in mentions)
+    ranges = [(lo, hi) for lo, hi in mentions if hi is not None and lo <= top <= hi]
+    if ranges:
+        return max(ranges)
+    return top, None

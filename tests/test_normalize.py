@@ -60,6 +60,16 @@ def test_work_mode(location, ats, is_remote, expected):
     ("3 years of professional experience", (3, None)),
     ("Founded 25 years ago, we are a team of 300", (None, None)),
     ("", (None, None)),
+    # The largest requirement wins over smaller, narrower ones (real Rubrik postings).
+    ("hands-on time (1–2 years) building AI apps. We are targeting 8+ years of overall software engineering", (8, None)),
+    ("Define the long-term technical vision (3+ years). Typically 18+ years of industry experience", (18, None)),
+    ("10+ years of Software Development experience and 1-2 years in Engineering Management", (10, None)),
+    # A number inside a stated range keeps the range.
+    ("5-7 yrs of accounting. 7 yrs of relevant working experience", (5, 7)),
+    ("7–10 years in services. 10 years of progressive experience. 5+ years managing", (7, 10)),
+    # Preferred sections don't raise the requirement.
+    ("5+ Years of Operations Experience. Preferred Qualifications: 7+ years in channel programs", (5, None)),
+    ("Nice to have: 6+ years in Go", (6, None)),
 ])
 def test_experience_range(text, expected):
     assert n.experience_range(text) == expected

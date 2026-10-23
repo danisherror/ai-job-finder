@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS matches (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,   -- short ID for Telegram buttons
     job_key         TEXT NOT NULL REFERENCES jobs(job_key),
     profile_id      TEXT NOT NULL,
-    fit             TEXT NOT NULL,       -- strong | good | weak
+    fit             TEXT NOT NULL,       -- strong | good | weak | no (never sent)
     matched_skills  TEXT,                -- JSON list
     missing_skills  TEXT,                -- JSON list
     red_flags       TEXT,                -- JSON list

@@ -4,7 +4,7 @@ import json
 
 from src.models import Job, Profile
 
-RUBRIC_VERSION = "2026-10-24.1"
+RUBRIC_VERSION = "2026-10-24.2"
 
 DESCRIPTION_CHARS = 5000   # per job; enough to reach the skills section of most postings
 RESUME_CHARS = 4000
@@ -24,7 +24,9 @@ Weigh, in this order:
 Fit levels:
 - strong: target role matches; most required skills are among the person's strong skills; experience fits; no red flags
 - good: role is adjacent or skills overlap partly; experience within about 1 year; at most one minor gap
-- weak: role or skills fit poorly
+- weak: same kind of work as a target role, but the skills or level fit poorly
+- no: a different kind of work from every target role (e.g. executive assistant, sales, recruiting, legal or finance
+  for someone targeting engineering roles). Never use weak for these; weak jobs may be sent to the person, no jobs never
 
 matched_skills: skills the job asks for that the person has. missing_skills: skills the job requires that the person
 lacks. red_flags: short notes such as "may not be open to people in India" (remote jobs that seem limited to another
@@ -32,7 +34,7 @@ country or time zone; rate those weak), "requires relocation outside India" or "
 the job text does not state. reason: one sentence, under 200 characters.
 
 Reply with JSON only, no other text, in exactly this shape:
-{"results": [{"job": 1, "fit": "strong|good|weak", "matched_skills": [], "missing_skills": [], "red_flags": [], "reason": ""}]}
+{"results": [{"job": 1, "fit": "strong|good|weak|no", "matched_skills": [], "missing_skills": [], "red_flags": [], "reason": ""}]}
 Include every job exactly once, using the job number given."""
 
 

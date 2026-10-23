@@ -32,12 +32,13 @@ def tz() -> ZoneInfo:
 # ---------------------------------------------------------------- picking
 
 def pending(conn, profile_id: str) -> list:
-    """Scored matches not yet delivered (or whose sending failed), for jobs that are still open."""
+    """Scored matches not yet delivered (or whose sending failed), for jobs that are still open.
+    Jobs the AI rated "no" (a different kind of work) are never sent, not even to fill the list; they stay in the CSV."""
     return conn.execute(
         """SELECT m.*, j.title, j.company, j.location_raw, j.cities, j.work_mode, j.apply_url, j.ats_id,
                   j.posted_at, j.first_seen, j.source, s.type AS source_type, s.board
            FROM matches m JOIN jobs j ON j.job_key = m.job_key JOIN sources s ON s.name = j.source
-           WHERE m.profile_id = ? AND m.delivery IN ('pending', 'failed') AND m.decision = 'none'
+           WHERE m.profile_id = ? AND m.fit != 'no' AND m.delivery IN ('pending', 'failed') AND m.decision = 'none'
              AND j.lifecycle = 'open'""",
         (profile_id,),
     ).fetchall()

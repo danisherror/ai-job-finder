@@ -178,6 +178,16 @@ def test_digest_orders_by_fit_and_overflows(conn, monkeypatch):
     assert len(tg.sent) == 2 and "No new matches today" in tg.sent[0][1]
 
 
+def test_off_target_jobs_never_fill_the_list(conn, monkeypatch):
+    score_all(conn, monkeypatch, ["no", "weak", "no", "no", "no"])
+    tg = FakeTelegram()
+    monkeypatch.setattr(telegram, "send_message", tg)
+    r = digest.send_digest(conn, PROFILE, None)
+    assert (r["sent"], r["overflow"]) == (1, 0)  # list size is 3, but only the weak job is sent
+    assert "Weak" in [t for _, t, b in tg.sent if b][0]
+    assert (digest.EXPORTS / "asha.csv").read_text().count(",no,") == 4  # still listed in the CSV
+
+
 def test_failed_send_is_not_marked_sent(conn, monkeypatch):
     score_all(conn, monkeypatch, ["good"])
     monkeypatch.setattr(telegram, "send_message", FakeTelegram(fail_on={3}))  # header, job, FAIL, job, footer
