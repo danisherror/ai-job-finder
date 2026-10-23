@@ -37,3 +37,40 @@
 - {name: Linear,       type: ashby,      board: linear}
 - {name: Sentry,       type: ashby,      board: sentry}
 - {name: Notion,       type: ashby,      board: notion}
+
+# --- D. Added 2026-10-24: checked for India hiring (2+ India-eligible jobs posted in 30 days) ---
+# Indian companies / India-first
+- {name: Tekion,       type: ashby,      board: tekion}
+- {name: Zenoti,       type: greenhouse, board: zenoti}
+- {name: Hevo Data,    type: lever,      board: hevodata}
+- {name: Glance,       type: greenhouse, board: glance}
+- {name: HighRadius,   type: greenhouse, board: highradius}
+- {name: Bureau,       type: ashby,      board: bureau}
+- {name: FamPay,       type: lever,      board: fampay}
+- {name: CloudSEK,     type: greenhouse, board: cloudsek}
+- {name: SigNoz,       type: ashby,      board: signoz}
+- {name: Contentstack, type: greenhouse, board: contentstack}
+- {name: Nium,         type: lever,      board: nium}
+- {name: Turing,       type: greenhouse, board: turing}
+# Global companies with India offices
+- {name: Pure Storage, type: greenhouse, board: purestorage}
+- {name: Tide,         type: greenhouse, board: tide}
+- {name: Rubrik,       type: greenhouse, board: rubrik}
+- {name: Fivetran,     type: greenhouse, board: fivetran}
+- {name: Snowflake,    type: ashby,      board: snowflake}
+- {name: JFrog,        type: greenhouse, board: jfrog}
+- {name: UiPath,       type: ashby,      board: uipath}
+- {name: Netskope,     type: greenhouse, board: netskope}
+- {name: ClickHouse,   type: ashby,      board: clickhouse}
+- {name: Lyft,         type: greenhouse, board: lyft}
+- {name: Anthropic,    type: greenhouse, board: anthropic}
+- {name: Celonis,      type: greenhouse, board: celonis}
+- {name: Neo4j,        type: greenhouse, board: neo4j}
+- {name: New Relic,    type: greenhouse, board: newrelic}
+- {name: Sumo Logic,   type: greenhouse, board: sumologic}
+- {name: Redis,        type: ashby,      board: redis}
+- {name: Yugabyte,     type: greenhouse, board: yugabyte}
+# AI / remote companies hiring in India
+- {name: ElevenLabs,   type: ashby,      board: elevenlabs}
+- {name: Cursor,       type: ashby,      board: cursor}
+- {name: Oyster,       type: ashby,      board: oyster}

@@ -2,7 +2,7 @@
 
 Answer these before or during Phase 0. Write your answer under each question. Suggested defaults come from the project report.
 
-**Status (2026-10-24):** 10 of 12 decided. **Still open: #5 (the first two people's profiles) and #12 (job volume), both needed before Phase 2.** Privacy to-dos: turn on FileVault; check the Claude "help improve Claude" setting.
+**Status (2026-10-24):** 11 of 12 decided. **Still open: #5 (the first two people's profiles), needed before Phase 2.** Privacy to-dos: turn on FileVault; check the Claude "help improve Claude" setting.
 
 ## Must answer before building
 
@@ -91,4 +91,8 @@ The repo is initialized but nothing is committed yet. Should I add a `.gitignore
 The first real collection found ~5,800 open jobs, of which ~850 are open to people in India. But only **~8 India-eligible jobs are newly posted per day** across all 30 companies (233 in the last 30 days), and that includes sales, HR and other non-tech roles. After each person's filters, that may leave **1–3 new jobs a day per person**. The report assumed ~40.
 Top India sources (last 30 days): Okta 36, Zscaler 30, MongoDB 27, InMobi 20, Stripe 15, Supabase 15, Meesho 13, GitLab 12.
 - **Options:** (a) add more Greenhouse/Lever/Ashby companies that hire in India (just lines in `sources.yaml`); (b) bring forward the Workday/career-page work for big Indian employers; (c) accept small daily lists.
-- **Answer:**
+- **Answer (decided 2026-10-24): option (a).** Probed ~270 candidate board names; added **32 companies** with 2+ India-eligible jobs posted in the last 30 days (group D in `sources.yaml`). Now **62 sources**, all collecting cleanly (~9,500 jobs, ~2.5 min).
+  - India-eligible new jobs: **~14/day** (was ~8), of which **~8/day look like tech roles** by title. Expect roughly 2–4 new matches per person per day, depending on their filters.
+  - Skipped: OKX (its "APAC" jobs are mostly Pakistan/SEA crypto sales), Binance (two boards with that name; unclear which is real), and companies with under ~2 India jobs a month (Agoda, Samsara, Brex, Starburst, Cockroach Labs, and others).
+  - Kept group C (remote-first, few India jobs) as decided in #1; their non-India jobs are dropped by rules before any AI cost.
+  - Next lever if lists are still thin: the post-v1 Workday/career-page work for big Indian employers.

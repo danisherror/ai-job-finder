@@ -4,7 +4,7 @@ Based on `AI_Job_Finder_Project_Report.md`, updated with the decisions in `quest
 
 About 3–4 weeks at 2–3 hours a day: a usable daily list after week 2, reliable enough to leave running after week 4.
 
-**Start small:** 2 people, the ~30 confirmed starter companies. Add more only after two clean weeks.
+**Start small:** 2 people, the 62 confirmed companies. Add more only after two clean weeks.
 
 ---
 
@@ -13,7 +13,7 @@ About 3–4 weeks at 2–3 hours a day: a usable daily list after week 2, reliab
 | Topic | Decision |
 | --- | --- |
 | Which jobs count | Located in India, or remote **and open to people in India**. Remote jobs limited to other regions are dropped |
-| Sources (v1) | Greenhouse, Lever, Ashby feeds only. ~30 confirmed companies (see `question.md` #1) |
+| Sources (v1) | Greenhouse, Lever, Ashby feeds only. 62 confirmed companies (see `question.md` #1 and #12) |
 | Career pages / Scrapling | **Not in v1.** Added after v1 together with Razorpay, Swiggy, PhonePe and others, and maybe a Workday adapter |
 | AI | Claude Haiku via **Claude Code headless mode** (`claude -p`) on the owner's Pro plan. All calls in `src/llm.py`; jobs batched 10–20 per call |
 | Host | The owner's Mac. `launchd` schedule (missed runs start on wake) + `pmset` scheduled wake |
@@ -68,7 +68,7 @@ Storage and models first, so every adapter writes the same shape.
 - Built: `models.py`, `collect/http.py` (retries, `User-Agent`, failure reasons), the three adapters, `normalize.py`, `store.py`, `config.py`, `main.py` (with the run lock, brought forward from Phase 2).
 - Run records are split into `runs` (one row per run) and `source_runs` (one row per source per run).
 - The 7-day rule uses the **posting date**, not `updated_at`: Stripe and MongoDB bump `updated_at` on every job daily.
-- Real data: ~850 open jobs are India-eligible (yes/unclear), but only **~8 per day** are newly posted across all 30 companies, non-tech included. See `question.md` #12.
+- Real data: with the first 30 companies only ~8 India-eligible jobs/day were new. Added 32 more (now 62): **~14/day, ~8/day tech**. See `question.md` #12.
 - `private/jobs.db` is not filled yet. Testing used a scratch database, so tracking starts on the first real run.
 
 ---
