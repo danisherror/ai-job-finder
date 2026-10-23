@@ -1,0 +1,17 @@
+# Template for one person's profile. Copy to <person>.yaml and fill in.
+# Real profiles are git-ignored because they hold personal details.
+
+name: Example
+telegram_chat_id: 0            # they tap "Start" on the bot once; ID found via getUpdates
+target_roles: [Backend Engineer, Python Developer]
+seniority: mid                 # junior | mid | senior | lead
+experience_years: 2
+skills_strong: [Python, Django, PostgreSQL]
+skills_some: [AWS, Docker]
+locations: [Bengaluru]         # Indian cities they would work in
+remote_ok: true                # remote jobs open to people in India
+work_modes: [onsite, hybrid, remote]
+min_salary_lpa: 12             # optional
+exclude_keywords: ["10+ years", "unpaid", "internship"]
+digest_size: 8                 # any number; blank means 8
+resume_file: private/resumes/example.txt

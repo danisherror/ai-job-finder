@@ -29,11 +29,14 @@ About 3–4 weeks at 2–3 hours a day: a usable daily list after week 2, reliab
 ## Phase 0 — Setup (1 day)
 
 - [x] `git init` (local only, branch `main`); `.gitignore` with `private/`, `.env`, `.venv/`, caches
-- [ ] Turn on FileVault; check the Claude "help improve Claude" setting
-- [ ] `uv init` with Python 3.12; add `httpx`, `pydantic`, `pyyaml`, `pytest` (pinned via `uv.lock`)
-- [ ] Create the Telegram bot with @BotFather; put the token and the owner's chat ID in `.env`; add `.env.example`
-- [ ] Confirm `claude -p --model haiku --output-format json "say ok"` works from a script
-- [ ] Create the folder layout (below) and `config/sources.yaml` with the starter list
+- [ ] **(Owner)** Turn on FileVault; check the Claude "help improve Claude" setting
+- [x] `uv init` with Python 3.12; add `httpx`, `pydantic`, `pyyaml`, `pytest` (pinned via `uv.lock`)
+- [x] `.env.example` added
+- [ ] **(Owner)** Create the Telegram bot with @BotFather; copy `.env.example` to `.env`; fill in the token and your chat ID
+- [x] Confirm `claude -p --model haiku --output-format json` works from a script (~4 s per call; no API key set, so it uses the Pro plan; each call carries ~13k tokens of Claude Code's own setup, so batching matters)
+- [x] Create the folder layout and `config/sources.yaml` (30 sources: 19 Greenhouse, 4 Lever, 7 Ashby)
+- [x] Profile template `config/profiles/example.yaml`; real profiles are git-ignored
+- Note: Groww's Greenhouse board currently lists only non-tech roles; keep it and watch whether it ever produces matches
 
 **Done when:** `uv run python -m src.collect.greenhouse groww` prints Groww's jobs.
 

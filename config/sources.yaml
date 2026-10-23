@@ -1,0 +1,39 @@
+# Companies to collect jobs from.
+# type: greenhouse | lever | ashby   (career_page comes after v1)
+# board: the company's board name on that ATS (checked live 2026-10-23)
+
+# --- A. Indian companies ---
+- {name: Meesho,     type: lever,      board: meesho}
+- {name: InMobi,     type: greenhouse, board: inmobi}
+- {name: Sarvam AI,  type: ashby,      board: sarvam}
+- {name: Zeta,       type: lever,      board: zeta}
+- {name: HackerRank, type: greenhouse, board: hackerrank}
+- {name: Mindtickle, type: lever,      board: mindtickle}
+- {name: Druva,      type: greenhouse, board: druva}
+- {name: Groww,      type: greenhouse, board: groww}
+- {name: CRED,       type: lever,      board: cred}
+- {name: Atlan,      type: ashby,      board: atlan}
+
+# --- B. Global companies with India offices ---
+- {name: Okta,       type: greenhouse, board: okta}
+- {name: Databricks, type: greenhouse, board: databricks}
+- {name: MongoDB,    type: greenhouse, board: mongodb}
+- {name: Zscaler,    type: greenhouse, board: zscaler}
+- {name: Stripe,     type: greenhouse, board: stripe}
+- {name: GitLab,     type: greenhouse, board: gitlab}
+- {name: Toast,      type: greenhouse, board: toast}
+- {name: Elastic,    type: greenhouse, board: elastic}
+- {name: Datadog,    type: greenhouse, board: datadog}
+- {name: Twilio,     type: greenhouse, board: twilio}
+- {name: Coinbase,   type: greenhouse, board: coinbase}
+- {name: Airbnb,     type: greenhouse, board: airbnb}
+
+# --- C. Remote-first companies ---
+- {name: Grafana Labs, type: greenhouse, board: grafanalabs}
+- {name: Canonical,    type: greenhouse, board: canonical}
+- {name: Vercel,       type: greenhouse, board: vercel}
+- {name: Supabase,     type: ashby,      board: supabase}
+- {name: PostHog,      type: ashby,      board: posthog}
+- {name: Linear,       type: ashby,      board: linear}
+- {name: Sentry,       type: ashby,      board: sentry}
+- {name: Notion,       type: ashby,      board: notion}

@@ -12,3 +12,7 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Real profiles hold personal details; only the template is committed
+config/profiles/*.yaml
+!config/profiles/example.yaml
