@@ -64,6 +64,13 @@ Storage and models first, so every adapter writes the same shape.
 
 **Done when:** a run fills the pool from all starter sources, and a second run adds zero duplicates.
 
+**Status (2026-10-24): done.** `uv run python -m src.main collect` scans all 30 sources (~5,800 jobs) in about a minute; a second run adds no duplicates; 44 offline tests pass (`uv run pytest`).
+- Built: `models.py`, `collect/http.py` (retries, `User-Agent`, failure reasons), the three adapters, `normalize.py`, `store.py`, `config.py`, `main.py` (with the run lock, brought forward from Phase 2).
+- Run records are split into `runs` (one row per run) and `source_runs` (one row per source per run).
+- The 7-day rule uses the **posting date**, not `updated_at`: Stripe and MongoDB bump `updated_at` on every job daily.
+- Real data: ~850 open jobs are India-eligible (yes/unclear), but only **~8 per day** are newly posted across all 30 companies, non-tech included. See `question.md` #12.
+- `private/jobs.db` is not filled yet. Testing used a scratch database, so tracking starts on the first real run.
+
 ---
 
 ## Phase 2 — Match and deliver per person (4–5 days)

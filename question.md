@@ -2,7 +2,7 @@
 
 Answer these before or during Phase 0. Write your answer under each question. Suggested defaults come from the project report.
 
-**Status (2026-10-23):** 10 of 11 decided. **Still open: #5 (the first two people's profiles), needed before Phase 2.** Privacy to-dos: turn on FileVault; check the Claude "help improve Claude" setting.
+**Status (2026-10-24):** 10 of 12 decided. **Still open: #5 (the first two people's profiles) and #12 (job volume), both needed before Phase 2.** Privacy to-dos: turn on FileVault; check the Claude "help improve Claude" setting.
 
 ## Must answer before building
 
@@ -86,3 +86,9 @@ You plus one other? I need each person's target roles, skills, years of experien
 ### 11. Should I make an initial commit?
 The repo is initialized but nothing is committed yet. Should I add a `.gitignore` (excluding `private/`, `.env`, `.venv/`) and commit the current docs?
 - **Answer (decided 2026-10-23):** yes. Default branch renamed to `main`; `.gitignore` added (excludes `private/`, `.env`, `.venv/`, caches); docs committed locally. No remote.
+
+### 12. Are 30 companies enough? (found in Phase 1, 2026-10-24)
+The first real collection found ~5,800 open jobs, of which ~850 are open to people in India. But only **~8 India-eligible jobs are newly posted per day** across all 30 companies (233 in the last 30 days), and that includes sales, HR and other non-tech roles. After each person's filters, that may leave **1–3 new jobs a day per person**. The report assumed ~40.
+Top India sources (last 30 days): Okta 36, Zscaler 30, MongoDB 27, InMobi 20, Stripe 15, Supabase 15, Meesho 13, GitLab 12.
+- **Options:** (a) add more Greenhouse/Lever/Ashby companies that hire in India (just lines in `sources.yaml`); (b) bring forward the Workday/career-page work for big Indian employers; (c) accept small daily lists.
+- **Answer:**
