@@ -167,6 +167,49 @@ def export_csv(conn, profile: Profile) -> None:
             w.writerow(r.values())
 
 
+ALL_JOBS_CSV = EXPORTS / "all_jobs.csv"
+
+
+def _date(value: str | None) -> str:
+    """ISO timestamp -> local YYYY-MM-DD, so the column sorts and filters well in a spreadsheet."""
+    if not value:
+        return ""
+    try:
+        d = datetime.fromisoformat(value)
+    except ValueError:
+        return value
+    return (d.astimezone(tz()) if d.tzinfo else d).strftime("%Y-%m-%d")
+
+
+def export_all_jobs(conn, path=None) -> int:
+    """Write every collected job, newest first, to one CSV for filtering by hand. No AI involved.
+
+    Returns the number of jobs written.
+    """
+    path = path or ALL_JOBS_CSV
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rows = conn.execute(
+        """SELECT j.*, s.type AS source_type, s.board
+           FROM jobs j JOIN sources s ON s.name = j.source
+           ORDER BY COALESCE(j.posted_at, j.first_seen) DESC"""
+    ).fetchall()
+    hosts = usual_hosts(conn)
+    with open(path, "w", newline="", encoding="utf-8-sig") as f:  # -sig: Excel then reads ₹, é, etc. correctly
+        w = csv.writer(f)
+        w.writerow(["posted", "first_seen", "company", "title", "department", "location", "cities", "work_mode",
+                    "india_eligible", "experience_min", "experience_max", "salary", "status", "apply_url"])
+        for r in rows:
+            url = safe_apply_url(r["apply_url"], r["source_type"], r["board"], r["ats_id"] or "",
+                                 hosts.get(r["source"], set()))
+            w.writerow([_date(r["posted_at"]), _date(r["first_seen"]), r["company"], r["title"],
+                        r["department"] or "", r["location_raw"] or "", "; ".join(json.loads(r["cities"] or "[]")),
+                        r["work_mode"] or "", r["india_eligible"] or "",
+                        "" if r["experience_min"] is None else r["experience_min"],
+                        "" if r["experience_max"] is None else r["experience_max"],
+                        r["salary"] or "", r["lifecycle"], url])
+    return len(rows)
+
+
 # ---------------------------------------------------------------- send
 
 def send_digest(conn, profile: Profile, run_id: str | None, dry_run: bool = False, once_a_day: bool = False) -> dict:

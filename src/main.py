@@ -1,7 +1,8 @@
 """Entry point.
 
     uv run python -m src.main daily              collect, match, send lists (the 6:45 job)
-    uv run python -m src.main collect            fetch all sources into the job pool
+    uv run python -m src.main collect            fetch all sources into the job pool (also writes all_jobs.csv)
+    uv run python -m src.main export             write every collected job to private/exports/all_jobs.csv
     uv run python -m src.main match              score new jobs for each person
     uv run python -m src.main digest [--dry-run] send (or just print) each person's list
     uv run python -m src.main taps               save Applied/Skipped button taps (the hourly job)
@@ -73,7 +74,13 @@ def collect(conn, run_id: str) -> tuple[int, int]:
     scanned = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ? AND result = 'ok'",
                            (run_id,)).fetchone()[0]
     print(f"Scanned {scanned} of {len(sources)} sources")
+    export_jobs(conn)
     return scanned, len(sources)
+
+
+def export_jobs(conn) -> None:
+    count = digest.export_all_jobs(conn)
+    print(f"Wrote {count} jobs to {digest.ALL_JOBS_CSV.relative_to(ROOT)}")
 
 
 def latest_run_id(conn) -> str | None:
@@ -190,6 +197,8 @@ def main(argv: list[str]) -> None:
         run_id, _ = store.resume_or_start_run(conn)
         scanned, _ = collect(conn, run_id)
         store.finish_run(conn, run_id, "done" if scanned else "failed")
+    elif command == "export":
+        export_jobs(conn)
     elif command == "match":
         match(conn)
     elif command == "digest":

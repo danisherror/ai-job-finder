@@ -19,7 +19,8 @@ Install the daily schedule with the steps in `launchd/README.md`.
 
 ```sh
 uv run python -m src.main daily              # everything: collect, match, send (what the 6:45 job runs)
-uv run python -m src.main collect            # only fetch jobs
+uv run python -m src.main collect            # only fetch jobs (no AI); also refreshes all_jobs.csv
+uv run python -m src.main export             # rewrite private/exports/all_jobs.csv from the stored jobs
 uv run python -m src.main match              # only score new jobs for each person
 uv run python -m src.main digest --dry-run   # print each person's list without sending it
 uv run python -m src.main health             # the weekly health summary (add --send to send it to you)
@@ -27,6 +28,13 @@ uv run pytest -q                             # offline tests
 ```
 
 Logs from the scheduled runs are in `private/logs/`.
+
+## Browse every job yourself (no AI)
+
+`collect` writes `private/exports/all_jobs.csv`: every job found so far, newest first, with company, title,
+location, work mode, India eligibility, experience range, salary (when listed), status (open, possibly_closed,
+closed) and apply link. Open it in Excel, Numbers or Google Sheets and filter it yourself.
+No Claude login or Telegram setup is needed for this.
 
 ## Add a person (about 5 minutes)
 
@@ -62,6 +70,7 @@ Everything personal stays on this Mac in folders git ignores:
 | Resumes | `private/resumes/` |
 | Jobs, matches, run history | `private/jobs.db` (SQLite) |
 | Full list of each person's matches | `private/exports/<name>.csv` |
+| Every collected job | `private/exports/all_jobs.csv` |
 | Logs | `private/logs/` |
 | Match-quality labels | `tests/labels/<name>.csv` and `.jobs.jsonl` |
 | Telegram token, your chat ID | `.env` |

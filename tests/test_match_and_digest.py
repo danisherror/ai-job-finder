@@ -255,3 +255,16 @@ def test_taps_save_decisions_only_from_the_right_person(conn, monkeypatch):
     assert tap(f"a:{match_id}", 111) == "applied" and decision() == "applied"
     assert tap(f"u:{match_id}", 111) == "none" and decision() == "none"      # undo
     assert tap("x:1", 111) == "ignored"
+
+
+def test_all_jobs_csv_lists_every_job_without_ai(conn, tmp_path):
+    import csv
+
+    path = tmp_path / "all.csv"
+    assert digest.export_all_jobs(conn, path) == 5
+    with open(path, encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    assert [r["title"] for r in rows][0] == "Backend Engineer, Team A"  # newest first
+    assert rows[0]["company"] == "Acme" and rows[0]["cities"] == "Bengaluru"
+    assert rows[0]["apply_url"] == "https://jobs.lever.co/acme/job1"
+    assert rows[0]["status"] == "open" and "description" not in rows[0]
