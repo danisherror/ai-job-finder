@@ -169,8 +169,15 @@ def export_csv(conn, profile: Profile) -> None:
 
 # ---------------------------------------------------------------- send
 
-def send_digest(conn, profile: Profile, run_id: str | None, dry_run: bool = False) -> dict:
-    """Send today's list. A match is marked `sent` only after Telegram accepts its message."""
+def send_digest(conn, profile: Profile, run_id: str | None, dry_run: bool = False, once_a_day: bool = False) -> dict:
+    """Send today's list. A match is marked `sent` only after Telegram accepts its message.
+
+    once_a_day (the daily run): skip if this person's list already went out today, so a run that is
+    restarted after a crash doesn't send a second list. Whatever it didn't finish goes out tomorrow.
+    """
+    day_key, today_local = f"digest_day:{profile.id}", datetime.now(tz()).date().isoformat()
+    if once_a_day and not dry_run and store.get_state(conn, day_key) == today_local:
+        return {"sent": 0, "failed": 0, "overflow": 0, "dry_run": False, "skipped": "already sent today"}
     today, overflow = pick(pending(conn, profile.id), list_size(conn, profile))
     hosts = usual_hosts(conn)
     messages = [(r, job_message(r, safe_apply_url(r["apply_url"], r["source_type"], r["board"], r["ats_id"],
@@ -189,6 +196,7 @@ def send_digest(conn, profile: Profile, run_id: str | None, dry_run: bool = Fals
 
     chat = profile.telegram_chat_id
     telegram.send_message(chat, head)  # if this fails, nothing is marked and everything stays pending
+    store.set_state(conn, day_key, today_local)
     sent = failed = 0
     for row, text in messages:
         try:

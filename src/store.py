@@ -12,6 +12,12 @@ from src.models import Job, MatchResult, Profile, Source
 
 DEFAULT_DB = Path(__file__).resolve().parent.parent / "private" / "jobs.db"
 BACKFILL_DAYS = 7  # on a source's first scan, older jobs are stored as already seen
+CLOSE_AFTER_MISSES = 2     # successful scans without a job before it counts as closed
+RESUME_WITHIN_HOURS = 6    # an unfinished run younger than this is resumed; older ones are marked failed
+SUSPICIOUS_MIN_USUAL = 3   # a source that usually has at least this many jobs and suddenly has 0 is suspicious
+ACCEPT_ZERO_AFTER = 3      # ...unless it has had 0 this many runs in a row; then the zero is believed
+USUAL_FROM_LAST = 7        # usual job count = median of the last N successful scans
+KEEP_LOGS_DAYS = 30
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sources (
@@ -51,7 +57,7 @@ CREATE INDEX IF NOT EXISTS jobs_source ON jobs(source);
 
 CREATE TABLE IF NOT EXISTS runs (
     run_id          TEXT PRIMARY KEY,
-    state           TEXT NOT NULL,       -- running | done | failed
+    state           TEXT NOT NULL,       -- running | done | failed (failed = no source scanned, or crashed)
     started         TEXT NOT NULL,
     finished        TEXT
 );
@@ -173,6 +179,30 @@ def start_run(conn: sqlite3.Connection) -> str:
     return run_id
 
 
+def resume_or_start_run(conn: sqlite3.Connection) -> tuple[str, bool]:
+    """Continue a recent run that never finished (the Mac slept or the process was killed), else start one.
+
+    Only one run can hold the run lock, so any run still marked `running` here was interrupted.
+    Returns (run_id, resumed).
+    """
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=RESUME_WITHIN_HOURS)).isoformat(timespec="seconds")
+    unfinished = conn.execute("SELECT run_id, started FROM runs WHERE state = 'running' ORDER BY started DESC"
+                              ).fetchall()
+    resume = unfinished[0]["run_id"] if unfinished and unfinished[0]["started"] >= cutoff else None
+    with conn:
+        for r in unfinished:
+            if r["run_id"] != resume:
+                conn.execute("UPDATE runs SET state = 'failed', finished = ? WHERE run_id = ?", (now(), r["run_id"]))
+    return (resume, True) if resume else (start_run(conn), False)
+
+
+def done_sources(conn, run_id: str) -> set[str]:
+    """Sources this run has already finished (ok or suspicious). Failed ones are tried again on resume."""
+    rows = conn.execute("SELECT source FROM source_runs WHERE run_id = ? AND result IN ('ok', 'suspicious')",
+                        (run_id,)).fetchall()
+    return {r[0] for r in rows}
+
+
 def finish_run(conn: sqlite3.Connection, run_id: str, state: str) -> None:
     with conn:
         conn.execute("UPDATE runs SET state = ?, finished = ? WHERE run_id = ?", (state, now(), run_id))
@@ -188,6 +218,43 @@ def record_source_failure(conn, run_id: str, source: Source, started: str, reaso
         )
 
 
+def usual_count(conn, source_name: str) -> int | None:
+    """Median job count over the source's last successful scans; None before its first one."""
+    rows = conn.execute(
+        "SELECT jobs_found FROM source_runs WHERE source = ? AND result = 'ok' ORDER BY started DESC, rowid DESC LIMIT ?",
+        (source_name, USUAL_FROM_LAST),
+    ).fetchall()
+    counts = sorted(r[0] for r in rows)
+    return counts[len(counts) // 2] if counts else None
+
+
+def is_suspicious_zero(conn, source: Source, jobs: list[Job]) -> bool:
+    """True when a source that usually has jobs suddenly returns none (a broken feed, not a hiring freeze).
+
+    After ACCEPT_ZERO_AFTER suspicious zeros in a row the zero is believed, so its jobs can finally close.
+    """
+    if jobs:
+        return False
+    usual = usual_count(conn, source.name)
+    if usual is None or usual < SUSPICIOUS_MIN_USUAL:
+        return False
+    recent = conn.execute("SELECT result FROM source_runs WHERE source = ? ORDER BY started DESC, rowid DESC LIMIT ?",
+                          (source.name, ACCEPT_ZERO_AFTER - 1)).fetchall()
+    in_a_row = len(recent) == ACCEPT_ZERO_AFTER - 1 and all(r[0] == "suspicious" for r in recent)
+    return not in_a_row
+
+
+def record_suspicious(conn, run_id: str, source: Source, started: str) -> None:
+    """A suspicious zero: logged, but no job is touched and it doesn't count as a successful scan."""
+    with conn:
+        conn.execute(
+            """INSERT OR REPLACE INTO source_runs
+               (run_id, source, result, started, finished, jobs_found, jobs_new, error_reason, error_detail)
+               VALUES (?, ?, 'suspicious', ?, ?, 0, 0, 'zero_jobs', ?)""",
+            (run_id, source.name, started, now(), f"0 jobs; usually {usual_count(conn, source.name)}"),
+        )
+
+
 def _is_backfill(job: Job, cutoff: datetime) -> bool:
     # Use the posting date. Some boards (Stripe, MongoDB) bump updated_at on every job daily,
     # so updated_at is only a fallback when no posting date exists.
@@ -200,16 +267,22 @@ def _is_backfill(job: Job, cutoff: datetime) -> bool:
 
 
 def save_source_result(conn, run_id: str, source: Source, started: str, jobs: list[Job]) -> int:
-    """Save one source's jobs and mark it done, in a single transaction. Returns the number of new jobs."""
+    """Save one source's jobs and mark it done, in a single transaction. Returns the number of new jobs.
+
+    Call this only for a successful scan: jobs of this source that were not in it move towards closed
+    (possibly_closed after one miss, closed after CLOSE_AFTER_MISSES). A job that shows up again reopens.
+    """
     ts = now()
     first_scan = conn.execute(
         "SELECT first_scan_at IS NULL FROM sources WHERE name = ?", (source.name,)
     ).fetchone()[0]
     cutoff = datetime.now(timezone.utc) - timedelta(days=BACKFILL_DAYS)
     new = 0
+    seen: list[str] = []
     with conn:  # one transaction: either all of this happens or none of it
         for job in jobs:
             key = job_key(source.type, source.board, job)
+            seen.append(key)
             cur = conn.execute(
                 """INSERT INTO jobs (job_key, source, ats_id, title, company, location_raw, cities, work_mode,
                        india_eligible, experience_min, experience_max, salary, department, description,
@@ -230,12 +303,20 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
                     """UPDATE jobs SET last_seen = ?, missed_scans = 0, updated_at = ?,
                            title = ?, description = ?, location_raw = ?, cities = ?, work_mode = ?,
                            india_eligible = ?, experience_min = ?, experience_max = ?, salary = ?,
-                           lifecycle = CASE WHEN lifecycle = 'possibly_closed' THEN 'open' ELSE lifecycle END
+                           lifecycle = 'open'
                        WHERE job_key = ?""",
                     (ts, job.updated_at.isoformat() if job.updated_at else None, job.title, job.description,
                      job.location_raw, json.dumps(job.cities), job.work_mode, job.india_eligible,
                      job.experience_min, job.experience_max, job.salary, key),
                 )
+        # This source's jobs that weren't in this scan were missed once more.
+        conn.execute(
+            """UPDATE jobs SET missed_scans = missed_scans + 1,
+                   lifecycle = CASE WHEN missed_scans + 1 >= ? THEN 'closed' ELSE 'possibly_closed' END
+               WHERE source = ? AND lifecycle != 'closed'
+                 AND job_key NOT IN (SELECT value FROM json_each(?))""",
+            (CLOSE_AFTER_MISSES, source.name, json.dumps(seen)),
+        )
         conn.execute(
             """INSERT OR REPLACE INTO source_runs (run_id, source, result, started, finished, jobs_found, jobs_new)
                VALUES (?, ?, 'ok', ?, ?, ?, ?)""",
@@ -244,6 +325,8 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
         conn.execute(
             "UPDATE sources SET first_scan_at = COALESCE(first_scan_at, ?) WHERE name = ?", (ts, source.name)
         )
+    with conn:
+        conn.execute("UPDATE sources SET usual_count = ? WHERE name = ?", (usual_count(conn, source.name), source.name))
     return new
 
 
@@ -311,3 +394,16 @@ def get_state(conn, key: str) -> str | None:
 def set_state(conn, key: str, value: str) -> None:
     with conn:
         conn.execute("INSERT OR REPLACE INTO state (key, value) VALUES (?, ?)", (key, value))
+
+
+# ---------------------------------------------------------------- retention
+
+def delete_old_logs(conn, days: int = KEEP_LOGS_DAYS) -> dict:
+    """Delete run records and AI call logs older than `days`. Jobs and matches are kept."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat(timespec="seconds")
+    with conn:
+        old_runs = "SELECT run_id FROM runs WHERE started < ? AND state != 'running'"
+        source_runs = conn.execute(f"DELETE FROM source_runs WHERE run_id IN ({old_runs})", (cutoff,)).rowcount
+        runs = conn.execute(f"DELETE FROM runs WHERE run_id IN ({old_runs})", (cutoff,)).rowcount
+        calls = conn.execute("DELETE FROM llm_calls WHERE at < ?", (cutoff,)).rowcount
+    return {"runs": runs, "source_runs": source_runs, "llm_calls": calls}

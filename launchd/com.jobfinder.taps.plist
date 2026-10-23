@@ -17,6 +17,8 @@
     <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder</string>
     <key>EnvironmentVariables</key>
     <dict>
+        <key>PYTHONUNBUFFERED</key>
+        <string>1</string>   <!-- write log lines at once, so a crash keeps them -->
         <key>PATH</key>
         <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
         <key>TZ</key>

@@ -103,14 +103,23 @@ Storage and models first, so every adapter writes the same shape.
 
 ## Phase 3 — Reliability (4–5 days)
 
-- [ ] **Resumable runs:** a restart with an unfinished `run_id` skips sources already marked done
-- [ ] **Job lifecycle:** each *successful* scan without the job → `possibly_closed`, then `closed` after 2. Failed scans never change lifecycle
-- [ ] **Suspicious zero:** track usual job count per source; a sudden 0 is marked `suspicious` and closes nothing
-- [ ] **Alerts:** whole-run failure, or `claude -p` unavailable/logged out → immediate Telegram message to the owner
-- [ ] **`src/health.py`:** weekly Telegram summary to the owner: success rate per source, suspicious zeros, failures with reasons, unscored backlog
-- [ ] **Retention:** delete run logs and cached AI requests older than 30 days
+- [x] **Resumable runs:** a restart with an unfinished `run_id` skips sources already marked done
+- [x] **Job lifecycle:** each *successful* scan without the job → `possibly_closed`, then `closed` after 2. Failed scans never change lifecycle
+- [x] **Suspicious zero:** track usual job count per source; a sudden 0 is marked `suspicious` and closes nothing
+- [x] **Alerts:** whole-run failure, or `claude -p` unavailable/logged out → immediate Telegram message to the owner
+- [x] **`src/health.py`:** weekly Telegram summary to the owner: success rate per source, suspicious zeros, failures with reasons, unscored backlog
+- [x] **Retention:** delete run logs and cached AI requests older than 30 days
 
 **Done when:** it runs unattended for a week, and a deliberately broken source appears in the health summary instead of vanishing.
+
+**Status (2026-10-24): code done; the week of unattended running starts once Phase 2's setup is finished.** 130 offline tests pass.
+- Resume: an unfinished run less than 6 hours old is continued (failed sources are retried); older ones are marked failed. Tested live: killed a run after 3 sources, the restart scanned only the other 59.
+- The daily list goes out at most once per person per day, so a restarted run never sends a second list.
+- Lifecycle compares job IDs from each scan, not timestamps. Closed jobs that reappear (re-posted with the same ID) reopen.
+- Suspicious zero: a source whose usual count (median of its last 7 successful scans) is 3+ and suddenly returns 0. After 3 zeros in a row the zero is believed, so its jobs can close.
+- Alerts (each at most once a day): no source scanned, `claude` logged out / missing / at its usage limit, a person's list failed to send, the run crashed (with the error), and, from the hourly job, no finished run for 26 hours. Without `OPERATOR_TELEGRAM_CHAT_ID` they are printed to the log.
+- Weekly summary goes out from the daily run once 7 days have passed since the last one; `uv run python -m src.main health [--send]` shows it any time.
+- Retention also trims log files over 2 MB. The LaunchAgents now set `PYTHONUNBUFFERED=1` so a crash doesn't lose the last log lines.
 
 ---
 
