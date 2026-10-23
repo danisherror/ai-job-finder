@@ -107,6 +107,12 @@ _NOT_A_PLACE_RE = re.compile(
     r"job requisitions only|anywhere|worldwide|global|globally|any location|in|of|the)\b",
     re.I,
 )
+# "U.S. Anywhere", "Anywhere in Canada", "Remote - EMEA": anywhere, but inside one non-India region.
+_REGION = r"(u\.?s\.?a?|united states|canada|uk|united kingdom|europe|eu|emea|latam|americas|north america)"
+_COUNTRY_WIDE_RE = re.compile(
+    rf"\b{_REGION}\.?\s*[-,(]?\s*(anywhere|remote)\b|\b(anywhere|remote)\s*(in|[-,(])\s*(the\s+)?{_REGION}(\b|\.)",
+    re.I,
+)
 # Phrases in descriptions that usually mean "you must live somewhere else".
 _RESTRICTION_RE = re.compile(
     r"(must (be )?(located|based|reside|live) in (the )?(us|u\.s\.|united states|usa|canada|uk|europe|eu)"
@@ -132,6 +138,8 @@ def india_eligibility(location: str, mode: str, description: str = "", country_c
     if mentions_india(location, country_code):
         return "yes"
     if mode != "remote":
+        return "no"
+    if _COUNTRY_WIDE_RE.search(location):
         return "no"
     restricted = bool(_RESTRICTION_RE.search(description))
     is_global = bool(_GLOBAL_RE.search(location))

@@ -2,9 +2,10 @@
 # Real profiles are git-ignored because they hold personal details.
 
 name: Example
-telegram_chat_id: 0            # they tap "Start" on the bot once; ID found via getUpdates
+telegram_chat_id: 0            # they send /start to the bot; the hourly job replies with this ID
 target_roles: [Backend Engineer, Python Developer]
-seniority: mid                 # junior | mid | senior | lead
+seniority: mid                 # intern | junior | mid | senior | lead (read from job titles)
+stretch_up: false              # true = also accept jobs one level up (e.g. Senior for a mid)
 experience_years: 2
 skills_strong: [Python, Django, PostgreSQL]
 skills_some: [AWS, Docker]
@@ -12,6 +13,9 @@ locations: [Bengaluru]         # Indian cities they would work in
 remote_ok: true                # remote jobs open to people in India
 work_modes: [onsite, hybrid, remote]
 min_salary_lpa: 12             # optional
-exclude_keywords: ["10+ years", "unpaid", "internship"]
+require_keywords: []           # optional: at least one must appear in title or description
+exclude_keywords: ["10+ years", "unpaid", "internship"]   # none may appear in title or description
+exclude_title_keywords: [Sales, Account Executive, Recruiter, Marketing]   # none may appear in the title
+max_age_days: 30               # skip jobs posted longer ago than this
 digest_size: 8                 # any number; blank means 8
-resume_file: private/resumes/example.txt
+resume_file: private/resumes/example.txt   # plain text (.txt or .md); optional

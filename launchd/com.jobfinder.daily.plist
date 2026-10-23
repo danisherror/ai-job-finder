@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jobfinder.daily</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/uv</string>
+        <string>run</string>
+        <string>python</string>
+        <string>-m</string>
+        <string>src.main</string>
+        <string>daily</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>TZ</key>
+        <string>Asia/Kolkata</string>
+    </dict>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key><integer>6</integer>
+        <key>Minute</key><integer>45</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder/private/logs/daily.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder/private/logs/daily.log</string>
+</dict>
+</plist>

@@ -89,6 +89,15 @@ Storage and models first, so every adapter writes the same shape.
 
 **Done when:** two people get their own correct list every morning for 3 days in a row.
 
+**Status (2026-10-24): code done; waiting on profiles (#5), the Telegram bot and installing the schedule.** 102 offline tests pass.
+- Commands: `uv run python -m src.main daily | collect | match | digest [--dry-run] | taps`.
+- `claude -p` runs with `--tools ""`, its own system prompt, no settings/MCP and an empty working folder: job text can't make it read files, and each call costs ~600 tokens of overhead instead of ~13k.
+- Tested on real data (scratch DB, sample backend profile): 88 new jobs → 27 after rules → 2 AI calls, 29 s. Fit levels and reasons looked sensible.
+- Jobs that fail the rules get no `matches` row and are re-checked each run, so profile edits apply to recent jobs. Only AI scores are stored ("scored once").
+- Other changes: remote jobs limited to one region ("U.S. Anywhere", "Remote - EMEA") now count as not open to India; profile fields `stretch_up`, `require_keywords`, `exclude_title_keywords`, `max_age_days`; apply links must be on the ATS or the company's usual careers host, else the plain ATS job page is sent; the bot replies to `/start` with the person's chat ID; taps use their own lock so the hourly job can't block the daily run.
+- Install steps for the schedule: `launchd/README.md` (needs `sudo` for `pmset`, and Full Disk Access for `uv` because the project is in `~/Desktop`).
+- Noticed, not changed: weak "fill" slots can be clearly off-target jobs (e.g. an executive assistant role); the experience regex takes the first number it finds (Rubrik: read 1 year, posting says 8+).
+
 ---
 
 ## Phase 3 — Reliability (4–5 days)

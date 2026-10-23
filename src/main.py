@@ -1,4 +1,11 @@
-"""Entry point. Usage: uv run python -m src.main collect"""
+"""Entry point.
+
+    uv run python -m src.main daily              collect, match, send lists (the 6:45 job)
+    uv run python -m src.main collect            fetch all sources into the job pool
+    uv run python -m src.main match              score new jobs for each person
+    uv run python -m src.main digest [--dry-run] send (or just print) each person's list
+    uv run python -m src.main taps               save Applied/Skipped button taps (the hourly job)
+"""
 
 import fcntl
 import sys
@@ -6,19 +13,20 @@ import time
 import traceback
 from pathlib import Path
 
-from src import store
+from src import digest, matcher, store, telegram
 from src.collect import ADAPTERS
 from src.collect.http import SourceError
-from src.config import ROOT, load_sources
+from src.config import ROOT, load_env, load_profiles, load_sources
 
 LOCK_FILE = ROOT / "private" / "run.lock"
+TAPS_LOCK_FILE = ROOT / "private" / "taps.lock"  # separate, so the hourly job never blocks the daily run
 DELAY_BETWEEN_SOURCES = 1.0  # seconds; be polite
 
 
-def acquire_lock():
+def acquire_lock(path: Path = LOCK_FILE):
     """Exit immediately if another run holds the lock. The lock is released when the process ends."""
-    LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
-    handle = open(LOCK_FILE, "w")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    handle = open(path, "w")
     try:
         fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
@@ -57,11 +65,70 @@ def collect() -> str:
     return run_id
 
 
+def latest_run_id(conn) -> str | None:
+    row = conn.execute("SELECT run_id FROM runs ORDER BY started DESC LIMIT 1").fetchone()
+    return row[0] if row else None
+
+
+def match(run_id: str | None = None) -> None:
+    """Stage 2: rules then AI, per person."""
+    profiles = load_profiles()
+    conn = store.connect()
+    store.sync_profiles(conn, profiles)
+    if not profiles:
+        print("No profiles in config/profiles/ (example.yaml is only a template)")
+    for p in profiles:
+        t = time.monotonic()
+        r = matcher.match_profile(conn, run_id, p)
+        print(f"  {p.id:<12} {r['candidates']} new jobs, {r['passed']} passed rules, {r['scored']} scored, "
+              f"{r['unscored']} left for next run ({time.monotonic() - t:.0f}s)")
+        if r["dropped"]:
+            print("               dropped by rules: " + ", ".join(f"{k} {v}" for k, v in r["dropped"].items()))
+        if r["errors"]:
+            print(f"               AI errors: {', '.join(r['errors'])}" + (f"; stopped ({r['stopped']})" if r["stopped"] else ""))
+
+
+def send(run_id: str | None = None, dry_run: bool = False) -> None:
+    """Stage 3: each person's list."""
+    conn = store.connect()
+    run_id = run_id or latest_run_id(conn)
+    for p in load_profiles():
+        try:
+            r = digest.send_digest(conn, p, run_id, dry_run=dry_run)
+        except telegram.TelegramError as e:
+            print(f"  {p.id:<12} FAILED to send: {e}")
+            continue
+        if not r["dry_run"]:
+            print(f"  {p.id:<12} sent {r['sent']}, failed {r['failed']}, overflow {r['overflow']}")
+
+
+def taps() -> None:
+    conn = store.connect()
+    try:
+        counts = telegram.poll_updates(conn, load_profiles())
+    except telegram.TelegramError as e:
+        sys.exit(f"Taps failed: {e}")
+    print(f"Taps saved: {counts['taps']}, ignored: {counts['ignored']}, /start replies: {counts['messages']}")
+
+
 def main(argv: list[str]) -> None:
-    command = argv[1] if len(argv) > 1 else "collect"
+    load_env()
+    command = argv[1] if len(argv) > 1 else "daily"
+    if command == "taps":
+        lock = acquire_lock(TAPS_LOCK_FILE)  # noqa: F841
+        taps()
+        return
     lock = acquire_lock()  # noqa: F841  (kept open for the life of the process)
     if command == "collect":
         collect()
+    elif command == "match":
+        match()
+    elif command == "digest":
+        send(dry_run="--dry-run" in argv)
+    elif command == "daily":
+        run_id = collect()
+        match(run_id)
+        send(run_id)
     else:
         sys.exit(f"Unknown command: {command}")
 

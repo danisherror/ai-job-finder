@@ -15,6 +15,10 @@ from src import normalize as n
     ("Remote - US", "remote", "", None, "no"),
     ("Sweden (Remote)", "remote", "", None, "no"),
     ("Remote, AMER", "remote", "", None, "no"),
+    ("U.S. Anywhere | United States", "remote", "", None, "no"),   # anywhere, but only in the US
+    ("Anywhere in Canada", "remote", "", None, "no"),
+    ("Remote - EMEA", "remote", "", None, "no"),
+    ("Bangalore | Remote - US", "remote", "", None, "yes"),
     ("Indianapolis, IN", "remote", "", None, "no"),            # "IN" here is Indiana
     ("Remote", "remote", "", None, "unclear"),
     ("Remote", "remote", "This role is US-only.", None, "no"),

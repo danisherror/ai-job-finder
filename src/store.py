@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from src.models import Job, Source
+from src.models import Job, MatchResult, Profile, Source
 
 DEFAULT_DB = Path(__file__).resolve().parent.parent / "private" / "jobs.db"
 BACKFILL_DAYS = 7  # on a source's first scan, older jobs are stored as already seen
@@ -68,6 +68,50 @@ CREATE TABLE IF NOT EXISTS source_runs (
     error_detail    TEXT,
     PRIMARY KEY (run_id, source)
 );
+
+CREATE TABLE IF NOT EXISTS profiles (
+    profile_id      TEXT PRIMARY KEY,
+    added_at        TEXT NOT NULL        -- their first list only covers jobs first seen up to 7 days before this
+);
+
+-- One row per job the AI scored for a person. Jobs that fail the rules get no row and are re-checked each run,
+-- so profile edits apply to recent jobs. Delivery and decision are separate on purpose.
+CREATE TABLE IF NOT EXISTS matches (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,   -- short ID for Telegram buttons
+    job_key         TEXT NOT NULL REFERENCES jobs(job_key),
+    profile_id      TEXT NOT NULL,
+    fit             TEXT NOT NULL,       -- strong | good | weak
+    matched_skills  TEXT,                -- JSON list
+    missing_skills  TEXT,                -- JSON list
+    red_flags       TEXT,                -- JSON list
+    reason          TEXT,
+    rubric_version  TEXT NOT NULL,
+    run_id          TEXT,
+    scored_at       TEXT NOT NULL,
+    delivery        TEXT NOT NULL DEFAULT 'pending',     -- pending | sent | failed | overflow
+    sent_at         TEXT,
+    telegram_message_id INTEGER,
+    decision        TEXT NOT NULL DEFAULT 'none',        -- none | applied | skipped
+    decided_at      TEXT,
+    UNIQUE (job_key, profile_id)
+);
+CREATE INDEX IF NOT EXISTS matches_delivery ON matches(profile_id, delivery);
+
+CREATE TABLE IF NOT EXISTS llm_calls (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    run_id          TEXT,
+    profile_id      TEXT,
+    at              TEXT NOT NULL,
+    jobs            INTEGER NOT NULL,
+    scored          INTEGER NOT NULL,
+    seconds         REAL NOT NULL,
+    error_reason    TEXT
+);
+
+CREATE TABLE IF NOT EXISTS state (
+    key             TEXT PRIMARY KEY,
+    value           TEXT
+);
 """
 
 
@@ -78,7 +122,7 @@ def now() -> str:
 def connect(path: str | Path | None = None) -> sqlite3.Connection:
     path = Path(path or os.environ.get("JOBFINDER_DB") or DEFAULT_DB)
     path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(path)
+    conn = sqlite3.connect(path, timeout=30)  # the hourly tap collector may write while a run is going
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.execute("PRAGMA journal_mode = WAL")
@@ -201,3 +245,69 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
             "UPDATE sources SET first_scan_at = COALESCE(first_scan_at, ?) WHERE name = ?", (ts, source.name)
         )
     return new
+
+
+# ---------------------------------------------------------------- jobs for matching
+
+def job_from_row(row: sqlite3.Row) -> Job:
+    return Job(
+        source=row["source"], ats_id=row["ats_id"] or "", title=row["title"], company=row["company"],
+        location_raw=row["location_raw"] or "", cities=json.loads(row["cities"] or "[]"),
+        work_mode=row["work_mode"] or "unknown", india_eligible=row["india_eligible"] or "unclear",
+        experience_min=row["experience_min"], experience_max=row["experience_max"], salary=row["salary"],
+        department=row["department"], description=row["description"] or "", apply_url=row["apply_url"],
+        posted_at=row["posted_at"], updated_at=row["updated_at"],
+    )
+
+
+def sync_profiles(conn, profiles: list[Profile]) -> None:
+    """Remember when each person was first seen, for their first-list window."""
+    with conn:
+        for p in profiles:
+            conn.execute("INSERT OR IGNORE INTO profiles (profile_id, added_at) VALUES (?, ?)", (p.id, now()))
+
+
+def unscored_jobs(conn, profile: Profile) -> list[tuple[str, Job]]:
+    """Open, non-backfill jobs this person has no match for yet, first seen recently enough to matter."""
+    added = conn.execute("SELECT added_at FROM profiles WHERE profile_id = ?", (profile.id,)).fetchone()[0]
+    newest_window = datetime.now(timezone.utc) - timedelta(days=profile.max_age_days)
+    first_list = datetime.fromisoformat(added) - timedelta(days=BACKFILL_DAYS)
+    since = max(newest_window, first_list).isoformat(timespec="seconds")
+    rows = conn.execute(
+        """SELECT j.* FROM jobs j
+           WHERE j.backfill = 0 AND j.lifecycle = 'open' AND j.india_eligible != 'no' AND j.first_seen >= ?
+             AND NOT EXISTS (SELECT 1 FROM matches m WHERE m.job_key = j.job_key AND m.profile_id = ?)
+           ORDER BY j.first_seen""",
+        (since, profile.id),
+    ).fetchall()
+    return [(r["job_key"], job_from_row(r)) for r in rows]
+
+
+def save_match(conn, run_id: str | None, profile_id: str, job_key: str, result: MatchResult, rubric: str) -> None:
+    with conn:
+        conn.execute(
+            """INSERT OR IGNORE INTO matches (job_key, profile_id, fit, matched_skills, missing_skills, red_flags,
+                   reason, rubric_version, run_id, scored_at)
+               VALUES (?,?,?,?,?,?,?,?,?,?)""",
+            (job_key, profile_id, result.fit, json.dumps(result.matched_skills), json.dumps(result.missing_skills),
+             json.dumps(result.red_flags), result.reason, rubric, run_id, now()),
+        )
+
+
+def record_llm_call(conn, run_id, profile_id, jobs: int, scored: int, seconds: float, error: str | None) -> None:
+    with conn:
+        conn.execute(
+            """INSERT INTO llm_calls (run_id, profile_id, at, jobs, scored, seconds, error_reason)
+               VALUES (?,?,?,?,?,?,?)""",
+            (run_id, profile_id, now(), jobs, scored, round(seconds, 1), error),
+        )
+
+
+def get_state(conn, key: str) -> str | None:
+    row = conn.execute("SELECT value FROM state WHERE key = ?", (key,)).fetchone()
+    return row[0] if row else None
+
+
+def set_state(conn, key: str, value: str) -> None:
+    with conn:
+        conn.execute("INSERT OR REPLACE INTO state (key, value) VALUES (?, ?)", (key, value))
