@@ -1,0 +1,14 @@
+# Private data: resumes, database, exports
+private/
+
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# macOS
+.DS_Store
