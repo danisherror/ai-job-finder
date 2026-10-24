@@ -1,7 +1,8 @@
 # AI Job Finder
 
 Collects tech jobs every morning from company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workday,
-Workable, Oracle Cloud HCM, Eightfold, Rippling), Amazon's careers site and three job boards (Himalayas, We Work Remotely, YC startup jobs), keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
+Workable, Oracle Cloud HCM, Eightfold, Rippling, Jibe), Amazon's careers site and seven job boards (Himalayas,
+We Work Remotely, YC startup jobs, Remote OK, Remotive, Working Nomads, Jobspresso), keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
 
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
@@ -63,6 +64,7 @@ Their first list covers only jobs from the last 7 days and has at most 10 jobs.
      `board: "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001"`
    - Eightfold: the career site URL plus the company's domain, e.g.
      `board: "https://qualcomm.eightfold.ai/careers?domain=qualcomm.com"`
+   - Jibe (iCIMS): the career site's base URL, e.g. `board: "https://careers.amd.com"`
    - Amazon: `type: amazon, board: IND` (a country code; only tech job categories are kept)
 2. Add a line to `config/sources.yaml`: `- {name: Acme, type: lever, board: acme}`
 3. Check it: `uv run python -m src.main collect` should show `ok  Acme  N jobs`.
@@ -76,8 +78,9 @@ job's page once for its description, so a big company's first scan takes a few m
 Sites left out on purpose: LinkedIn and Indeed jobs, Naukri and Hirist (their robots.txt forbids it),
 Foundit, Internshala and Instahyre (block automated access), Wellfound and Cutshort (no public API),
 Google Careers (web page only, no API) and Apple (its search API returned nothing for India).
-Remote job boards Remotive, RemoteOK, Working Nomads and Jobicy were checked on 2026-10-24 and had almost
-no jobs open to India. Hacker News "Who is hiring" was skipped (about 8 India posts a month, free text).
+Remote job boards Remote OK, Remotive, Working Nomads and Jobspresso were added on 2026-10-24 even though
+few of their jobs are open to India (about 15 a day between them); each costs one call per scan. Jobicy was not added.
+Python.org jobs (no India jobs) and Wipro's job feed (ignores search and paging) were checked and left out. Hacker News "Who is hiring" was skipped (about 8 India posts a month, free text).
 YC jobs need a free YC account to apply.
 
 ## Where data lives

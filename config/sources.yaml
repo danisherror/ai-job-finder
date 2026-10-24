@@ -1,6 +1,7 @@
 # Companies to collect jobs from.
 # type: greenhouse | lever | ashby | smartrecruiters | workday | workable | himalayas
-#       | amazon | oracle | eightfold | rippling | weworkremotely | ycombinator
+#       | amazon | oracle | eightfold | rippling | weworkremotely | ycombinator | jibe
+#       | remoteok | remotive | workingnomads | jobspresso
 # board: the company's board name on that ATS (checked live 2026-10-23)
 #   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
 #   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
@@ -143,3 +144,28 @@
 - {name: BrowserStack,      type: workday,         board: "https://browserstack.wd3.myworkdayjobs.com/External"}  # 18
 - {name: Red Hat,           type: workday,         board: "https://redhat.wd5.myworkdayjobs.com/jobs"}         # 9
 - {name: SUSE,              type: workday,         board: "https://suse.wd3.myworkdayjobs.com/Jobsatsuse"}     # 3
+
+# --- I. Added 2026-10-24 from the second shared list (India job counts checked live that day) ---
+# Workday
+- {name: Cisco,             type: workday,    board: "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers"}             # 312
+- {name: Mastercard,        type: workday,    board: "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers"}     # 270
+- {name: Cadence,           type: workday,    board: "https://cadence.wd1.myworkdayjobs.com/External_Careers"}        # 195
+- {name: Wells Fargo,       type: workday,    board: "https://wf.wd1.myworkdayjobs.com/WellsFargoJobs"}               # 90
+- {name: Broadcom,          type: workday,    board: "https://broadcom.wd1.myworkdayjobs.com/External_Career"}        # 50 (locations read "IND-<city>")
+- {name: Marvell,           type: workday,    board: "https://marvell.wd1.myworkdayjobs.com/MarvellCareers"}          # 32
+- {name: Samsung,           type: workday,    board: "https://sec.wd3.myworkdayjobs.com/Samsung_Careers"}             # 30
+- {name: Cohesity,          type: workday,    board: "https://cohesity.wd5.myworkdayjobs.com/Cohesity_Careers"}       # 13
+- {name: Ciena,             type: workday,    board: "https://ciena.wd5.myworkdayjobs.com/Careers"}                   # 11
+# Greenhouse
+- {name: Cloudflare,        type: greenhouse, board: cloudflare}         # 20 India of 453
+- {name: Coupang,           type: greenhouse, board: coupang}            # 43 of 693
+# Eightfold (Netflix still runs the older API; the adapter handles it)
+- {name: Netflix,           type: eightfold,  board: "https://explore.jobs.netflix.net/careers?domain=netflix.com"}   # 7
+# Jibe / iCIMS (board: the career site's base URL)
+- {name: AMD,               type: jibe,       board: "https://careers.amd.com"}        # 213
+- {name: GitHub,            type: jibe,       board: "https://www.github.careers"}     # 1 India of 73 (most others remote outside India)
+# Remote job boards (one call each per scan)
+- {name: Remote OK,         type: remoteok,      board: ""}              # ~60 recent, mostly plain "Remote"
+- {name: Remotive,          type: remotive,      board: software-dev}    # ~10; they ask for only a few calls a day
+- {name: Working Nomads,    type: workingnomads, board: ""}              # ~40
+- {name: Jobspresso,        type: jobspresso,    board: ""}              # ~20

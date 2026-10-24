@@ -22,7 +22,9 @@ ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby"
                "workable": ("workable.com",), "himalayas": ("himalayas.app",), "amazon": ("amazon.jobs",),
                "oracle": ("oraclecloud.com",), "eightfold": ("eightfold.ai", "careers.microsoft.com"),
                "rippling": ("rippling.com",), "weworkremotely": ("weworkremotely.com",),
-               "ycombinator": ("ycombinator.com",)}
+               "ycombinator": ("ycombinator.com",), "jibe": (), "remoteok": ("remoteok.com",),
+               "remotive": ("remotive.com",), "workingnomads": ("workingnomads.com",),
+               "jobspresso": ("jobspresso.co",)}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -37,6 +39,11 @@ ATS_JOB_PAGE = {
     "rippling": "https://ats.rippling.com/{board}/jobs/{id}",
     "weworkremotely": "{id}",                      # the ID is the job's We Work Remotely URL
     "ycombinator": "https://www.ycombinator.com/jobs",   # YC job pages need the company slug too
+    "jibe": "{site}/careers-home/jobs/{id}",       # board is the career site's base URL
+    "remoteok": "{id}",                            # the job boards below use the job's board URL as its ID
+    "remotive": "{id}",
+    "workingnomads": "{id}",
+    "jobspresso": "{id}",
 }
 
 

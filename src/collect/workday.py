@@ -19,6 +19,7 @@ MAX_JOBS = 1000    # safety cap per company
 DETAIL_DELAY = 0.2
 _LOCALE_RE = re.compile(r"^[a-z]{2}-[A-Z]{2}$")
 _INDIA_RE = re.compile(r"\bindia\b", re.I)   # "India, Pune" and "Bengaluru, Karnataka, India", not "Indiana"
+_IND_CODE_RE = re.compile(r"^IND\b")          # Broadcom's "IND-Bangalore Electronic City"
 
 
 def site_urls(board: str) -> tuple[str, str]:
@@ -46,7 +47,8 @@ def india_facet(facets: list[dict]) -> tuple[str, list[str]] | None:
         exact = [v["id"] for v in values if (v.get("descriptor") or "").strip().lower() == "india"]
         if exact:
             return param, exact
-        some = [v["id"] for v in values if _INDIA_RE.search(v.get("descriptor") or "")]
+        some = [v["id"] for v in values
+                if _INDIA_RE.search(v.get("descriptor") or "") or _IND_CODE_RE.match(v.get("descriptor") or "")]
         if some and not cities:
             cities = (param, some)
     return cities

@@ -1,0 +1,132 @@
+{
+ "slug": "89389",
+ "language": "en-us",
+ "languages": [
+  "en-us"
+ ],
+ "req_id": "89389",
+ "title": "SOC Design verification engineer",
+ "description": "ADVANCE YOUR CAREER. ADVANCE THE WORLD. At AMD, we believe technology can change lives for the better. It can heal us, entertain us, and make us more connected, productive, and understanding of the world around us. And we\u2019re looking for talent who feel the same: people who want to leave the planet better than they found it, those who don\u2019t shy away from humanity\u2019s challenges but are determined to help solve them. AMD is powering the next generation of supercomputing, high-performance computing, cloud, and AI. Whether you\u2019re designing next-gen processors, enabling AI breakthroughs, or creating go-to-market plans, every role at AMD contributes to something bigger \u2014 technology that moves the world forward. \u202f THE ROLE: The focus of this role is to plan, build, and execute the verification of new and existing features for pre-silicon verification for full chip, blocks, multi-chip and system-level verification, resulting in no bugs in the final design.\u202f\u202f \u202f THE PERSON:\u202f You have a passion for modern, complex processor architecture, digital design, and verification in general. You are a team player who has excellent communication skills and experience collaborating with other engineers located in different sites/timezones. You have strong analytical and problem-solving skills and are willing to learn and ready to take on problems. \u202f KEY RESPONSIBILITIES:\u202f Collaborate with architects, hardware engineers, and firmware engineers to understand the new features to be verified Build test plan documentation, accounting for interactions with other features, the hardware, the firmware, and the software driver use cases Estimate the time required to write the new feature tests and any required changes to the test environment Build the directed and random verification tests Debug test failures to determine the root cause; work with RTL and firmware engineers to resolve design defects and correct any test issues\u202f Review functional and code coverage metrics \u2013 modify or add tests or constrain random tests to meet the coverage requirements \u202f PREFERRED EXPERIENCE:\u202f Proficient in ASIC design verification with 8+ Years of experience Must have excellent knowledge of ASIC Design Flow and SOC architecture Excellent debugging skills in functional simulations are must.\u202f Proficient in developing and using UVM testbenches, flows and working in Linux and Windows environments Experienced with Verilog, System Verilog, C, C++\u202f\u202fand SystemC Automating workflows in a distributed compute environment.\u202f\u202f Exposure to simulation profile, efficiency improvement, acceleration, HLS tools/process Scripting language experience: Perl, Python, Makefile, shell preferred.\u202f\u202f Exposure to leadership or mentorship is an asset Experience in hardware security features verification or SoC level boot flow is good to have. \u202f ACADEMIC CREDENTIALS:\u202f Bachelors or Masters degree in computer engineering/Electrical Engineering #LI-PK2 Benefits offered are described: AMD benefits at a glance. AMD does not accept unsolicited resumes from headhunters, recruitment agencies, or fee-based recruitment services. AMD and its subsidiaries are equal opportunity, inclusive employers and will consider all applicants without regard to age, ancestry, color, marital status, medical condition, mental or physical disability, national origin, race, religion, political and/or third-party affiliation, sex, pregnancy, sexual orientation, gender identity, military or veteran status, or any other characteristic protected by law. We encourage applications from all qualified candidates and will accommodate applicants\u2019 needs under the respective laws throughout all stages of the recruitment and selection process. AMD may use Artificial Intelligence to help screen, assess or select applicants for this position. AMD\u2019s \u201cResponsible AI Policy\u201d is available here. This posting is for an existing vacancy.",
+ "location_name": "IN,Hyderabad-Design Center",
+ "street_address": "4F to 11F, Building #11, Mindspace, Hitech City, Madhapur",
+ "city": "Hyderabad",
+ "state": "Telangana",
+ "country": "India",
+ "country_code": "IN",
+ "postal_code": "500081",
+ "location_type": "LAT_LNG",
+ "latitude": 17.438198,
+ "longitude": 78.38216539999999,
+ "categories": [
+  {
+   "name": "Engineering"
+  }
+ ],
+ "tags1": [
+  "No"
+ ],
+ "tags2": [
+  "INR \u20b93,338,160.00/Yr."
+ ],
+ "tags3": [
+  "INR \u20b94,768,800.00/Yr."
+ ],
+ "tags4": [
+  "Global Careers (do not use for US or Canada)"
+ ],
+ "promotion_value": 0,
+ "employment_type": "FULL_TIME",
+ "qualifications": "Benefits offered are described: AMD benefits at a glance. AMD does not accept unsolicited resumes from headhunters, recruitment agencies, or fee-based recruitment services. AMD and its subsidiaries are equal opportunity, inclusive employers and will consider all applicants without regard to age, ancestry, color, marital status, medical condition, mental or physical disability, national origin, race, religion, political and/or third-party affiliation, sex, pregnancy, sexual orientation, gender identity, military or veteran status, or any other characteristic protected by law. We encourage applications from all qualified candidates and will accommodate applicants\u2019 needs under the respective laws throughout all stages of the recruitment and selection process. AMD may use Artificial Intelligence to help screen, assess or select applicants for this position. AMD\u2019s \u201cResponsible AI Policy\u201d is available here. This posting is for an existing vacancy.",
+ "hiring_organization": "Advanced Micro Devices, Inc",
+ "hiring_organization_logo": "https://www.amd.com/content/dam/code/images/header/amd-header-logo.svg",
+ "responsibilities": "\u202f THE ROLE: The focus of this role is to plan, build, and execute the verification of new and existing features for pre-silicon verification for full chip, blocks, multi-chip and system-level verification, resulting in no bugs in the final design.\u202f\u202f \u202f THE PERSON:\u202f You have a passion for modern, complex processor architecture, digital design, and verification in general. You are a team player who has excellent communication skills and experience collaborating with other engineers located in different sites/timezones. You have strong analytical and problem-solving skills and are willing to learn and ready to take on problems. \u202f KEY RESPONSIBILITIES:\u202f Collaborate with architects, hardware engineers, and firmware engineers to understand the new features to be verified Build test plan documentation, accounting for interactions with other features, the hardware, the firmware, and the software driver use cases Estimate the time required to write the new feature tests and any required changes to the test environment Build the directed and random verification tests Debug test failures to determine the root cause; work with RTL and firmware engineers to resolve design defects and correct any test issues\u202f Review functional and code coverage metrics \u2013 modify or add tests or constrain random tests to meet the coverage requirements \u202f PREFERRED EXPERIENCE:\u202f Proficient in ASIC design verification with 8+ Years of experience Must have excellent knowledge of ASIC Design Flow and SOC architecture Excellent debugging skills in functional simulations are must.\u202f Proficient in developing and using UVM testbenches, flows and working in Linux and Windows environments Experienced with Verilog, System Verilog, C, C++\u202f\u202fand SystemC Automating workflows in a distributed compute environment.\u202f\u202f Exposure to simulation profile, efficiency improvement, acceleration, HLS tools/process Scripting language experience: Perl, Python, Makefile, shell preferred.\u202f\u202f Exposure to leadership or mentorship is an asset Experience in hardware security features verification or SoC level boot flow is good to have. \u202f ACADEMIC CREDENTIALS:\u202f Bachelors or Masters degree in computer engineering/Electrical Engineering #LI-PK2",
+ "posted_date": "2026-09-08T10:51:00+0000",
+ "apply_url": "https://global-external-amd.icims.com/jobs/89389/login",
+ "internal": false,
+ "external": false,
+ "searchable": true,
+ "applyable": true,
+ "li_easy_applyable": true,
+ "ats_code": "icims",
+ "isFrontLineAIJob": false,
+ "isApplyFlowJob": false,
+ "meta_data": {
+  "client_code": "amd",
+  "googlejobs": {
+   "jobName": "projects/helpful-passage-853/jobs/95688940631007942",
+   "companyName": "projects/helpful-passage-853/companies/8822ff4e-3d3a-4660-ae04-6ef3c02ac1f3",
+   "jobHash": "af1bc54b5905799eab46c9bcf405d8d2",
+   "derivedInfo": {
+    "jobCategories": [
+     "COMPUTER_AND_IT",
+     "SCIENCE_AND_ENGINEERING"
+    ],
+    "locations": [
+     {
+      "latLng": {
+       "latitude": 17.438198,
+       "longitude": 78.38216539999999
+      },
+      "locationType": "SUB_LOCALITY_1",
+      "postalAddress": {
+       "addressLines": [
+        "11f, building, 11, Mindspace, HITEC City, Hyderabad, Telangana 500081, India"
+       ],
+       "administrativeArea": "TS",
+       "languageCode": "",
+       "locality": "Hyderabad",
+       "organization": "",
+       "postalCode": "500081",
+       "recipients": [],
+       "regionCode": "IN",
+       "revision": 0,
+       "sortingCode": "",
+       "sublocality": "HITEC City"
+      },
+      "radiusInMiles": 8.717215560109754e-05
+     }
+    ]
+   },
+   "jobSummary": "THE ROLE: The focus of this role is to plan, build, and execute the verification of new and existing features for pre-silicon verification for full chip, blocks, multi-chip and system-level verification, resulting in no bugs in the final design. THE PERSON: You have a passion for modern, complex processor architecture, digital design, and verification in general. You are a team player who has excellent communication skills and experience collaborating with other engineers located in different sites/timezones. You have strong analytical and problem-solving skills and are willing to learn and ready to take on problems. KEY RESPONSIBILITIES: Collaborate with architects, hardware engineers, and firmware engineers to understand the new features to be verified Build test plan documentation, accounting for interactions with other features, the hardware, the firmware, and the software driver use cases Estimate the time required to write the new feature tests and any required changes to the test environment Build the directed and random verification tests Debug test failures to determine the root cause; work with RTL and firmware engineers to resolve design defects and correct any test issues Review functional and code coverage metrics \u2013 modify or add tests or constrain random tests to meet the coverage requirements PREFERRED EXPERIENCE: Proficient in ASIC design verification with 8+ Years of experience Must have excellent knowledge of ASIC Design Flow and SOC architecture Excellent debugging skills in functional simulations are must. Proficient in developing and using UVM testbenches, flows and working in Linux and Windows environments Experienced with Verilog, System Verilog, C, C++and SystemC Automating workflows in a distributed compute environment. Exposure to simulation profile, efficiency improvement, acceleration, HLS tools/process Scripting language experience: Perl, Python, Makefile, shell preferred. Exposure to leadership or mentorship is an asset Experience in hardware security features verification or SoC level boot flow is good to have. ACADEMIC CREDENTIALS: Bachelors or Masters degree in computer engineering/Electrical Engineering #LI-PK2",
+   "jobTitleSnippet": "",
+   "searchTextSnippet": ""
+  },
+  "icims": {
+   "config_keys": {
+    "ccc.attract.portal.url": "https://careers.amd.com",
+    "icims.config.web.apply.jobpost": "1",
+    "icims.config.web.indeed.easy.apply": "0",
+    "icims.external.xml.feeds": "icims.adzuna.xml.enabled,icims.aeroemploiformation.xml.enabled,icims.apec.xml.enabled,icims.careerbuilder.xml.enabled,icims.careerarc.xml.enabled,icims.careerlink.xml.enabled,icims.clearbold.xml.enabled,icims.constructionjobs.xml.enabled,icims.craigslist.xml.enabled,icims.cv-library.xml.enabled,icims.cvaden.xml.enabled,icims.direct-employers.xml.enabled,icims.hireheroesusa.xml.enabled,icims.hireahero.xml.enabled,icims.hirepurpose.xml.enabled,icims.hospitalcareers.xml.enabled,icims.iberempleos.xml.enabled,icims.indeed.xml.enabled,icims.inhersight.xml.enabled,icims.irishjobs.xml.enabled,icims.itjobscafe.xml.enabled,icims.jobbio.xml.enabled,icims.jobcase.xml.enabled,icims.jobsite.xml.enabled,icims.linkedin.xml.enabled,icims.monster.xml.enabled,icims.msep.xml.enabled,icims.nijobs.xml.enabled,icims.oneten.xml.enabled,icims.pallet-labs.xml.enabled,icims.paradox.xml.enabled,icims.practicematch.xml.enabled,icims.prideatwork.xml.enabled,icims.professionaldiversitynetwork.xml.enabled,icims.propellum.xml.enabled,icims.qkly.xml.enabled,icims.radancy.xml.enabled,icims.recruitnet.xml.enabled,icims.recruitmilitary.xml.enabled,icims.regionsjob.xml.enabled,icims.resume-library.xml.enabled,icims.snagajob.xml.enabled,icims.upward.xml.enabled,icims.vonq.xml.enabled,icims.webengineering.xml.enabled,icims.webscribble.xml.enabled,icims.ziprecruiter.xml.enabled,icims.zippia.xml.enabled,icims.nexxt.xml.enabled",
+    "jobposting.external.company.name": "Advanced Micro Devices, Inc",
+    "jobposting.external.indeed.screenerquestions": "1",
+    "jobposting.external.parent.organization.name": "Advanced Micro Devices, Inc",
+    "portal.id": "204"
+   },
+   "date_updated": "2026-10-23T10:50:30Z",
+   "jps_is_public": true,
+   "primary_posted_site_object": {
+    "datePosted": "2026-09-08T10:51:00+0000",
+    "site": "global-external-amd",
+    "siteId": "6245c1b1-1919-49a5-9362-f476371d191b",
+    "siteType": "ATTRACT",
+    "tenantId": "12834"
+   },
+   "revision_int": 11,
+   "uuid": "ab374294-ba10-41e0-9aca-c8134c865362"
+  },
+  "import_id": "ea107793-5c47-4a1e-aec7-e5920e77952a",
+  "import_source": "ImporterService",
+  "redirectOnApply": true,
+  "canonical_url": "https://careers.amd.com/jobs/89389?lang=en-us",
+  "last_mod": "2026-10-23T11:50:12+0000",
+  "gdpr": false
+ },
+ "update_date": "2026-10-23T11:50:12+0000",
+ "create_date": "2026-09-08T10:53:08+0000",
+ "category": [
+  " Engineering"
+ ],
+ "full_location": "Hyderabad, India",
+ "short_location": "Hyderabad, India",
+ "multipleLocations": false
+}

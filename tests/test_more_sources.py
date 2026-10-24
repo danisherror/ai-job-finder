@@ -168,3 +168,11 @@ def test_workday_respects_a_per_company_cap(monkeypatch):
     capped = WD.model_copy(update={"max_jobs": 25})
     jobs = workday.fetch(capped, known=frozenset(workday.job_id(p) for p in page))
     assert len(jobs) == 25
+
+
+def test_workday_reads_country_code_city_values():
+    facets = [{"facetParameter": "locationMainGroup", "values": [{"facetParameter": "locations", "values": [
+        {"id": "a", "descriptor": "IND-Bangalore Electronic City - S1"},
+        {"id": "b", "descriptor": "USA-CA San Jose"},
+        {"id": "c", "descriptor": "INDIANA-Remote"}]}]}]
+    assert workday.india_facet(facets) == ("locations", ["a"])
