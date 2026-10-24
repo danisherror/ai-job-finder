@@ -39,11 +39,11 @@
     - ClearanceJobs
     - Linux Foundation job board
 
-- group: needs_api_key
+- group: no_public_api_docs
   kind: portal
-  reason: Official API exists but needs a free key you register for. These cover India.
-  could_add: yes, once a key is registered and an adapter is written
-  names: [Adzuna, Talent.com]    # Jooble and Careerjet were added 2026-10-24
+  reason: Its API is for approved publisher partners; no public documentation to build a reader from.
+  could_add: yes, if they approve a publisher account and share the API format
+  names: [Talent.com]    # Jooble, Careerjet and Adzuna have readers (Adzuna is off until its key is in .env)
 
 - group: no_public_api
   kind: portal
@@ -133,12 +133,6 @@
   could_add: no
   names: [CNCF, OpenSSF, OWASP]
 
-- group: few_india_jobs
-  kind: portal
-  reason: Checked but not added; too few jobs open to India.
-  could_add: yes, just a new adapter, but low value
-  names: [Jobicy]
-
 - group: staffing_firms
   kind: portal
   reason: Their own career sites, not on a job system this tool reads.
@@ -159,41 +153,18 @@
 
 # ============================== Companies ==============================
 
-- group: icims_classic
-  kind: company
-  reason: Career site runs on iCIMS classic; this tool has no reader for it (only the newer Jibe sites).
-  could_add: yes, with a new iCIMS reader
-  names: [Atlassian, Arm, IDeaS]
+# Added 2026-10-24 with new readers, so no longer listed here: Atlassian, Arm, IDeaS (iCIMS),
+# Optum / UnitedHealth Group, Societe Generale (Taleo), Synopsys, Siemens (Avature), Cencora, NTT DATA (Phenom),
+# LTIMindtree, Mphasis, Tata Technologies (RippleHire).
 
 - group: sap_successfactors
   kind: company
-  reason: Career site runs on SAP SuccessFactors; no reader for it.
-  could_add: yes, with a new SuccessFactors reader
+  reason: >-
+    Career site runs on SAP SuccessFactors. Its pages are drawn by JavaScript and the only readable job feed
+    (an RSS feed of the 20 newest matches) is under /services/, which their robots.txt disallows.
+    SAP's own site also shows a bot check (HTTP 403).
+  could_add: only by reading the disallowed /services/ feed, so not done
   names: [SAP, Cargill, Globant, HCLTech, Wipro]
-
-- group: taleo
-  kind: company
-  reason: Career site runs on Oracle Taleo; no reader for it.
-  could_add: yes, with a new Taleo reader
-  names: [Optum, Societe Generale]
-
-- group: avature
-  kind: company
-  reason: Career site runs on Avature; no reader for it.
-  could_add: yes, with a new Avature reader
-  names: [Synopsys, Siemens]
-
-- group: phenom
-  kind: company
-  reason: Career site runs on Phenom; no reader for it.
-  could_add: yes, with a new Phenom reader
-  names: [Cencora, NTT DATA]
-
-- group: ripplehire
-  kind: company
-  reason: Career site runs on RippleHire; no reader for it.
-  could_add: yes, with a new RippleHire reader
-  names: [LTIMindtree, Mphasis, Tata Technologies]
 
 - group: in_house_site
   kind: company
@@ -221,7 +192,7 @@
   could_add: no
   names:
     - Apple (search API returned nothing for India)
-    - Wipro job feed (ignores search and paging)
+    - Wipro job feed (ignores search and paging; see sap_successfactors)
 
 - group: no_india_jobs
   kind: company

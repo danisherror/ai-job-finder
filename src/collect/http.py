@@ -25,23 +25,28 @@ def get_json(url: str, params: dict | None = None, headers: dict | None = None):
     return _request("GET", url, params=params, headers=headers)
 
 
-def get_text(url: str, params: dict | None = None) -> str:
+def get_text(url: str, params: dict | None = None, headers: dict | None = None) -> str:
     """GET a URL and return its body as text (RSS feeds, HTML pages)."""
-    return _request("GET", url, params=params, as_text=True)
+    return _request("GET", url, params=params, as_text=True, headers=headers)
 
 
-def post_json(url: str, body: dict):
+def post_json(url: str, body: dict, headers: dict | None = None):
     """POST a JSON body and return parsed JSON (Workday's search works this way)."""
-    return _request("POST", url, body=body)
+    return _request("POST", url, body=body, headers=headers)
+
+
+def post_form(url: str, form: dict, headers: dict | None = None):
+    """POST form fields and return parsed JSON (RippleHire's search works this way)."""
+    return _request("POST", url, form=form, headers=headers)
 
 
 def _request(method: str, url: str, params: dict | None = None, body: dict | None = None, as_text: bool = False,
-             headers: dict | None = None):
+             headers: dict | None = None, form: dict | None = None):
     last: Exception | None = None
     attempt = limited = 0
     while attempt < RETRIES and limited < RATE_LIMIT_RETRIES:
         try:
-            resp = httpx.request(method, url, params=params, json=body, headers={**HEADERS, **(headers or {})}, timeout=TIMEOUT,
+            resp = httpx.request(method, url, params=params, json=body, data=form, headers={**HEADERS, **(headers or {})}, timeout=TIMEOUT,
                                  follow_redirects=True)
         except httpx.TimeoutException as e:
             last = SourceError("timeout", str(e))

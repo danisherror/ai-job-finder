@@ -1,9 +1,9 @@
-"""Job boards with a free public feed: Remote OK, Remotive, Working Nomads, Jobspresso and Hasjob.
+"""Job boards with a free public feed: Remote OK, Remotive, Working Nomads, Jobspresso, Jobicy and Hasjob.
 Each exposes its own fetch(source, known).
 
 These are job boards (many companies; `company` is the real employer). Each read is one call
 returning the newest jobs, so they run once per scan. The Apply link is the job's page on the
-board, which Remote OK and Remotive ask for in return for using their APIs.
+board, which Remote OK, Remotive and Jobicy ask for in return for using their APIs.
 `board` is unused except by Remotive, where it is the category slug (e.g. "software-dev").
 """
 
@@ -148,6 +148,27 @@ def fetch_jobspresso(source: Source, known: frozenset[str] = frozenset()) -> lis
     return _recent([jobspresso_job(i, source) for i in _rss_items(get_text(JOBSPRESSO_FEED))])
 
 
+# ---------------------------------------------------------------- Jobicy
+
+JOBICY_API = "https://jobicy.com/api/v2/remote-jobs"
+JOBICY_COUNT = 100      # the API's maximum; about a day and a half of new jobs
+
+
+def jobicy_job(raw: dict, source: Source) -> Job:
+    lo, hi = raw.get("salaryMin") or raw.get("annualSalaryMin"), raw.get("salaryMax") or raw.get("annualSalaryMax")
+    salary = f"{raw.get('salaryCurrency') or 'USD'} {lo}-{hi} {raw.get('salaryPeriod') or 'yearly'}" if lo or hi else None
+    industry = raw.get("jobIndustry") or []
+    department = n.html_to_text(industry[0] if isinstance(industry, list) and industry else str(industry or "")) or None
+    return _job(source, raw["url"], n.html_to_text(raw["jobTitle"]), n.html_to_text(raw.get("companyName")),
+                raw.get("jobGeo"), raw.get("jobDescription"), raw["url"], _iso(raw.get("pubDate")),
+                department=department, salary=salary)
+
+
+def fetch_jobicy(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
+    data = get_json(JOBICY_API, params={"count": JOBICY_COUNT})
+    return _recent([jobicy_job(r, source) for r in data.get("jobs") or []])
+
+
 # ---------------------------------------------------------------- Hasjob (Atom)
 
 HASJOB_FEED = "https://hasjob.co/feed"
@@ -195,6 +216,7 @@ FETCHERS = {
     "remotive": fetch_remotive,
     "workingnomads": fetch_workingnomads,
     "jobspresso": fetch_jobspresso,
+    "jobicy": fetch_jobicy,
     "hasjob": fetch_hasjob,
 }
 

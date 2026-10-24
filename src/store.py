@@ -340,8 +340,9 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
                 for copy in copies:  # a job board listed this first; keep the company's own posting
                     conn.execute("UPDATE jobs SET lifecycle = 'closed' WHERE job_key = ?", (copy,))
             elif not job.description:  # known, and its details weren't fetched again: keep what's stored
-                conn.execute(
-                    "UPDATE jobs SET last_seen = ?, missed_scans = 0, title = ?, lifecycle = 'open' WHERE job_key = ?",
+                conn.execute(  # sitemap readers don't know a known job's title: keep the saved one
+                    """UPDATE jobs SET last_seen = ?, missed_scans = 0, title = COALESCE(NULLIF(?, ''), title),
+                           lifecycle = 'open' WHERE job_key = ?""",
                     (ts, job.title, key),
                 )
             else:  # already known: only refresh what changes over time

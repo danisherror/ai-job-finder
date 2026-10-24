@@ -7,10 +7,12 @@ from pydantic import BaseModel, Field, HttpUrl
 
 SourceType = Literal["greenhouse", "lever", "ashby", "smartrecruiters", "workday", "workable", "himalayas",
                      "amazon", "oracle", "eightfold", "rippling", "weworkremotely", "ycombinator", "jibe",
-                     "remoteok", "remotive", "workingnomads", "jobspresso", "hasjob", "hackernews", "jooble", "careerjet"]
+                     "remoteok", "remotive", "workingnomads", "jobspresso", "hasjob", "hackernews", "jooble", "careerjet",
+                     "atlassian", "ripplehire", "phenom", "avature", "talentbrew", "icims", "socgen", "jobicy",
+                     "adzuna"]
 # Job boards listing many companies (not one company's own feed).
 AGGREGATOR_TYPES = {"himalayas", "weworkremotely", "ycombinator", "remoteok", "remotive", "workingnomads",
-                    "jobspresso", "hasjob", "hackernews", "jooble", "careerjet"}
+                    "jobspresso", "hasjob", "hackernews", "jooble", "careerjet", "jobicy", "adzuna"}
 WorkMode = Literal["remote", "hybrid", "onsite", "unknown"]
 IndiaEligible = Literal["yes", "no", "unclear"]
 
@@ -20,7 +22,7 @@ class Source(BaseModel):
     type: SourceType
     board: str
     active: bool = True
-    max_jobs: int | None = None   # cap on India jobs read per scan (Workday, Oracle, Eightfold); None = default
+    max_jobs: int | None = None   # cap on jobs read per scan (Workday, Oracle, Eightfold, ...); None = default
 
     @property
     def aggregator(self) -> bool:

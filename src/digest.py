@@ -26,7 +26,10 @@ ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby"
                "remotive": ("remotive.com",), "workingnomads": ("workingnomads.com",),
                "jobspresso": ("jobspresso.co",), "hasjob": ("hasjob.co",),
                "hackernews": ("news.ycombinator.com",), "jooble": ("jooble.org",),
-               "careerjet": ("jobviewtrack.com", "careerjet.co.in")}
+               "careerjet": ("jobviewtrack.com", "careerjet.co.in"), "atlassian": ("icims.com", "atlassian.com"),
+               "ripplehire": ("ripplehire.com",), "phenom": (), "avature": ("avature.net",), "talentbrew": (),
+               "icims": ("icims.com",), "socgen": ("societegenerale.com",), "jobicy": ("jobicy.com",),
+               "adzuna": ("adzuna.in",)}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -50,6 +53,15 @@ ATS_JOB_PAGE = {
     "hackernews": "https://news.ycombinator.com/item?id={id}",
     "jooble": "https://jooble.org/jdp/{id}",
     "careerjet": "https://www.careerjet.co.in",   # its job links change on every call; no stable page
+    "atlassian": "https://www.atlassian.com/company/careers/all-jobs",
+    "ripplehire": "{board}",                       # job pages need the site token, which the board holds
+    "phenom": "{site}/job/{id}",                   # board is the career site URL with its locale path
+    "avature": "{site}/JobDetail/{id}",            # site is the portal URL without the search words
+    "talentbrew": "{site}",                        # job pages need the title and city too
+    "icims": "{site}/jobs/{id}/job",
+    "socgen": "{site}/en/jobs",                    # job pages need the title too
+    "jobicy": "{id}",                              # the ID is the job's Jobicy URL
+    "adzuna": "https://www.adzuna.in/details/{id}",
 }
 
 

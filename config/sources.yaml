@@ -2,11 +2,16 @@
 # type: greenhouse | lever | ashby | smartrecruiters | workday | workable | himalayas
 #       | amazon | oracle | eightfold | rippling | weworkremotely | ycombinator | jibe
 #       | remoteok | remotive | workingnomads | jobspresso | hasjob | hackernews | jooble | careerjet
+#       | atlassian | ripplehire | phenom | avature | talentbrew | icims | socgen | jobicy | adzuna
 # board: the company's board name on that ATS (checked live 2026-10-23)
 #   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
 #   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
 #   himalayas: a country name; this is a job board covering many companies (remote jobs open to that country)
-#   jooble, careerjet: search keywords, several separated by "|" (India only; need an API key in .env)
+#   jooble, careerjet, adzuna: search keywords, several separated by "|" (India only; need an API key in .env)
+#   ripplehire: the career site link with its token, plus "#list/geo=India" where the site has that filter
+#   phenom: the career site URL with its locale path, e.g. https://careers.nttdata.com/global/en
+#   avature: the portal URL plus ?search=<words>, e.g. https://jobs.siemens.com/en_US/externaljobs?search=India
+#   talentbrew, icims, socgen: the career site's base URL (read through its sitemap and job pages)
 # SmartRecruiters and Workday only collect India jobs, and fetch each new job's page once (first scan is slow).
 # max_jobs: optional cap on India jobs read per scan for Workday, Oracle and Eightfold (default 1,000).
 
@@ -254,3 +259,26 @@
 # Jooble: the key is for the global site, which has few India jobs (~40 in 2 weeks, mostly Mastercard, 2026-10-24).
 # The key allows 500 requests in all; each keyword uses one a day.
 - {name: Jooble,            type: jooble,    board: "developer|software engineer"}
+
+# --- M. Added 2026-10-24: readers for career systems that were missing (India job counts checked live that day) ---
+# Atlassian's own job list (its iCIMS site; one call per scan, full descriptions)
+- {name: Atlassian,         type: atlassian,  board: ""}                                                   # 48
+# RippleHire (each new job costs one extra call)
+- {name: LTIMindtree,       type: ripplehire, board: "https://ltimindtree.ripplehire.com/candidate/?token=xviyQvbnyYZdGtozXoNm#list/geo=India"}  # 754
+- {name: Tata Technologies, type: ripplehire, board: "https://tatatechnologies.ripplehire.com/candidate/?token=jjZIWXgr7fPCCF6T5yk4#list"}  # ~150 India of 319 (no country filter)
+- {name: Mphasis,           type: ripplehire, board: "https://mphasis.ripplehire.com/candidate/?token=ty4DfyWddnOrtpclQeia#list"}           # India share of 198 (no country filter)
+# Phenom (each new job costs one extra call)
+- {name: NTT DATA,          type: phenom,     board: "https://careers.nttdata.com/global/en", max_jobs: 500}   # 1,138; capped
+- {name: Cencora,           type: phenom,     board: "https://careers.cencora.com/us/en"}                      # 88 (Pune)
+# Avature: ~150 list pages a scan; at most 150 new job pages opened per scan
+- {name: Siemens,           type: avature,    board: "https://jobs.siemens.com/en_US/externaljobs?search=India"}  # ~900 matching "India"
+# Sitemap + job pages (TalentBrew, iCIMS classic, Societe Generale); at most 200 new job pages per scan
+- {name: Arm,               type: talentbrew, board: "https://careers.arm.com"}                     # 104
+- {name: Synopsys,          type: talentbrew, board: "https://careers.synopsys.com"}                # 206
+- {name: UnitedHealth Group (Optum), type: talentbrew, board: "https://careers.unitedhealthgroup.com"}  # ~220
+- {name: Societe Generale,  type: socgen,     board: "https://careers.societegenerale.com"}         # 231
+- {name: IDeaS,             type: icims,      board: "https://ideasglobal-sas.icims.com"}           # 0 India of 5 today
+# Remote job board
+- {name: Jobicy,            type: jobicy,     board: ""}               # ~40 of the newest 100 open worldwide
+# Adzuna: turn on once ADZUNA_APP_ID and ADZUNA_APP_KEY are in .env (free key at developer.adzuna.com)
+- {name: Adzuna,            type: adzuna,     board: "software engineer|developer|data engineer|devops", active: false}

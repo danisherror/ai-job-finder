@@ -1,4 +1,4 @@
-"""Job portals with an official API that needs a key: Jooble and Careerjet.
+"""Job portals with an official API that needs a key: Jooble, Careerjet and Adzuna.
 Each exposes its own fetch(source, known). Keys come from .env (see .env.example).
 
 `board` holds the search keywords, several separated by "|"; each one is a separate search.
@@ -161,9 +161,54 @@ def fetch_careerjet(source: Source, known: frozenset[str] = frozenset()) -> list
     return list(jobs.values())
 
 
+# ---------------------------------------------------------------- Adzuna
+
+# Free developer keys (an app ID and an app key) from developer.adzuna.com; India is country "in".
+# The free tier allows 250 calls a day, so each keyword reads at most ADZUNA_MAX_PAGES pages.
+ADZUNA_API = "https://api.adzuna.com/v1/api/jobs/in/search/{page}"
+ADZUNA_PAGE_SIZE = 50         # the API's maximum
+ADZUNA_MAX_PAGES = 5
+
+
+def _adzuna_salary(raw: dict) -> str | None:
+    lo, hi = raw.get("salary_min"), raw.get("salary_max")
+    if not lo and not hi or raw.get("salary_is_predicted") in ("1", 1):
+        return None   # Adzuna's own estimate, not the employer's
+    return f"INR {int(lo or 0):,}-{int(hi or lo or 0):,} yearly"
+
+
+def adzuna_job(raw: dict, source: Source) -> Job:
+    place = (raw.get("location") or {}).get("display_name") or ""
+    area = (raw.get("location") or {}).get("area") or []
+    if area and area[0] == "India" and "india" not in place.lower():
+        place = f"{place}, India" if place else "India"
+    return _job(source, str(raw["id"]), raw["title"], (raw.get("company") or {}).get("display_name") or "",
+                place, raw.get("description") or "", raw["redirect_url"],
+                _jooble_date(raw.get("created")), _adzuna_salary(raw),
+                (raw.get("category") or {}).get("label"))
+
+
+def fetch_adzuna(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
+    auth = {"app_id": _key("ADZUNA_APP_ID"), "app_key": _key("ADZUNA_APP_KEY")}
+    jobs: dict[str, Job] = {}
+    for keyword in _keywords(source):
+        for page in range(1, ADZUNA_MAX_PAGES + 1):
+            time.sleep(PAGE_DELAY)
+            data = get_json(ADZUNA_API.format(page=page), params={
+                **auth, "what": keyword, "results_per_page": ADZUNA_PAGE_SIZE, "max_days_old": MAX_AGE_DAYS,
+                "sort_by": "date", "content-type": "application/json"})
+            items = data.get("results") or []
+            for raw in items:
+                jobs.setdefault(str(raw["id"]), adzuna_job(raw, source))
+            if len(items) < ADZUNA_PAGE_SIZE or all(str(r["id"]) in known for r in items):
+                break
+    return list(jobs.values())
+
+
 FETCHERS = {
     "jooble": fetch_jooble,
     "careerjet": fetch_careerjet,
+    "adzuna": fetch_adzuna,
 }
 
 
