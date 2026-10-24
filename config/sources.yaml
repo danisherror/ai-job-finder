@@ -1,6 +1,10 @@
 # Companies to collect jobs from.
-# type: greenhouse | lever | ashby   (career_page comes after v1)
+# type: greenhouse | lever | ashby | smartrecruiters | workday | workable | himalayas
 # board: the company's board name on that ATS (checked live 2026-10-23)
+#   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
+#   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
+#   himalayas: a country name; this is a job board covering many companies (remote jobs open to that country)
+# SmartRecruiters and Workday only collect India jobs, and fetch each new job's page once (first scan is slow).
 
 # --- A. Indian companies ---
 - {name: Meesho,     type: lever,      board: meesho}
@@ -74,3 +78,31 @@
 - {name: ElevenLabs,   type: ashby,      board: elevenlabs}
 - {name: Cursor,       type: ashby,      board: cursor}
 - {name: Oyster,       type: ashby,      board: oyster}
+
+# --- E. Added 2026-10-24: more systems (India job counts checked live that day) ---
+# SmartRecruiters
+- {name: ServiceNow,      type: smartrecruiters, board: ServiceNow}       # 71 India jobs
+- {name: Freshworks,      type: smartrecruiters, board: Freshworks}       # 34
+- {name: Swiggy,          type: smartrecruiters, board: Swiggy}           # 200 (many non-tech; rules filter them)
+- {name: LinkedIn,        type: smartrecruiters, board: LinkedIn3}        # 44 (LinkedIn's own careers page)
+- {name: Experian,        type: smartrecruiters, board: Experian}         # 31
+- {name: Bosch,           type: smartrecruiters, board: BoschGroup}       # 631
+# Workday
+- {name: NVIDIA,          type: workday, board: "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"}       # 242
+- {name: Salesforce,      type: workday, board: "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site"}      # 113
+- {name: Analog Devices,  type: workday, board: "https://analogdevices.wd1.myworkdayjobs.com/External"}                # 104
+- {name: Visa,            type: workday, board: "https://visa.wd5.myworkdayjobs.com/Visa"}                             # 96
+- {name: Intel,           type: workday, board: "https://intel.wd1.myworkdayjobs.com/External"}                        # 86
+- {name: Target,          type: workday, board: "https://target.wd5.myworkdayjobs.com/targetcareers"}                  # 58
+- {name: KLA,             type: workday, board: "https://kla.wd1.myworkdayjobs.com/Search"}                            # 45
+- {name: Adobe,           type: workday, board: "https://adobe.wd5.myworkdayjobs.com/external_experienced"}            # 44
+- {name: Thomson Reuters, type: workday, board: "https://thomsonreuters.wd5.myworkdayjobs.com/External_Career_Site"}   # 42
+- {name: CrowdStrike,     type: workday, board: "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers"}        # 33
+- {name: Workday,         type: workday, board: "https://workday.wd5.myworkdayjobs.com/Workday"}                       # 25
+- {name: Autodesk,        type: workday, board: "https://autodesk.wd1.myworkdayjobs.com/Ext"}                          # 24
+- {name: Sprinklr,        type: workday, board: "https://sprinklr.wd1.myworkdayjobs.com/careers"}                      # 19
+# Workable
+- {name: Leena AI,        type: workable, board: leena-ai}                # 7 India of 19
+
+# --- F. Job boards (many companies; duplicates of company feeds above are skipped) ---
+- {name: Himalayas,       type: himalayas, board: India}                  # remote jobs open to India, ~500 per 2 weeks

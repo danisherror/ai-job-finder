@@ -9,7 +9,7 @@ from src.models import Job, Source
 API = "https://api.lever.co/v0/postings/{board}"
 
 
-def fetch(source: Source) -> list[Job]:
+def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
     data = get_json(API.format(board=source.board), params={"mode": "json"})
     if not isinstance(data, list):
         raise ValueError("Lever feed did not return a list")

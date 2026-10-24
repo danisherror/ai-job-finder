@@ -7,7 +7,7 @@ from src.models import Job, Source
 API = "https://api.ashbyhq.com/posting-api/job-board/{board}"
 
 
-def fetch(source: Source) -> list[Job]:
+def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
     data = get_json(API.format(board=source.board), params={"includeCompensation": "true"})
     return [to_job(raw, source) for raw in data["jobs"] if raw.get("isListed", True)]
 

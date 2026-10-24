@@ -3,16 +3,18 @@
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from src.models import Job, MatchResult, Profile, Source
+from src.models import AGGREGATOR_TYPES, Job, MatchResult, Profile, Source
 
 DEFAULT_DB = Path(__file__).resolve().parent.parent / "private" / "jobs.db"
 BACKFILL_DAYS = 7  # on a source's first scan, older jobs are stored as already seen
 CLOSE_AFTER_MISSES = 2     # successful scans without a job before it counts as closed
+AGGREGATOR_CLOSE_DAYS = 30  # job-board jobs close by age (a board scan only reads its newest pages)
 RESUME_WITHIN_HOURS = 6    # an unfinished run younger than this is resumed; older ones are marked failed
 SUSPICIOUS_MIN_USUAL = 3   # a source that usually has at least this many jobs and suddenly has 0 is suspicious
 ACCEPT_ZERO_AFTER = 3      # ...unless it has had 0 this many runs in a row; then the zero is believed
@@ -266,11 +268,44 @@ def _is_backfill(job: Job, cutoff: datetime) -> bool:
     return d < cutoff
 
 
+def known_ats_ids(conn, source_name: str) -> frozenset[str]:
+    rows = conn.execute("SELECT ats_id FROM jobs WHERE source = ? AND ats_id IS NOT NULL", (source_name,))
+    return frozenset(r[0] for r in rows)
+
+
+_COMPANY_FILLER = {"inc", "ltd", "llc", "pvt", "private", "limited", "corp", "corporation", "co", "the",
+                   "technologies", "technology", "labs", "gmbh", "ai", "io", "hq", "group"}
+
+
+def same_job_key(company: str, title: str) -> tuple[str, str]:
+    """Loose (company, title) identity, used to spot one job listed on a job board and a company feed."""
+    words = [w for w in re.findall(r"[a-z0-9]+", company.lower()) if w not in _COMPANY_FILLER]
+    return "".join(words), " ".join(re.findall(r"[a-z0-9]+", title.lower()))
+
+
+def _open_jobs_by_identity(conn, aggregators: bool) -> dict[tuple[str, str], list[str]]:
+    """Open jobs from job boards (aggregators=True) or from company feeds, by same_job_key."""
+    marks = ",".join("?" * len(AGGREGATOR_TYPES))
+    rows = conn.execute(
+        f"""SELECT j.job_key, j.company, j.title FROM jobs j JOIN sources s ON s.name = j.source
+            WHERE j.lifecycle != 'closed' AND s.type {'' if aggregators else 'NOT'} IN ({marks})""",
+        tuple(AGGREGATOR_TYPES),
+    )
+    index: dict[tuple[str, str], list[str]] = {}
+    for key, company, title in rows:
+        index.setdefault(same_job_key(company, title), []).append(key)
+    return index
+
+
 def save_source_result(conn, run_id: str, source: Source, started: str, jobs: list[Job]) -> int:
     """Save one source's jobs and mark it done, in a single transaction. Returns the number of new jobs.
 
     Call this only for a successful scan: jobs of this source that were not in it move towards closed
     (possibly_closed after one miss, closed after CLOSE_AFTER_MISSES). A job that shows up again reopens.
+
+    Job boards (aggregators) differ: a job already open from a company feed is skipped, and their jobs
+    close by age instead of by misses. When a company feed adds a job a board already had, the board's
+    copy closes, so each job is matched and sent once.
     """
     ts = now()
     first_scan = conn.execute(
@@ -279,10 +314,14 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
     cutoff = datetime.now(timezone.utc) - timedelta(days=BACKFILL_DAYS)
     new = 0
     seen: list[str] = []
+    others = _open_jobs_by_identity(conn, aggregators=not source.aggregator)
     with conn:  # one transaction: either all of this happens or none of it
         for job in jobs:
             key = job_key(source.type, source.board, job)
             seen.append(key)
+            copies = others.get(same_job_key(job.company, job.title), [])
+            if source.aggregator and copies:
+                continue  # the company's own feed already has it
             cur = conn.execute(
                 """INSERT INTO jobs (job_key, source, ats_id, title, company, location_raw, cities, work_mode,
                        india_eligible, experience_min, experience_max, salary, department, description,
@@ -298,6 +337,13 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
             )
             if cur.rowcount:
                 new += 1
+                for copy in copies:  # a job board listed this first; keep the company's own posting
+                    conn.execute("UPDATE jobs SET lifecycle = 'closed' WHERE job_key = ?", (copy,))
+            elif not job.description:  # known, and its details weren't fetched again: keep what's stored
+                conn.execute(
+                    "UPDATE jobs SET last_seen = ?, missed_scans = 0, title = ?, lifecycle = 'open' WHERE job_key = ?",
+                    (ts, job.title, key),
+                )
             else:  # already known: only refresh what changes over time
                 conn.execute(
                     """UPDATE jobs SET last_seen = ?, missed_scans = 0, updated_at = ?,
@@ -309,14 +355,22 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
                      job.location_raw, json.dumps(job.cities), job.work_mode, job.india_eligible,
                      job.experience_min, job.experience_max, job.salary, key),
                 )
-        # This source's jobs that weren't in this scan were missed once more.
-        conn.execute(
-            """UPDATE jobs SET missed_scans = missed_scans + 1,
-                   lifecycle = CASE WHEN missed_scans + 1 >= ? THEN 'closed' ELSE 'possibly_closed' END
-               WHERE source = ? AND lifecycle != 'closed'
-                 AND job_key NOT IN (SELECT value FROM json_each(?))""",
-            (CLOSE_AFTER_MISSES, source.name, json.dumps(seen)),
-        )
+        if source.aggregator:
+            old = (datetime.now(timezone.utc) - timedelta(days=AGGREGATOR_CLOSE_DAYS)).isoformat()
+            conn.execute(
+                """UPDATE jobs SET lifecycle = 'closed'
+                   WHERE source = ? AND lifecycle != 'closed' AND COALESCE(posted_at, first_seen) < ?""",
+                (source.name, old),
+            )
+        else:
+            # This source's jobs that weren't in this scan were missed once more.
+            conn.execute(
+                """UPDATE jobs SET missed_scans = missed_scans + 1,
+                       lifecycle = CASE WHEN missed_scans + 1 >= ? THEN 'closed' ELSE 'possibly_closed' END
+                   WHERE source = ? AND lifecycle != 'closed'
+                     AND job_key NOT IN (SELECT value FROM json_each(?))""",
+                (CLOSE_AFTER_MISSES, source.name, json.dumps(seen)),
+            )
         conn.execute(
             """INSERT OR REPLACE INTO source_runs (run_id, source, result, started, finished, jobs_found, jobs_new)
                VALUES (?, ?, 'ok', ?, ?, ?, ?)""",

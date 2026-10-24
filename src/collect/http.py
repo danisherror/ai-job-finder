@@ -1,4 +1,4 @@
-"""Polite JSON fetching shared by all ATS adapters."""
+"""Polite JSON fetching shared by all adapters."""
 
 import time
 
@@ -19,10 +19,20 @@ class SourceError(Exception):
 
 def get_json(url: str, params: dict | None = None):
     """GET a URL and return parsed JSON, retrying temporary failures with backoff."""
+    return _request("GET", url, params=params)
+
+
+def post_json(url: str, body: dict):
+    """POST a JSON body and return parsed JSON (Workday's search works this way)."""
+    return _request("POST", url, body=body)
+
+
+def _request(method: str, url: str, params: dict | None = None, body: dict | None = None):
     last: Exception | None = None
     for attempt in range(RETRIES):
         try:
-            resp = httpx.get(url, params=params, headers=HEADERS, timeout=TIMEOUT, follow_redirects=True)
+            resp = httpx.request(method, url, params=params, json=body, headers=HEADERS, timeout=TIMEOUT,
+                                 follow_redirects=True)
         except httpx.TimeoutException as e:
             last = SourceError("timeout", str(e))
         except httpx.HTTPError as e:

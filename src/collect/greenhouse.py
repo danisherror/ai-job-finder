@@ -9,7 +9,7 @@ from src.models import Job, Source
 API = "https://boards-api.greenhouse.io/v1/boards/{board}/jobs"
 
 
-def fetch(source: Source) -> list[Job]:
+def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
     data = get_json(API.format(board=source.board), params={"content": "true"})
     return [to_job(raw, source) for raw in data["jobs"]]
 

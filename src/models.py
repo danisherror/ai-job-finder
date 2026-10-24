@@ -5,7 +5,9 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, HttpUrl
 
-SourceType = Literal["greenhouse", "lever", "ashby"]
+SourceType = Literal["greenhouse", "lever", "ashby", "smartrecruiters", "workday", "workable", "himalayas"]
+# Job boards listing many companies (not one company's own feed).
+AGGREGATOR_TYPES = {"himalayas"}
 WorkMode = Literal["remote", "hybrid", "onsite", "unknown"]
 IndiaEligible = Literal["yes", "no", "unclear"]
 
@@ -15,6 +17,10 @@ class Source(BaseModel):
     type: SourceType
     board: str
     active: bool = True
+
+    @property
+    def aggregator(self) -> bool:
+        return self.type in AGGREGATOR_TYPES
 
 
 class Job(BaseModel):

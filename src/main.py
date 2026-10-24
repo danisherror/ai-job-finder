@@ -56,7 +56,7 @@ def collect(conn, run_id: str) -> tuple[int, int]:
             time.sleep(DELAY_BETWEEN_SOURCES)
         started = store.now()
         try:
-            jobs = ADAPTERS[source.type](source)
+            jobs = ADAPTERS[source.type](source, store.known_ats_ids(conn, source.name))
             if store.is_suspicious_zero(conn, source, jobs):
                 store.record_suspicious(conn, run_id, source, started)
                 print(f"  SUSPECT {source.name:<14}    0 jobs (usually {store.usual_count(conn, source.name)}); "

@@ -1,0 +1,151 @@
+{
+ "item": {
+  "id": "744000157388914",
+  "name": "Field Marketing Specialist (Contract)",
+  "uuid": "44aef59a-887f-4f15-96da-56011fdc05a4",
+  "jobAdId": "326ab946-2f23-4ef6-b3a6-0847e04aef27",
+  "defaultJobAd": true,
+  "refNumber": "REF8781Y",
+  "company": {
+   "identifier": "Freshworks",
+   "name": "Freshworks"
+  },
+  "releasedDate": "2026-10-23T06:15:27.282Z",
+  "location": {
+   "city": "Bengaluru",
+   "region": "KA",
+   "country": "in",
+   "remote": false,
+   "hybrid": true,
+   "latitude": "12.9628957",
+   "longitude": "77.57754",
+   "fullLocation": "Bengaluru, KA, India"
+  },
+  "industry": {
+   "id": "it_and_services",
+   "label": "Information Technology And Services"
+  },
+  "department": {},
+  "function": {
+   "id": "human_resources",
+   "label": "Human Resources"
+  },
+  "typeOfEmployment": {
+   "id": "contract",
+   "label": "Contract"
+  },
+  "experienceLevel": {
+   "id": "mid_senior_level",
+   "label": "Mid-Senior Level"
+  },
+  "customField": [
+   {
+    "fieldId": "618bba30fa9dfa25d877c58b",
+    "fieldLabel": "Brands",
+    "valueId": "default",
+    "valueLabel": "Freshworks"
+   },
+   {
+    "fieldId": "COUNTRY",
+    "fieldLabel": "Country/Region",
+    "valueId": "in",
+    "valueLabel": "India"
+   }
+  ],
+  "visibility": "PUBLIC",
+  "ref": "https://api.smartrecruiters.com/v1/companies/Freshworks/postings/744000157388914",
+  "language": {
+   "code": "en",
+   "label": "English",
+   "labelNative": "English (US)"
+  }
+ },
+ "detail": {
+  "id": "744000157388914",
+  "name": "Field Marketing Specialist (Contract)",
+  "uuid": "44aef59a-887f-4f15-96da-56011fdc05a4",
+  "jobId": "757cbb9f-0310-4fc1-a6b1-f6b3e220abbd",
+  "jobAdId": "326ab946-2f23-4ef6-b3a6-0847e04aef27",
+  "defaultJobAd": true,
+  "refNumber": "REF8781Y",
+  "company": {
+   "name": "Freshworks",
+   "identifier": "Freshworks"
+  },
+  "location": {
+   "city": "Bengaluru",
+   "region": "KA",
+   "country": "in",
+   "remote": false,
+   "hybrid": true,
+   "latitude": "12.9628957",
+   "longitude": "77.57754",
+   "fullLocation": "Bengaluru, KA, India"
+  },
+  "customField": [
+   {
+    "fieldId": "618bba30fa9dfa25d877c58b",
+    "fieldLabel": "Brands",
+    "valueId": "default",
+    "valueLabel": "Freshworks"
+   },
+   {
+    "fieldId": "COUNTRY",
+    "fieldLabel": "Country/Region",
+    "valueId": "in",
+    "valueLabel": "India"
+   }
+  ],
+  "releasedDate": "2026-10-23T06:15:27.282Z",
+  "creator": {
+   "name": "",
+   "avatarUrl": ""
+  },
+  "postingUrl": "https://jobs.smartrecruiters.com/Freshworks/744000157388914-field-marketing-specialist-contract-",
+  "applyUrl": "https://jobs.smartrecruiters.com/Freshworks/744000157388914-field-marketing-specialist-contract-?oga=true",
+  "referralUrl": "https://jobs.smartrecruiters.com/external-referrals/company/Freshworks/publication/44aef59a-887f-4f15-96da-56011fdc05a4?dcr_ci=Freshworks",
+  "jobAd": {
+   "sections": {
+    "companyDescription": {
+     "title": "Company Description",
+     "text": "<p>Freshworks makes it fast and easy for businesses to delight their customers and employees. We do this by taking a fresh approach to building and delivering software that is affordable, quick to implement, and designed for the end user. Headquartered in&#xa0;<strong>San Mateo, California</strong>, Freshworks has a global team operating from&#xa0;<strong>13 global locations</strong>&#xa0;to serve more than 65,000 companies -- from startups to public companies \u2013 that rely on Freshworks software-as-a-service to enable a better customer experience (CRM, CX) and employee experience (ITSM).</p><p>Freshworks\u2019 cloud-based software suite includes&#xa0;<strong>Freshdesk</strong>&#xa0;(omni-channel customer support),&#xa0;<strong>Freshsales</strong>&#xa0;(sales automation),&#xa0;<strong>Freshmarketer</strong>&#xa0;(marketing automation),&#xa0;<strong>Freshservice</strong>&#xa0;(IT service desk),&#xa0;<strong>Freshchat</strong>&#xa0;(AI-powered bots), supported by Neo, our underlying platform of shared services.</p><p>Freshworks is featured in global national press including CNBC, Forbes, Fortune, Bloomberg and has been a BuiltIn Best Place to work in San Francisco and Denver for the last 3 years. Our customer ratings have earned Freshworks products TrustRadius Top Rated Software ratings and G2 Best of Awards for Best Feature Set, Best Value for the Price and Best Relationship.</p>"
+    },
+    "jobDescription": {
+     "title": "Job Description",
+     "text": "<p>We\u2019re looking for an execution-driven Field Marketing Specialist to run events, webinars and field programs, primarily across India with support for APMEA. You\u2019ll run the show end-to-end, from planning and delivery through follow-up, reporting and learnings, and build the foundations that let every campaign and event execute smoothly. You\u2019ll work closely with the Regional Marketing Manager, Sales, and cross-functional teams (Ops, procurement, finance, etc.)</p><p>This isn\u2019t a \u201cfollow-the-playbook\u201d role. We need a genuine doer with strong business sense, someone who sees the bigger picture, keeps many moving parts on track, and is always asking, \u201cHow can we do this better?\u201d</p><p>What You\u2019ll Do</p><ul><li><p>Support the execution of physical, virtual and third-party events, roundtables and webinars, from concept to post-event follow-up, with a focus on high engagement and ROI. As you grow in the role, you\u2019ll take on a bigger part in planning and strategic discussions for in-region activity.</p></li><li><p>Own the operational side: manage budgets, timelines, and vendors and agencies, from vendor PR paperwork and POs through to invoices, while keeping trackers current and working with procurement and finance to deliver on time and within budget.</p></li><li><p>Work jointly with Marketing Operations on campaign setup, lead and attendee uploads, and Salesforce tracking, so leads reach Sales promptly.</p></li><li><p>Work with the local field marketing owners across the various programs and ABM activations across India, and support scaled campaigns across APMEA.</p></li><li><p>Manage vendors, agencies, event logistics and swag, evaluating third-party event opportunities and making every dollar count.</p></li><li><p>Work with brand, content and design teams to deliver assets on time and on brand.</p></li><li><p>Build reports and analysis of campaign performance, spot trends, and turn learnings into clear recommendations for Sales and Marketing on what to repeat, fix or stop.</p></li><li><p>Experiment with AI tools to automate reporting, tracking and follow-ups, and to scale campaign reach.</p></li></ul>"
+    },
+    "qualifications": {
+     "title": "Qualifications",
+     "text": "<ul><li><p>4-7 years in B2B SaaS or enterprise tech marketing, with experience running field programs, events and webinars end-to-end. You\u2019ve run the show, not just supported it.</p></li><li><p>Strong business acumen: you connect programs to pipeline and business priorities, think big, and make smart trade-offs on budget and investment.</p></li><li><p>Solid operational foundations: experience with budgets, vendors, agencies, procurement, POs and invoicing, and project tracking, and you know what it takes to set a program up to execute well.</p></li><li><p>A self-starter with a strong bias for action, who manages multiple fast-moving priorities independently without losing sight of the details.</p></li><li><p>Data confidence and Salesforce (or similar CRM) fluency. You understand what the data means and use it to improve campaigns.</p></li><li><p>Experience working across Sales, Marketing Operations, procurement, finance, and brand, content and design teams.</p></li><li><p>A sales-centric mindset and genuine interest in how sales teams work and win.</p></li><li><p>Curiosity about ABM and AI tools, and comfort using them to work smarter.</p></li><li><p>Comfortable supporting programs across multiple markets and time zones.</p></li><li><p>Fluent English and clear communication.</p></li><li><p>Willingness to travel when needed</p></li></ul>"
+    },
+    "additionalInformation": {
+     "title": "Additional Information",
+     "text": "<div sr-tagline=\"\"></div><p>At Freshworks, we have fostered an environment that enables everyone to find their true potential, purpose, and passion, welcoming colleagues of all backgrounds, genders, sexual orientations, religions, and ethnicities. We are committed to providing equal opportunity and believe that diversity in the workplace creates a more vibrant, richer environment that boosts the goals of our employees, communities, and business. <strong>Fresh vision. Real impact. Come build it with us.</strong></p>"
+    }
+   }
+  },
+  "active": true,
+  "visibility": "PUBLIC",
+  "industry": {
+   "id": "it_and_services",
+   "label": "Information Technology And Services"
+  },
+  "function": {
+   "id": "marketing",
+   "label": "Marketing"
+  },
+  "experienceLevel": {
+   "id": "mid_senior_level",
+   "label": "Mid-Senior Level"
+  },
+  "typeOfEmployment": {
+   "id": "contract",
+   "label": "Contract"
+  },
+  "language": {
+   "code": "en",
+   "label": "English",
+   "labelNative": "English (US)"
+  }
+ }
+}

@@ -1,0 +1,167 @@
+{
+ "comments": "Search results come 20 to a page. Pass ?page=2, ?page=3 and so on for more; there is no cursor on search. Cursor pagination (nextCursor) is only on /jobs/api, the browse feed. 13/03/2026: The API has been updated to include the companySlug field in the response.",
+ "updatedAt": 1792784000,
+ "offset": 0,
+ "limit": 20,
+ "totalCount": 4638,
+ "jobs": [
+  {
+   "title": "Manager, Regulatory Intelligence (India)",
+   "excerpt": "Redica Systems is looking for a Manager, Regulatory Intelligence to lead a team responsible for monitoring, evaluating, and structuring regulatory developments across 150+ countries.",
+   "companyName": "REDICA Systems",
+   "companySlug": "redicasystems",
+   "companyLogo": "https://cdn-images.himalayas.app/w7sdhzs7hmarsj5znfa6idbsn797",
+   "employmentType": "Full Time",
+   "minSalary": null,
+   "maxSalary": null,
+   "salaryPeriod": "annual",
+   "seniority": [
+    "Manager"
+   ],
+   "currency": null,
+   "locationRestrictions": [
+    "India"
+   ],
+   "timezoneRestrictions": [
+    5.5
+   ],
+   "categories": [
+    "Regulatory-Intelligence",
+    "Regulatory-Affairs-Manager",
+    "QA-Manager"
+   ],
+   "parentCategories": [
+    "Developer"
+   ],
+   "description": "<p>Redica Systems is looking for a Manager, Regulatory Intelligence to lead a team responsible for monitoring, evaluating, and structuring regulatory developments across 150+ countries.</p><p>In this role, you will oversee the quality, accuracy, and timely delivery of regulatory intelligence covering Pharmaceutical, Biologics, MedTech, and Animal Health sectors. You'll guide the team in interpreting regulatory developments, determining industry relevance and impact, and maintaining reliable information within Redica's regulatory intelligence platform.</p><p>We're looking for a hands-on leader who brings strong GxP knowledge, sound judgment, and a practical approach to managing people, improving processes, and making effective use of technology.</p><h3>Key Responsibilities </h3><ul>\n<li>Lead, coach, and develop a team of Data Solutions Coordinators, providing clear priorities, guidance, feedback, and performance management.</li>\n<li>Oversee global regulatory monitoring activities, ensuring relevant developments are identified, evaluated, and processed accurately and on time.</li>\n<li>Guide the team's assessment of regulatory developments, including industry scope, GxP applicability, operational impact, and classification decisions.</li>\n<li>Maintain standards for structured regulatory data, including metadata accuracy, effective dates, consultation deadlines, enforcement timelines, and document relationships.</li>\n<li>Establish and monitor team KPIs covering productivity, quality, accuracy, and turnaround times, addressing gaps and improving performance.</li>\n<li>Manage team workload, resource allocation, and priorities to maintain consistent regulatory coverage and meet operational objectives.</li>\n<li>Work with Product, Engineering, and other internal teams to improve monitoring capabilities, classification logic, quality controls, and workflows.</li>\n<li>Identify opportunities to use AI, automation, and other technologies to improve the efficiency, consistency, and scalability of regulatory intelligence operations.</li>\n</ul><h3>About You</h3><ul>\n<li>\n<strong>Communicates Effectively</strong>: You develop and deliver clear, concise communications across multiple platforms, ensuring accurate and timely sharing of regulatory intelligence insights, updates, and trends with teams and stakeholders.</li>\n<li>\n<strong>Decision Quality</strong>: You demonstrate the ability to make good and timely decisions in data operations. You understand the implications of various data choices.</li>\n<li>\n<strong>Optimizes Work Processes</strong>: You demonstrate the ability to enhance and streamline data processes. You seek opportunities for data process improvement.</li>\n<li>\n<strong>Business Insight</strong>: You demonstrate an understanding of the business and use this knowledge to inform data decisions.</li>\n<li>\n<strong>Tech Savvy</strong>: You demonstrate a basic understanding of current technologies used in data operations. You can effectively use these technologies in daily work and are open to adopting new ones.</li>\n<li>\n<strong>Engaged</strong>: You not only share our values but also possess the essential competencies needed to thrive at Redica, as outlined here. </li>\n</ul><ul>\n<li>Familiarity with Regulatory Affairs, Quality Assurance, GxP, or Regulatory Intelligence within Pharmaceutical, Biologics, Medical Device, or Animal Health industries.</li>\n<li>Previous experience leading, supervising, or managing teams, with demonstrated responsibility for work quality, performance, and delivery.</li>\n<li>Strong understanding of GxP principles and global regulatory frameworks, including the ability to interpret regulatory language and assess industry impact.</li>\n<li>Experience overseeing regulatory monitoring, intelligence gathering, data classification, or compliance-related operations.</li>\n<li>Demonstrated ability to establish quality standards, manage operational KPIs, and improve team workflows.</li>\n<li>Comfortable working with technology-enabled processes, data platforms, and AI or automation tools.</li>\n<li>A Master's degree in Regulatory Affairs, Pharmaceutics, Quality Assurance, or a related discipline is preferred.</li>\n</ul><p>Top Pharmaceutical Companies, Food Manufacturers, MedTech Companies, and Service Firms from around the globe rely on Redica Systems to mine and process government inspection, enforcement, and registration data. This enables them to quantify risk signals from their suppliers, identify market opportunities, benchmark against peers, and prepare for the latest inspection trends.</p><p>Our data and analytics have been cited by major media outlets, including MSNBC, <em>The Wall Street Journal</em>, and <em>The Boston Globe</em>. </p><p><strong>Redica Systems </strong>is the Intelligence Cloud for life sciences, transforming regulatory complexity into connected, proactive intelligence. Redica's platform helps the world's leading Pharmaceutical and MedTech companies stay inspection-ready, manage supplier risk, and keep pace with evolving global regulations. Built on the Redica Catalyst Platform and powered by Redica ID, Redica unifies the industry's most complete regulatory and inspection datasets, sourced from hundreds of global health authorities, into trusted intelligence for quality and regulatory teams. The Redica Intelligence Cloud brings data together to anticipate risk, accelerate compliance, and enable smarter, faster decisions across the enterprise. </p><p>More information is available at redica.com.</p><p>Originally posted on <a href=\"https://himalayas.app\">Himalayas</a></p>",
+   "pubDate": 1792784000,
+   "expiryDate": 1797967999,
+   "applicationLink": "https://himalayas.app/companies/redicasystems/jobs/manager-regulatory-intelligence-india?utm_source=api",
+   "guid": "https://himalayas.app/companies/redicasystems/jobs/manager-regulatory-intelligence-india"
+  },
+  {
+   "title": "Lead PHP/Symfony Engineer (Remote, Full-Time) - [HR191]",
+   "excerpt": "About Smart WorkingAt Smart Working, we believe the right job should do more than strengthen your CV \u2014 it should challenge you, inspire you, and feel right every day.",
+   "companyName": "Smart Working",
+   "companySlug": "smart-working",
+   "companyLogo": "",
+   "employmentType": "Full Time",
+   "minSalary": null,
+   "maxSalary": null,
+   "salaryPeriod": "annual",
+   "seniority": [
+    "Senior"
+   ],
+   "currency": null,
+   "locationRestrictions": [
+    "India"
+   ],
+   "timezoneRestrictions": [
+    5.5
+   ],
+   "categories": [
+    "Lead-PHP-Developer",
+    "Senior-PHP-Developer",
+    "Symfony-Developer",
+    "Backend-Engineer",
+    "Software-Engineer",
+    "Lead-PHP-Engineer",
+    "Senior-PHP-Engineer",
+    "Team-Lead-PHP-Engineer",
+    "Senior-PHP-Tech-Lead",
+    "Senior-Symfony-Architect",
+    "Senior-Full-Stack-PHP-Developer",
+    "Senior-PHP-Architect"
+   ],
+   "parentCategories": [
+    "Developer"
+   ],
+   "description": "<h3>About <a href=\"https://himalayas.app/companies/smart-working\">Smart Working</a>\n</h3><div>At <a href=\"https://himalayas.app/companies/smart-working\">Smart Working</a>, we believe the right job should do more than strengthen your CV \u2014 it should challenge you, inspire you, and feel right every day. We connect experienced professionals with long-term, full-time remote roles where engineering excellence truly matters.</div><div>Our mission is to remove geographic barriers and match top talent with global teams building high-impact, mission-critical products. We partner with companies that value precision, ownership, and long-term growth, empowering our people to thrive both professionally and personally.</div><div>Join one of the highest-rated workplaces on Glassdoor and experience what it means to work in a truly remote-first environment.</div><h3>About the Role</h3><div><strong>Important: Laravel-only experience is not qualifying \u2014 proven Symfony experience is mandatory!!!</strong></div><div>We\u2019re hiring a <strong>Lead PHP &amp; Symfony Software Engineer</strong> to work on mission-critical backend systems where code quality, reliability, and accountability are non-negotiable. This role goes far beyond feature delivery \u2014 it\u2019s about engineering craftsmanship, technical ownership, and building systems you can truly stand behind.</div><div>You\u2019ll be part of a highly collaborative Agile team, working closely with product, QA, and other engineers across the full lifecycle \u2014 from ticket definition and design through testing, review, and production deployment. This role is ideal for someone who values clean architecture, Test-Driven Development, thoughtful technical decisions, and mentoring others while building robust, scalable solutions.</div><h3>Responsibilities</h3><ul>\n<li>Design, develop, and maintain high-quality backend systems using PHP and Symfony</li>\n<li>Own features end-to-end, from ticket creation and technical design to production release</li>\n<li>Write clean, strongly-typed, maintainable, and testable code that meets strict quality standards</li>\n<li>Apply design patterns thoughtfully and consistently</li>\n<li>Build and maintain comprehensive automated test coverage using PHPUnit and similar tools</li>\n<li>Follow and promote Test-Driven Development (TDD) practices</li>\n<li>Use static analysis, linters, and code quality tools to ensure reliability and consistency</li>\n<li>Participate actively in code reviews, providing and receiving constructive feedback</li>\n<li>Collaborate closely with product, design, and QA teams to deliver robust solutions</li>\n<li>Break down complex initiatives into well-defined, actionable tasks and guide implementation</li>\n<li>Monitor systems and participate in a rotating on-call schedule when required</li>\n<li>Promote secure coding practices and ensure code is free from known vulnerabilities</li>\n<li>Document architecture, decisions, and processes to support team-wide knowledge sharing</li>\n<li>Mentor junior and mid-level engineers and contribute to a strong engineering culture</li>\n</ul><h3>Requirements </h3><ul>\n<li>5+ years of professional experience with PHP (7.4 / 8+)</li>\n<li>3+ years of hands-on experience with the Symfony framework</li>\n<li>Strong understanding and practical use of design patterns</li>\n<li>Solid experience with unit and integration testing (PHPUnit, Behat, or similar)</li>\n<li>Hands-on experience with Test-Driven Development (TDD)</li>\n<li>Familiarity with static analysis tools (PHPStan, Psalm, or similar)</li>\n<li>Strong understanding of CI/CD pipelines, code coverage, and deployment workflows</li>\n<li>Excellent technical communication skills and ability to explain and defend technical decisions</li>\n<li>High ownership mindset and strong sense of accountability</li>\n</ul><h3>Nice-to-Have</h3><ul>\n<li>Experience working with MongoDB</li>\n<li>Familiarity with JavaScript, React, Node.js, and/or TypeScript</li>\n<li>Experience with Docker and/or Kubernetes</li>\n<li>Experience working on high-availability or mission-critical systems</li>\n</ul><h3>Benefits</h3><ul>\n<li>Fixed Shifts: 12:00 PM - 9:30 PM IST (Summer) | 1:00 PM - 10:30 PM IST (Winter)</li>\n<li>No Weekend Work: Real work-life balance, not just words</li>\n<li>Day 1 Benefits: Laptop and full medical insurance provided</li>\n<li>Support That Matters: Mentorship, community, and forums where ideas are shared</li>\n<li>True Belonging: A long-term career where your contributions are valued</li>\n</ul><p>Originally posted on <a href=\"https://himalayas.app\">Himalayas</a></p>",
+   "pubDate": 1792782160,
+   "expiryDate": 1797966158,
+   "applicationLink": "https://himalayas.app/companies/smart-working/jobs/lead-php-symfony-engineer-remote-full-time-hr191?utm_source=api",
+   "guid": "https://himalayas.app/companies/smart-working/jobs/lead-php-symfony-engineer-remote-full-time-hr191"
+  },
+  {
+   "title": "Forward-Deployed AI Engineer",
+   "excerpt": "Why Choose Bottomline? Are you ready to transform the way businesses pay and get paid?",
+   "companyName": "Bottomline Technologies",
+   "companySlug": "bottomline-technologies",
+   "companyLogo": "https://cdn-images.himalayas.app/1mta85043smxm7k56tvmjo70c7t7",
+   "employmentType": "Full Time",
+   "minSalary": null,
+   "maxSalary": null,
+   "salaryPeriod": "annual",
+   "seniority": [
+    "Mid-level"
+   ],
+   "currency": null,
+   "locationRestrictions": [
+    "India"
+   ],
+   "timezoneRestrictions": [
+    5.5
+   ],
+   "categories": [
+    "Forward-Deployed-AI-Engineer",
+    "Applied-AI-Engineer",
+    "Machine-Learning-Engineer",
+    "Data-Scientist",
+    "AI-Engineer",
+    "Forward-Deployed-ML-Engineer",
+    "Forward-Deployed-AI-Engineering",
+    "Forward-Deployed-Engineer",
+    "Forward-Deployed-Software-Engineer"
+   ],
+   "parentCategories": [
+    "Data Science",
+    "Developer"
+   ],
+   "description": "<div class=\"content-intro\">\n<h3>Why Choose Bottomline?</h3>\n<p>Are you ready to transform the way businesses pay and get paid? Bottomline is a global leader in business payments and cash management, with over 35 years of experience and moving more than $16 trillion in payments annually. We're looking for passionate individuals to join our team and help drive impactful results for our customers. If you're dedicated to delighting customers and promoting growth and innovation - we want you on our team!</p>\n</div><p>Job Description: <strong>Forward-Deployed AI Engineer</strong></p><h3>Location</h3><h3>India (Pune / Bangalore / Remote India)</h3><h3>Reports To</h3><p>Snr. Director of AI and Data, Enterprise Data Services (UK)</p><h3>Level</h3><p>Individual Contributor (3-4 years experience)</p><h3>Team</h3><p>Enterprise Data Services \u2014 AI Engineering</p><h3>Contract</h3><h3>Permanent, Full-Time</h3><h3>HRFs\u2002\u2002\u2002</h3><h3>BTF27272, BTF27273</h3><h3>About the Team</h3><p>Enterprise Data Services (EDS) is Bottomline's AI Engineering function. We don't build AI as a side tool \u2014 we build AI-native solutions where intelligence IS the product. Our platform runs on Snowflake, and we use Snowflake's native AI capabilities (Cortex AI, Cortex Agents, Cortex Search, Cortex Analyst, ML Functions) to solve business problems directly in the data platform, no external ML infrastructure, no separate serving layer, no handoffs between teams.</p><p>We currently ship: churn prediction agents, contract intelligence, partner reporting automation, a governance control plane, and much more. Everything runs in Snowflake. Everything is versioned, tested, and production-governed.</p><h3>The Role</h3><p>We're looking for an Forward-Deployed AI Engineer (FDE) who can take a business problem and solve it natively in Snowflake \u2014 from feature engineering through model training to deployment as a live service. This is not a platform-building role. You won't be designing schemas or managing pipelines. You'll be the person who turns business questions into working AI solutions that run in production.</p><h3>What You Will Do</h3><ul><li>Take business problems (e.g. churn risk, propensity to buy, anomaly detection, document intelligence) and design AI solutions using Snowflake-native capabilities</li></ul><ul><li>Build and evaluate ML models using Snowflake ML Functions, Snowpark ML, and Cortex AI</li></ul><ul><li>Design and implement Cortex Agents that combine structured data queries with unstructured document intelligence</li></ul><ul><li>Create evaluation frameworks (golden datasets, LLM-as-judge, human review loops) to prove solutions meet success metrics</li></ul><ul><li>Work with Cortex Analyst semantic views to enable natural language access to business data</li></ul><ul><li>Build Cortex Search services over unstructured documents (contracts, support tickets, product docs etc.)</li></ul><ul><li>Collaborate with AI and Data Engineers who handles platform infrastructure, you focus on the science, they handle the plumbing</li></ul><ul><li>Present findings and recommendations to business stakeholders in plain language</li></ul><ul><li>Contribute to the AI project lifecycle: framing problems, running spikes, evaluating results, and iterating</li></ul><h3>Requirements</h3><p></p><p><strong>Must Have</strong></p><ul><li><strong>3-4 years experience in data science, machine learning, or applied AI</strong></li></ul><ul><li><strong>Strong Python (pandas, scikit-learn, numpy), you think in DataFrames</strong></li></ul><ul><li><strong>SQL fluency, comfortable writing complex analytical queries, window functions, CTEs</strong></li></ul><ul><li><strong>Experience building classification or regression models and evaluating them rigorously (precision, recall, F1, AUC)</strong></li></ul><ul><li><strong>Experience with at least one of: NLP, document extraction, recommendation systems, or anomaly detection</strong></li></ul><ul><li><strong>Comfortable working with messy real-world data \u2014 missing values, inconsistent formats, multiple sources</strong></li></ul><ul><li><strong>Great communications skills and can work directly with stakeholders end to end</strong></li></ul><ul><li><strong>Can communicate findings to non-technical stakeholders clearly</strong></li></ul><h3><strong>Strong Preference</strong></h3><ul><li><strong>Snowflake experience (Snowpark Python, Cortex AI functions, ML model registry)</strong></li></ul><ul><li><strong>Experience with LLMs in production (prompt engineering, RAG architectures, evaluation of generative outputs)</strong></li></ul><ul><li><strong>Understanding of Cortex Agents, Cortex Search, or Cortex Analyst</strong></li></ul><ul><li><strong>Experience building evaluation sets and measuring AI quality systematically (not just accuracy, precision/recall tradeoffs, error analysis)</strong></li></ul><ul><li><strong>Familiarity with feature engineering for tabular business data (customer signals, transaction patterns, contract attributesetc)</strong></li></ul><h3><strong>Nice to Have</strong></h3><ul><li><strong>Experience in Fintech, B2B payments, or B2B SaaS</strong></li></ul><ul><li><strong>Familiarity with A/B testing or causal inference methods</strong></li></ul><ul><li><strong>Experience with Streamlit for rapid prototyping of data apps</strong></li></ul><h3><strong>Our Tech Stack</strong></h3><ul><li><strong>Snowflake (everything lives here): Cortex AI, Cortex Agents, Cortex Search, Cortex Analyst, Snowpark Python, ML Functions, Dynamic Tables</strong></li></ul><ul><li><strong>Python: pandas, scikit-learn, snowpark-ml, evaluation frameworks</strong></li></ul><ul><li><strong>Version control: Git, Snowflake stage-based deployment</strong></li></ul><ul><li><strong>Visualisation: Streamlit in Snowflake, Cortex Code (IDE), PowerBI</strong></li></ul><h3><strong>Why This Role Is Different</strong></h3><ul><li><strong>AI-native, not AI-assisted: You will build solutions where the AI IS the product, not a feature bolted onto something else</strong></li></ul><ul><li><strong>No ML infrastructure tax: Everything runs natively in Snowflake \u2014 no Docker, no Kubernetes, no model serving endpoints to manage</strong></li></ul><ul><li><strong>You will have business impact from day one: with a prioritised backlog of Quick Win candidates waiting for someone to build them</strong></li></ul><ul><li><strong>Direct line to stakeholders: No layers of middle management between you and the business problem.</strong></li></ul><ul><li><strong>Modern AI engineering practices: Lifecycle-governed (Framing &gt; Spikes &gt; Build &gt; Evaluate &gt; Governance &gt; Adoption), evaluation-driven, with a real governance plane</strong></li></ul><h3><strong>Your First 90 Days</strong></h3><h3><strong>Days 1-30: Learn</strong></h3><ul><li><strong>Understand the Snowflake platform and Cortex AI capabilities</strong></li></ul><ul><li><strong>Run through the AI project lifecycle on a small candidate</strong></li></ul><h3><strong>Days 30-60: Spike</strong></h3><ul><li><strong>Own your first AI candidate from the prioritised backlog </strong></li></ul><ul><li><strong>Run a timeboxed spikes: build the crudest version that proves positive signal</strong></li></ul><ul><li><strong>Create your first golden evaluation dataset</strong></li></ul><ul><li><strong>Present spike findings to the team</strong></li></ul><h3><strong>Days 60-90: Build</strong></h3><ul><li><strong>Build your spike to production standard with proper evaluation</strong></li></ul><ul><li><strong>Pass through governance gates</strong></li></ul><ul><li><strong>Ship your first AI solution to production</strong></li></ul><div class=\"content-conclusion\"><p><strong>We welcome talent at all career stages and are dedicated to understanding and supporting additional needs. We're proud to be an equal opportunity employer, committed to creating an inclusive and open environment for everyone.</strong></p></div><p>Originally posted on <a href=\"https://himalayas.app\">Himalayas</a></p>",
+   "pubDate": 1792780408,
+   "expiryDate": 1797964407,
+   "applicationLink": "https://himalayas.app/companies/bottomline-technologies/jobs/forward-deployed-ai-engineer?utm_source=api",
+   "guid": "https://himalayas.app/companies/bottomline-technologies/jobs/forward-deployed-ai-engineer"
+  },
+  {
+   "title": "Sr. Territory Manager, Eyecare",
+   "excerpt": "Deliver sales performance, brand KPIs, financial targets, marketing objectives, etc.",
+   "companyName": "AbbVie",
+   "companySlug": "abbvie",
+   "companyLogo": "https://cdn-images.himalayas.app/kfge4z8cvd7atx3yyf2mdwi3ptl1",
+   "employmentType": "Full Time",
+   "minSalary": null,
+   "maxSalary": null,
+   "salaryPeriod": "annual",
+   "seniority": [
+    "Senior",
+    "Manager"
+   ],
+   "currency": null,
+   "locationRestrictions": [
+    "India"
+   ],
+   "timezoneRestrictions": [
+    5.5
+   ],
+   "categories": [
+    "Territory-Manager",
+    "Pharmaceutical-Sales-Manager",
+    "Sales-Manager",
+    "Ophthalmology-Sales-Manager",
+    "Regional-Sales-Manager",
+    "Senior-Territory-Manager",
+    "Healthcare-Territory-Manager",
+    "Territory-Sales-Manager"
+   ],
+   "parentCategories": [
+    "Sales"
+   ],
+   "description": "<p>Deliver sales performance, brand KPIs, financial targets, marketing objectives, etc. in order to</p><h3>meet or exceed on those objectives.</h3><p>Create precall plan using SMART objectives and execute postcall evaluation in order to<br>continuously improve sales performance. Effectively handle objections, misunderstandings,<br>concerns and consistently gain logical and reasonable calls to action in order to close on every<br>sales call.<br>Proactively and continuously aspire to serve customer needs, customer expectations and<br>challenges in order to build trusted customer relationships and to achieve winwin agreements<br>between <a href=\"https://himalayas.app/companies/abbvie\">AbbVie</a> and customers.<br>Develop and execute a call plan that achieves set call metrics and optimizes coverage and<br>frequency to key customers in order to maximize access and sales opportunities.<br>Continuously build understanding on customer needs and expectations, territory market landscape,<br>competitors, market segments/dynamics, accounts, disease, product, clinical and sales expertise<br>and share this market intelligence information with infield team, brand team and sales manager to<br>achieve alignment, to anticipate environmental changes and challenges and to optimize brand<br>strategy and its execution.<br>Differentiate <a href=\"https://himalayas.app/companies/abbvie\">AbbVie</a>\u2019s value proposition with health providers assigned and identify, develop and<br>maintain disease state experts and speakers/advocates in order to maximize brand performance.</p><p>Any governmental and/or or legal mandatory certification requirements as by respective country\u2019s</p><h3>laws and/or regulations (if applicable)</h3><p>Bachelor's degree, biological sciences, pharmacy, business related field, or equivalent.<br>Proven track record of success in selling and solid presentation skills<br>Demonstrates indepth scientific, therapeutic, product, and competitive knowledge and is<br>recognized as an expert resource by all relevant stakeholders<br>Strong business acumen and proficient use of business tools; possesses strategic and critical<br>thinking capabilities<br>Proactively identifies customer style / behavior and adapts quickly all aspects of selling approach<br>Operates effectively in a matrix environment<br>Proven track record of success in sales performance within respective therapeutic areas preferred<br>Commercial pharmaceutical industry experiences such as physician/account based selling, training,<br>managed health care or marketing preferred<br>English language proficiency verbally and in writing preferred (for all non English speaking</p><p><a href=\"https://himalayas.app/companies/abbvie\">AbbVie</a> is an equal opportunity employer and is committed to operating with integrity, driving innovation, transforming lives and serving our community.\u202f Equal Opportunity Employer/Veterans/Disabled. </p><p>US &amp; Puerto Rico only - to learn more, visit </p><p>US &amp; Puerto Rico applicants seeking a reasonable accommodation, click here to learn more:</p><p></p><h3>About <a href=\"https://himalayas.app/companies/abbvie\">AbbVie</a>\n</h3><p><a href=\"https://himalayas.app/companies/abbvie\">AbbVie</a>'s mission is to discover and deliver innovative medicines and solutions that solve serious health issues today and address the medical challenges of tomorrow. We strive to have a remarkable impact on people's lives across several key therapeutic areas including immunology, oncology and neuroscience - and products and services in our Allergan Aesthetics portfolio. For more information about <a href=\"https://himalayas.app/companies/abbvie\">AbbVie</a>, please visit us at . Follow @abbvie on LinkedIn,Facebook, Instagram, X and YouTube.</p><p>Originally posted on <a href=\"https://himalayas.app\">Himalayas</a></p>",
+   "pubDate": 1792780236,
+   "expiryDate": 1797964235,
+   "applicationLink": "https://himalayas.app/companies/abbvie/jobs/sr-territory-manager-eyecare-7526377857?utm_source=api",
+   "guid": "https://himalayas.app/companies/abbvie/jobs/sr-territory-manager-eyecare-7526377857"
+  }
+ ]
+}

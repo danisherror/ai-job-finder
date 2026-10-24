@@ -40,7 +40,7 @@ def owner(monkeypatch):
 
 def feeds(monkeypatch, **by_source):
     """Fake adapters: by_source maps a source name to a list of job IDs, or to an exception to raise."""
-    def fetch(source):
+    def fetch(source, known=frozenset()):
         value = by_source[source.name]
         if isinstance(value, Exception):
             raise value
@@ -68,8 +68,8 @@ def test_restart_skips_sources_already_done(conn, monkeypatch):
     calls = []
     feeds(monkeypatch, Acme=["a1"], Bolt=["b1"])
     fetch = main.ADAPTERS["lever"]
-    monkeypatch.setattr(main, "ADAPTERS", {"lever": lambda s: calls.append(s.name) or fetch(s),
-                                           "greenhouse": lambda s: calls.append(s.name) or fetch(s)})
+    monkeypatch.setattr(main, "ADAPTERS", {"lever": lambda s, k=frozenset(): calls.append(s.name) or fetch(s),
+                                           "greenhouse": lambda s, k=frozenset(): calls.append(s.name) or fetch(s)})
     resumed_id, resumed = store.resume_or_start_run(conn)
     assert (resumed_id, resumed) == (run_id, True)
     assert main.collect(conn, resumed_id) == (2, 2)
