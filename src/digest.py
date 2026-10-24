@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 from src import store, telegram
 from src.config import ROOT
 from src.models import Profile
+from src.rules import title_level
 
 EXPORTS = ROOT / "private" / "exports"
 FIRST_LIST_MAX = 10
@@ -208,7 +209,9 @@ def export_csv(conn, profile: Profile) -> None:
             w.writerow(r.values())
 
 
-ALL_JOBS_CSV = EXPORTS / "all_jobs.csv"
+# File names inside EXPORTS, joined at call time so tests that point EXPORTS elsewhere never touch the real files.
+ALL_JOBS_CSV = "all_jobs.csv"
+INDIA_INTERNSHIPS_CSV = "india_internships.csv"
 
 
 def _date(value: str | None) -> str:
@@ -227,13 +230,26 @@ def export_all_jobs(conn, path=None) -> int:
 
     Returns the number of jobs written.
     """
-    path = path or ALL_JOBS_CSV
+    return _export_jobs(conn, path or EXPORTS / ALL_JOBS_CSV, lambda r: True)
+
+
+def export_india_internships(conn, path=None) -> int:
+    """Write open internships (intern/trainee/apprentice titles) that someone in India can take.
+
+    Returns the number of jobs written.
+    """
+    return _export_jobs(conn, path or EXPORTS / INDIA_INTERNSHIPS_CSV,
+                        lambda r: r["india_eligible"] == "yes" and r["lifecycle"] != "closed"
+                        and title_level(r["title"]) == "intern")
+
+
+def _export_jobs(conn, path, keep) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
-    rows = conn.execute(
+    rows = [r for r in conn.execute(
         """SELECT j.*, s.type AS source_type, s.board
            FROM jobs j JOIN sources s ON s.name = j.source
            ORDER BY COALESCE(j.posted_at, j.first_seen) DESC"""
-    ).fetchall()
+    ) if keep(r)]
     hosts = usual_hosts(conn)
     with open(path, "w", newline="", encoding="utf-8-sig") as f:  # -sig: Excel then reads ₹, é, etc. correctly
         w = csv.writer(f)
