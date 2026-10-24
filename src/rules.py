@@ -25,6 +25,99 @@ def title_level(title: str) -> str | None:
     return None
 
 
+# ---------------------------------------------------------------- software roles
+
+_SOFTWARE = re.compile(
+    r"\b(software|sw|sde\w*|developer|development engineer|programmer|coding|full[- ]?stack|front[- ]?end|"
+    r"back[- ]?end|web|android|ios|mobile|python|java|ruby|rails|golang|node(\.?js)?|react|devops|sre|"
+    r"site reliability|cloud|azure|aws|data scien\w*|data engineer\w*|big data|machine learning|ml|ai|"
+    r"artificial intelligence|llm|deep learning|computer vision|qa|quality assurance|sdet|test(ing)? automation|"
+    r"automation|cyber ?security|security (engineer|research|consultant)\w*|game development|"
+    r"forward deployed engineer)\b", re.I)
+_NOT_SOFTWARE = re.compile(r"\b(hw|hardware|asic|fpga|silicon|technical support|recruit\w*|talent acquisition|"
+                           r"sales|marketing)\b", re.I)
+# A title with none of the software words and none of these is too vague ("Intern", "Campus Program - 2027"),
+# so the description decides.
+_OTHER_ROLE = re.compile(
+    r"\b(analyst|account\w*|audit|finance|financial|hr|human resources|people|operations?|design\w*|content|"
+    r"manager|management|executive|associate|specialist|representative|technician|chemical|industrial|patent|"
+    r"banking|support|success|cfo|ca|kyc|advisory|procurement|product|ambassador|video|social|copy|brand|"
+    r"animator|editor|writer|lead generation|business|public relations|system|systems|applications engineer|"
+    r"quality|camera|wlan|network)\b", re.I)
+_CODING_TERMS = re.compile(r"\b(software development|software engineering|programming|python|java|c\+\+|"
+                           r"computer science|data structures|algorithms|coding|machine learning|full[- ]stack)\b",
+                           re.I)
+
+
+def is_software_role(title: str, description: str = "") -> bool:
+    """Software, data/AI, QA, DevOps or security engineering.
+
+    Judged from the title ("Intern_2027_SW" counts; "Engineer_HW", "IT Recruiter" don't). When the title is too
+    vague to tell, the description must name at least three coding terms (Python, programming, ...).
+    """
+    t = title.replace("_", " ")
+    if _NOT_SOFTWARE.search(t):
+        return False
+    if _SOFTWARE.search(t):
+        return True
+    if _OTHER_ROLE.search(t):
+        return False
+    return len({m.group(0).lower() for m in _CODING_TERMS.finditer(description)}) >= 3
+
+
+# ---------------------------------------------------------------- graduating students
+
+_BATCH_WORDS = re.compile(r"batch|graduat\w*|passing|pass[- ]?outs?|passed out|class of|campus|cohort|degree|"
+                          r"students?|freshers?|final[- ]year|completion|\b[bm]\.?\s?tech\b|\bmca\b|\bb\.e\b", re.I)
+_YEAR = re.compile(r"\b(202[3-9]|2030)(?:\s*[/-]\s*(\d\d)(?!\d))?\b")  # also "2025/26"
+_DATE_BEFORE = re.compile(r"(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\.?\s*\d{0,2},?\s*$|/\s*$", re.I)
+_EARLY_TITLE = re.compile(r"\b(new grads?|graduates?|grads?|freshers?|campus|early[- ]careers?|early talent|"
+                          r"entry[- ]level|university|college|trainee|apprentice\w*|fellow\w*)\b", re.I)
+_RETURNER = re.compile(r"return to work|returnship|returner", re.I)
+
+
+def batch_years(text: str) -> set[int]:
+    """Graduation years a posting asks for: "2027 batch", "Passing year: 2025, 2026 or 2027", "2025/26".
+    Years in dates ("Jan 2027", "02/27/2027") or plans ("by 2027") are not counted."""
+    years = set()
+    for m in _YEAR.finditer(text):
+        near = text[max(0, m.start() - 60):m.end() + 40]
+        if _BATCH_WORDS.search(near) and not _DATE_BEFORE.search(text[max(0, m.start() - 12):m.start()]):
+            years.add(int(m.group(1)))
+            if m.group(2):
+                years.add(2000 + int(m.group(2)))
+    return years
+
+
+def graduate_fit(title: str, description: str, experience_min: int | None, experience_max: int | None,
+                 year: int) -> str | None:
+    """Why a student graduating in `year` can apply, or None.
+
+    The year in the title, or named as a batch in the text -> "<year> batch"
+    The text names other batches only                   -> None
+    Internship, campus/graduate/fresher title, or 0 years needed -> that reason
+    """
+    if _RETURNER.search(title):  # for people coming back after a career break
+        return None
+    if str(year) in title:
+        return f"{year} batch"
+    level = title_level(title)
+    if level in ("senior", "lead") or (experience_min or 0) >= 1:
+        return None
+    years = batch_years(f"{title}\n{description}")
+    if year in years:
+        return f"{year} batch"
+    if years:
+        return None
+    if level == "intern":
+        return "internship"
+    if _EARLY_TITLE.search(title):
+        return "campus / graduate / fresher role"
+    if experience_min == 0 and (experience_max is None or experience_max <= 2):
+        return "fresher role (0 years)"
+    return None
+
+
 def allowed_levels(profile: Profile) -> set[str]:
     i = LEVELS.index(profile.seniority)
     allowed = {profile.seniority}

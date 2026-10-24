@@ -268,3 +268,18 @@ def test_all_jobs_csv_lists_every_job_without_ai(conn, tmp_path):
     assert rows[0]["company"] == "Acme" and rows[0]["cities"] == "Bengaluru"
     assert rows[0]["apply_url"] == "https://jobs.lever.co/acme/job1"
     assert rows[0]["status"] == "open" and "description" not in rows[0]
+
+
+def test_graduates_csv_groups_by_reason(conn, tmp_path):
+    import csv
+
+    conn.execute("UPDATE jobs SET india_eligible = 'yes'")
+    conn.execute("UPDATE jobs SET title = 'Backend Intern' WHERE rowid = (SELECT MIN(rowid) FROM jobs)")
+    conn.execute("UPDATE jobs SET title = '2027 Campus Hire_Engineer_SW' WHERE rowid = (SELECT MAX(rowid) FROM jobs)")
+    conn.commit()
+    path = tmp_path / "grads.csv"
+    assert digest.export_graduates(conn, path, year=2027) == 2
+    with open(path, encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    assert [(r["title"], r["why"]) for r in rows] == [("2027 Campus Hire_Engineer_SW", "2027 batch"),
+                                                      ("Backend Intern", "internship")]

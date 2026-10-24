@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 from src import store, telegram
 from src.config import ROOT
 from src.models import Profile
-from src.rules import title_level
+from src.rules import graduate_fit, is_software_role, title_level
 
 EXPORTS = ROOT / "private" / "exports"
 FIRST_LIST_MAX = 10
@@ -212,6 +212,9 @@ def export_csv(conn, profile: Profile) -> None:
 # File names inside EXPORTS, joined at call time so tests that point EXPORTS elsewhere never touch the real files.
 ALL_JOBS_CSV = "all_jobs.csv"
 INDIA_INTERNSHIPS_CSV = "india_internships.csv"
+GRAD_YEAR = 2027
+GRADUATES_CSV = f"graduates_{GRAD_YEAR}.csv"
+GRAD_REASON_ORDER = [f"{GRAD_YEAR} batch", "campus / graduate / fresher role", "internship", "fresher role (0 years)"]
 
 
 def _date(value: str | None) -> str:
@@ -234,28 +237,56 @@ def export_all_jobs(conn, path=None) -> int:
 
 
 def export_india_internships(conn, path=None) -> int:
-    """Write open internships (intern/trainee/apprentice titles) that someone in India can take.
+    """Write open software internships (intern/trainee/apprentice titles) that someone in India can take.
 
     Returns the number of jobs written.
     """
     return _export_jobs(conn, path or EXPORTS / INDIA_INTERNSHIPS_CSV,
                         lambda r: r["india_eligible"] == "yes" and r["lifecycle"] != "closed"
-                        and title_level(r["title"]) == "intern")
+                        and title_level(r["title"]) == "intern"
+                        and is_software_role(r["title"], r["description"] or ""))
 
 
-def _export_jobs(conn, path, keep) -> int:
+def export_graduates(conn, path=None, year=GRAD_YEAR) -> int:
+    """Write open software jobs in India that a student graduating in `year` can apply to, with a `why` column.
+
+    Jobs that name the year come first, then campus/graduate roles, internships and 0-year roles.
+    Returns the number of jobs written.
+    """
+    order = [f"{year} batch"] + GRAD_REASON_ORDER[1:]
+
+    def why(r):
+        if (r["india_eligible"] != "yes" or r["lifecycle"] == "closed"
+                or not is_software_role(r["title"], r["description"] or "")):
+            return None
+        return graduate_fit(r["title"], r["description"] or "", r["experience_min"], r["experience_max"], year)
+
+    return _export_jobs(conn, path or EXPORTS / f"graduates_{year}.csv", why, extra="why",
+                        sort=lambda reason: order.index(reason))
+
+
+def _export_jobs(conn, path, keep, extra=None, sort=None) -> int:
+    """keep(row) -> falsy to leave a job out. With `extra`, its value goes in a last column of that name,
+    and `sort(value)` (if given) groups rows by it, newest first within a group."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    rows = [r for r in conn.execute(
+    rows = []
+    for r in conn.execute(
         """SELECT j.*, s.type AS source_type, s.board
            FROM jobs j JOIN sources s ON s.name = j.source
            ORDER BY COALESCE(j.posted_at, j.first_seen) DESC"""
-    ) if keep(r)]
+    ):
+        value = keep(r)
+        if value:
+            rows.append((r, value))
+    if sort:
+        rows.sort(key=lambda rv: sort(rv[1]))  # stable: keeps newest first inside each group
     hosts = usual_hosts(conn)
     with open(path, "w", newline="", encoding="utf-8-sig") as f:  # -sig: Excel then reads ₹, é, etc. correctly
         w = csv.writer(f)
         w.writerow(["posted", "first_seen", "company", "title", "department", "location", "cities", "work_mode",
-                    "india_eligible", "experience_min", "experience_max", "salary", "status", "apply_url"])
-        for r in rows:
+                    "india_eligible", "experience_min", "experience_max", "salary", "status", "apply_url"]
+                   + ([extra] if extra else []))
+        for r, value in rows:
             url = safe_apply_url(r["apply_url"], r["source_type"], r["board"], r["ats_id"] or "",
                                  hosts.get(r["source"], set()))
             w.writerow([_date(r["posted_at"]), _date(r["first_seen"]), r["company"], r["title"],
@@ -263,7 +294,8 @@ def _export_jobs(conn, path, keep) -> int:
                         r["work_mode"] or "", r["india_eligible"] or "",
                         "" if r["experience_min"] is None else r["experience_min"],
                         "" if r["experience_max"] is None else r["experience_max"],
-                        r["salary"] or "", r["lifecycle"], url])
+                        r["salary"] or "", r["lifecycle"], url]
+                       + ([value] if extra else []))
     return len(rows)
 
 

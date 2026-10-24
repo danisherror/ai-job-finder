@@ -2,7 +2,7 @@
 
     uv run python -m src.main daily              collect, match, send lists (the 6:45 job)
     uv run python -m src.main collect            fetch all sources into the job pool (also writes the CSV exports)
-    uv run python -m src.main export             write all_jobs.csv and india_internships.csv to private/exports/
+    uv run python -m src.main export             write the CSV exports (all jobs; software internships and 2027-graduate jobs in India)
     uv run python -m src.main match              score new jobs for each person
     uv run python -m src.main digest [--dry-run] send (or just print) each person's list
     uv run python -m src.main taps               save Applied/Skipped button taps (the hourly job)
@@ -117,7 +117,9 @@ def export_jobs(conn) -> None:
     count = digest.export_all_jobs(conn)
     print(f"Wrote {count} jobs to private/exports/{digest.ALL_JOBS_CSV}")
     count = digest.export_india_internships(conn)
-    print(f"Wrote {count} internships to private/exports/{digest.INDIA_INTERNSHIPS_CSV}")
+    print(f"Wrote {count} software internships to private/exports/{digest.INDIA_INTERNSHIPS_CSV}")
+    count = digest.export_graduates(conn)
+    print(f"Wrote {count} software jobs for {digest.GRAD_YEAR} graduates to private/exports/{digest.GRADUATES_CSV}")
 
 
 def latest_run_id(conn) -> str | None:

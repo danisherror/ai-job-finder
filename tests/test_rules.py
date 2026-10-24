@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 from src.models import Job, Profile
-from src.rules import passes_rules, title_level
+from src.rules import batch_years, graduate_fit, is_software_role, passes_rules, title_level
 
 NOW = datetime(2026, 10, 24, tzinfo=timezone.utc)
 
@@ -79,3 +79,49 @@ def test_passes(j, p):
 ])
 def test_title_level(title, level):
     assert title_level(title) == level
+
+
+# ---------------------------------------------------------------- graduating students
+
+def test_batch_years_reads_graduation_years_not_dates():
+    assert batch_years("Passing year: 2025, 2026 or 2027 (preferred).") == {2025, 2026, 2027}
+    assert batch_years("Open to 2026 - 2027 graduates") == {2026, 2027}
+    assert batch_years("The program will run from January 2027.") == set()
+    assert batch_years("Window closes on 02/27/2027") == set()
+    assert batch_years("By 2027, we aim to be the top destination.") == set()
+
+
+@pytest.mark.parametrize("title, text, exp_min, exp_max, why", [
+    ("2027 Campus Hire_Engineer_SW", "", None, None, "2027 batch"),
+    ("Business Development Associate", "Passing year: 2026 or 2027", None, None, "2027 batch"),
+    ("Apprentice", "B.Tech (2023 & 2024 graduates only)", None, None, None),  # other batches only
+    ("Software Engineer Intern", "6-month internship, Jan - June 2027", None, None, "internship"),
+    ("Graduate Programme - India", "", None, None, "campus / graduate / fresher role"),
+    ("SDE I", "", 0, 1, "fresher role (0 years)"),
+    ("Software Engineer", "", 2, 4, None),
+    ("Software Engineer", "", None, None, None),  # nothing says it suits students
+    ("Senior Engineer", "", 0, 2, None),
+    ("Return to Work Program - Mumbai", "graduates welcome", None, None, None),
+])
+def test_graduate_fit(title, text, exp_min, exp_max, why):
+    assert graduate_fit(title, text, exp_min, exp_max, 2027) == why
+
+
+@pytest.mark.parametrize("title, text, expected", [
+    ("Software Development Engineer Intern", "", True),
+    ("Interim Engineering Intern_2027_SW", "", True),
+    ("Machine Learning (ML) Engineer Intern", "", True),
+    ("QA Engineer", "", True),
+    ("2027 Campus Hire_ Engineer_ HW", "", False),
+    ("Talent Acquisition Intern - IT Recruitment", "", False),
+    ("Technical Support Engineer", "", False),
+    ("Marketing Intern", "Python, programming and computer science", False),  # title decides
+    ("Intern", "You know Python, Java and programming basics.", True),            # vague: text decides
+    ("Intern", "Support the finance team with month-end close.", False),
+])
+def test_is_software_role(title, text, expected):
+    assert is_software_role(title, text) is expected
+
+
+def test_batch_years_reads_short_year_ranges():
+    assert batch_years("Engineer - RF SW - M.Tech - Communication background - 2025/26") == {2025, 2026}
