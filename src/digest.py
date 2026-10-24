@@ -19,7 +19,9 @@ FIT_ORDER = {"strong": 0, "good": 1, "weak": 2}
 FIT_LABEL = {"strong": "🟢 Strong fit", "good": "🟡 Good fit", "weak": "⚪ Weak fit (filling a slot)"}
 ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby": ("ashbyhq.com",),
                "smartrecruiters": ("smartrecruiters.com",), "workday": ("myworkdayjobs.com",),
-               "workable": ("workable.com",), "himalayas": ("himalayas.app",)}
+               "workable": ("workable.com",), "himalayas": ("himalayas.app",), "amazon": ("amazon.jobs",),
+               "oracle": ("oraclecloud.com",), "eightfold": ("eightfold.ai", "careers.microsoft.com"),
+               "rippling": ("rippling.com",)}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -28,6 +30,10 @@ ATS_JOB_PAGE = {
     "workday": "{board}/details/{id}",             # board is the career site URL
     "workable": "https://apply.workable.com/{board}/j/{id}",
     "himalayas": "{id}",                           # the ID is the job's Himalayas URL
+    "amazon": "https://www.amazon.jobs/en/jobs/{id}",
+    "oracle": "{site}/job/{id}",                   # site is the board URL without query or trailing slash
+    "eightfold": "{site}/job/{id}",                # e.g. https://qualcomm.eightfold.ai/careers/job/<id>
+    "rippling": "https://ats.rippling.com/{board}/jobs/{id}",
 }
 
 
@@ -93,7 +99,8 @@ def safe_apply_url(url: str, source_type: str, board: str, ats_id: str, allowed_
     on_ats = any(host == d or host.endswith("." + d) for d in ATS_DOMAINS.get(source_type, ()))
     if parts.scheme == "https" and (on_ats or host in allowed_hosts):
         return url
-    return ATS_JOB_PAGE[source_type].format(board=board, id=ats_id)
+    site = board.split("?")[0].rstrip("/")
+    return ATS_JOB_PAGE[source_type].format(board=board, site=site, id=ats_id)
 
 
 # ---------------------------------------------------------------- formatting

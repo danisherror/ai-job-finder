@@ -1,11 +1,12 @@
 """One adapter per source type. Each exposes fetch(source, known) -> list[Job].
 
 `known` holds the ats_ids already stored for that source. Adapters that need an extra call
-per job for its description (SmartRecruiters, Workday) skip that call for known jobs and
-return them without a description; the store then keeps the saved one.
+per job for its description (SmartRecruiters, Workday, Oracle, Eightfold, Rippling) skip that call
+for known jobs and return them without a description; the store then keeps the saved one.
 """
 
-from src.collect import ashby, greenhouse, himalayas, lever, smartrecruiters, workable, workday
+from src.collect import (amazon, ashby, eightfold, greenhouse, himalayas, lever, oracle, rippling,
+                         smartrecruiters, workable, workday)
 
 ADAPTERS = {
     "greenhouse": greenhouse.fetch,
@@ -15,4 +16,8 @@ ADAPTERS = {
     "workday": workday.fetch,
     "workable": workable.fetch,
     "himalayas": himalayas.fetch,
+    "amazon": amazon.fetch,
+    "oracle": oracle.fetch,
+    "eightfold": eightfold.fetch,
+    "rippling": rippling.fetch,
 }

@@ -1,5 +1,6 @@
 # Companies to collect jobs from.
 # type: greenhouse | lever | ashby | smartrecruiters | workday | workable | himalayas
+#       | amazon | oracle | eightfold | rippling
 # board: the company's board name on that ATS (checked live 2026-10-23)
 #   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
 #   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
@@ -106,3 +107,21 @@
 
 # --- F. Job boards (many companies; duplicates of company feeds above are skipped) ---
 - {name: Himalayas,       type: himalayas, board: India}                  # remote jobs open to India, ~500 per 2 weeks
+
+# --- G. Added 2026-10-24: big employers on their own career systems (India job counts checked live that day) ---
+# Amazon (board: country code; only tech job categories are kept)
+- {name: Amazon,            type: amazon,    board: IND}                 # ~800 tech of 2,327 India jobs
+# Oracle Cloud HCM (board: the career site URL)
+- {name: JPMorgan Chase,    type: oracle,    board: "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001"}                    # 280
+- {name: Oracle,            type: oracle,    board: "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001"}              # 100
+- {name: Texas Instruments, type: oracle,    board: "https://edbz.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX"}                    # 151
+- {name: Nokia,             type: oracle,    board: "https://fa-evmr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1"}   # 134
+# Eightfold (board: the career site URL with ?domain=<company domain>)
+- {name: Microsoft,         type: eightfold, board: "https://apply.careers.microsoft.com/careers?domain=microsoft.com"}     # 234
+- {name: Qualcomm,          type: eightfold, board: "https://qualcomm.eightfold.ai/careers?domain=qualcomm.com"}           # 564
+- {name: Micron,            type: eightfold, board: "https://micron.eightfold.ai/careers?domain=micron.com"}               # 300
+- {name: Vodafone,          type: eightfold, board: "https://vodafone.eightfold.ai/careers?domain=vodafone.com"}           # 299 (mostly Pune)
+- {name: Morgan Stanley,    type: eightfold, board: "https://morganstanley.eightfold.ai/careers?domain=morganstanley.com"} # 93
+- {name: PayPal,            type: eightfold, board: "https://paypal.eightfold.ai/careers?domain=paypal.com"}               # 14
+# Rippling ATS (board: the name in ats.rippling.com/<board>/jobs)
+- {name: Rippling,          type: rippling,  board: rippling}            # 93

@@ -1,7 +1,7 @@
 # AI Job Finder
 
 Collects tech jobs every morning from company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workday,
-Workable) and the Himalayas remote job board, keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
+Workable, Oracle Cloud HCM, Eightfold, Rippling), Amazon's careers site and the Himalayas remote job board, keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
 
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
@@ -58,17 +58,26 @@ Their first list covers only jobs from the last 7 days and has at most 10 jobs.
    - Workday: use the whole career site URL as the board, e.g.
      `board: "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"`
    - Workable: `apply.workable.com/<board>`
+   - Rippling: `ats.rippling.com/<board>/jobs`
+   - Oracle Cloud HCM: use the whole career site URL, e.g.
+     `board: "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001"`
+   - Eightfold: the career site URL plus the company's domain, e.g.
+     `board: "https://qualcomm.eightfold.ai/careers?domain=qualcomm.com"`
+   - Amazon: `type: amazon, board: IND` (a country code; only tech job categories are kept)
 2. Add a line to `config/sources.yaml`: `- {name: Acme, type: lever, board: acme}`
 3. Check it: `uv run python -m src.main collect` should show `ok  Acme  N jobs`.
 
 On its first scan, jobs older than 7 days are stored as already seen, so nobody gets a flood of old jobs.
 To pause a company, add `active: false` to its line.
 
-SmartRecruiters and Workday sources collect only India jobs and open each new job's page once for its
-description, so a big company's first scan takes a few minutes; later scans only open new jobs.
+SmartRecruiters, Workday, Oracle, Eightfold and Rippling sources collect only India jobs and open each new
+job's page once for its description, so a big company's first scan takes a few minutes; later scans only open new jobs.
 
 Sites left out on purpose: LinkedIn and Indeed jobs, Naukri and Hirist (their robots.txt forbids it),
-Foundit, Internshala and Instahyre (block automated access), Wellfound and Cutshort (no public API).
+Foundit, Internshala and Instahyre (block automated access), Wellfound and Cutshort (no public API),
+Google Careers (web page only, no API) and Apple (its search API returned nothing for India).
+Remote job boards Remotive, RemoteOK, Working Nomads and Jobicy were checked on 2026-10-24 and had almost
+no jobs open to India.
 
 ## Where data lives
 

@@ -13,7 +13,7 @@ About 3–4 weeks at 2–3 hours a day: a usable daily list after week 2, reliab
 | Topic | Decision |
 | --- | --- |
 | Which jobs count | Located in India, or remote **and open to people in India**. Remote jobs limited to other regions are dropped |
-| Sources | v1: Greenhouse, Lever, Ashby (62 companies). Added 2026-10-24: SmartRecruiters, Workday, Workable adapters (20 companies) and the Himalayas job board (India remote jobs; copies of company-feed jobs skipped) |
+| Sources | v1: Greenhouse, Lever, Ashby (62 companies). Added 2026-10-24: SmartRecruiters, Workday, Workable adapters (20 companies) and the Himalayas job board (India remote jobs; copies of company-feed jobs skipped). Also added 2026-10-24: Amazon, Oracle Cloud HCM (JPMorgan, Oracle, Texas Instruments, Nokia), Eightfold (Microsoft, Qualcomm, Micron, Vodafone, Morgan Stanley, PayPal) and Rippling |
 | Career pages / Scrapling | **Not in v1.** Added after v1 together with Razorpay, Swiggy, PhonePe and others, and maybe a Workday adapter |
 | AI | Claude Haiku via **Claude Code headless mode** (`claude -p`) on the owner's Pro plan. All calls in `src/llm.py`; jobs batched 10–20 per call |
 | Host | The owner's Mac. `launchd` schedule (missed runs start on wake) + `pmset` scheduled wake |

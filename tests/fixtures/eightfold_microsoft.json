@@ -1,0 +1,66 @@
+{
+ "count": 160,
+ "item": {
+  "id": 1970393557045586,
+  "displayJobId": "200063429",
+  "name": "Senior Software Engineer",
+  "locations": [
+   "India, Karnataka, Bangalore"
+  ],
+  "standardizedLocations": [
+   "Bengaluru, KA, IN"
+  ],
+  "postedTs": 1792818368,
+  "solrScore": null,
+  "stars": 0,
+  "department": "Software Engineering",
+  "creationTs": 1792730187,
+  "isHot": 0,
+  "workLocationOption": "onsite",
+  "locationFlexibility": null,
+  "atsJobId": "200063429",
+  "positionUrl": "/careers/job/1970393557045586"
+ },
+ "detail": {
+  "id": 1970393557045586,
+  "displayJobId": "200063429",
+  "name": "Senior Software Engineer",
+  "locations": [
+   "India, Karnataka, Bangalore"
+  ],
+  "standardizedLocations": [
+   "Bengaluru, KA, IN"
+  ],
+  "postedTs": 1792818368,
+  "stars": 0,
+  "department": "Software Engineering",
+  "creationTs": 1792730187,
+  "jobDescription": "<b>Overview</b><br><p>\ud83d\ude80\u00a0<strong>Exciting Opportunity at Microsoft Surface Windows Display team!\u00a0</strong>\ud83d\ude80</p><p>Are you passionate about developing cutting-edge display technologies? \ud83d\udee0\ufe0f We're on the lookout for a talented Software Engineer to join our dynamic team. If you love working on OEM products, leading third-party teams, and designing and developing display drivers, then this role is perfect for you!\u00a0\ud83c\udfaf\ud83d\udc69\u200d\ud83d\udcbb\ud83d\udc68\u200d\ud83d\udcbb</p><p>Here, your efforts are not just part of the process; they are at the forefront of delivering high-quality display solutions to our customers. Join us in shaping the future of technology and making a difference in the world.\u00a0\ud83c\udf0d</p><p>Ready to take on this exciting challenge? Apply now and be part of an innovative team driving excellence in Display world! \ud83c\udfc6\u2728</p><p>Are you passionate about building cool devices and technologies? The Surface Team focuses on building devices that fully express the Windows vision. A fundamental part of our strategy is having desirable and powerful devices that enable the experiences people want and elicit their excitement. Creating these devices involves a close partnership between hardware and software engineers, designers, and manufacturing. We are currently building the next generation and Surface needs you!</p><br><br><b>Responsibilities</b><br><ul type=\"disc\"><li>Lead the design and architecture of complex software systems, engineering roadmaps, making key decisions that affect the project's direction.</li><li>Deliver high quality results with full ownership.</li><li>Create a strong culture of engineering excellence, customer passion, collaboration, diversity and inclusion.</li><li>Hire and develop the best talent.</li><li>Must be self-driven, curious to learn, proactive and result oriented.</li></ul><br><br><b>Qualifications</b><br><p><strong>Minimum Qualifications:</strong></p><ul type=\"disc\"><li><strong>Education</strong>: Minimum Bachelor\u2019s degree in Computer/Software Engineering or equivalent experience.</li><li><strong>Experience</strong>: At least 8 years of experience in embedded domain working on drivers and firmware.</li><li><strong>Development Skills</strong>:\u00a0Proficiency in C/C++ and driver development.</li><li><strong>Problem Solving</strong>:\u00a0Strong debugging skills for modern multiprocessor systems, including using hardware-level code debuggers and diagnostic tools. Familiarity with debugging tools like windbg is a plus.</li><li><strong>Communication</strong>:\u00a0Effective verbal and written communication, from block diagrams to low-level C code explanations.</li><li><strong>Adaptability</strong>:\u00a0Ability to plan work and adjust as needed in a dynamic global environment.</li><li><strong>Technical Acumen</strong>:\u00a0Capability to understand and integrate technical concepts across various disciplines.</li><li><strong>Enthusiasm</strong>:\u00a0Motivated and self-driven attitude.</li><li><strong>Travel</strong>:\u00a0Some travel may be required.</li><li>Deep background and understanding in Windows and PC architecture, including driver architecture.</li><li>Windows driver development framework(WDF/KMDF/UMDF) knowledge.</li><li>Working knowledge of display technologies like DP, HDR, OLED.</li><li>Working knowledge of HW like GPU, TCON.</li><li>Experience in display color calibration.</li><li>Enthusiastic, motivated and self-driven.</li><li>High tolerance to ambiguity and ability make progress in the face of it.</li></ul> <br><p>This position will be open for a minimum of 5 days, with applications accepted on an ongoing basis until the position is filled.</p><br><hr><br><p>Microsoft is an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to age, ancestry, citizenship, color, family or medical care leave, gender identity or expression, genetic information, immigration status, marital status, medical condition, national origin, physical or mental disability, political affiliation, protected veteran or military status, race, ethnicity, religion, sex (including pregnancy), sexual orientation, or any other characteristic protected by applicable local laws, regulations and ordinances. If you need assistance with religious accommodations and/or a reasonable accommodation due to a disability during the application process, read more about <a href=\"https://careers.microsoft.com/v2/global/en/accessibility.html\"><b><u>requesting accommodations.</u></b></a></p> ",
+  "location": "India, Karnataka, Bangalore",
+  "isHot": 0,
+  "workLocationOption": "onsite",
+  "locationFlexibility": null,
+  "atsJobId": "200063429",
+  "positionUrl": "/careers/job/1970393557045586",
+  "publicUrl": "https://apply.careers.microsoft.com/careers/job/1970393557045586",
+  "efcustomTextWorkSite": [
+   "3 days / week in-office"
+  ],
+  "efcustomTextRequiredTravel": [
+   "Less than 25%"
+  ],
+  "efcustomTextCurrentProfession": [
+   "Software Engineering"
+  ],
+  "efcustomTextTaDisciplineName": [
+   "Software Engineering"
+  ],
+  "efcustomTextRoletype": [
+   "Individual Contributor"
+  ],
+  "efcustomTextEmploymentType": [
+   "Full-Time"
+  ],
+  "jdHighlight": []
+ }
+}
