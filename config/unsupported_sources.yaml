@@ -10,7 +10,7 @@
   kind: portal
   reason: Their robots.txt forbids automated collection, so they are left out on purpose.
   could_add: no
-  names: [LinkedIn, Indeed, Naukri, Hirist]
+  names: [LinkedIn job listings (LinkedIn's own openings are collected), Indeed, Naukri, Hirist]
 
 - group: blocks_automated_access
   kind: portal
@@ -233,7 +233,7 @@
   kind: company
   reason: Fewer than about 2 India jobs a month, so not worth a scan.
   could_add: yes, one line in sources.yaml
-  names: [Agoda, Samsara, Brex, Starburst, Cockroach Labs]
+  names: [Samsara, Brex, Starburst, Cockroach Labs]
 
 - group: unclear_or_off_target
   kind: company
