@@ -4,8 +4,8 @@
 https://apply.careers.microsoft.com/careers?domain=microsoft.com
 https://qualcomm.eightfold.ai/careers?domain=qualcomm.com
 This is the public JSON the career site itself loads. It returns 10 jobs per page and has
-no descriptions, so each new job costs one extra call. Microsoft answers HTTP 429 to fast
-requests, so calls are spaced out and retried with backoff.
+no descriptions, so each new job costs one extra call. These sites answer HTTP 429 (and
+Eightfold's shared servers sometimes 403) to fast requests, so calls are spaced out.
 """
 
 import re
@@ -19,7 +19,8 @@ from src.collect.http import SourceError, get_json
 from src.models import Job, Source
 
 MAX_JOBS = 1000     # safety cap per company
-DELAY = 0.3         # between calls
+DELAY = 1.5         # between calls; all *.eightfold.ai sites share servers and answered 429/403
+                    # to back-to-back scans 0.3s apart
 SLOW_HOSTS = {"apply.careers.microsoft.com": 2.0}   # answered HTTP 429 after ~300 calls 1s apart
 _DAYS_RE = re.compile(r"(\d)\s*days?\s*/\s*week", re.I)
 
