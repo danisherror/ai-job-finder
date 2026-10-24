@@ -1,0 +1,244 @@
+# Companies and job portals this tool does NOT collect jobs from, and why.
+# This file is a record only; the tool never reads it. Sources it does collect from are in sources.yaml.
+# Checked 2026-10-23 to 2026-10-24. A site may change, so a "blocked" or "no API" entry can be re-checked later.
+#
+# Each group has a reason and the names it applies to. "could_add" says whether it can be added later and how.
+
+# ============================== Job portals ==============================
+
+- group: robots_txt_forbids
+  kind: portal
+  reason: Their robots.txt forbids automated collection, so they are left out on purpose.
+  could_add: no
+  names: [LinkedIn, Indeed, Naukri, Hirist]
+
+- group: blocks_automated_access
+  kind: portal
+  reason: Blocked automated access when checked (HTTP 403, a bot check or no answer).
+  could_add: no
+  names:
+    - Foundit
+    - Internshala
+    - Instahyre
+    - WorkIndia
+    - Job Hai
+    - JobGrin
+    - Startup Jobs
+    - FlexJobs
+    - Remote.co
+    - Golang Cafe
+    - Rust Jobs
+    - Ruby on Remote
+    - StepStone
+    - CV-Library
+    - Totaljobs
+    - CareerOne
+    - GrabJobs
+    - JobisJob
+    - Naukrigulf
+    - ClearanceJobs
+    - Linux Foundation job board
+
+- group: needs_api_key
+  kind: portal
+  reason: Official API exists but needs a free key you register for. These cover India.
+  could_add: yes, once a key is registered and an adapter is written
+  names: [Adzuna, Jooble, Careerjet, Talent.com]
+
+- group: no_public_api
+  kind: portal
+  reason: Search web pages only; no public feed or API to read.
+  could_add: no
+  names:
+    - Wellfound
+    - Cutshort
+    - TimesJobs
+    - Shine
+    - iimjobs (and its executive search)
+    - Glassdoor
+    - Apna
+    - Freshersworld
+    - Placement India
+    - AmbitionBox
+    - Fresherslive
+    - Unstop
+    - Firstnaukri
+    - eJobIndia
+    - Google Jobs
+    - SimplyHired
+    - ZipRecruiter
+    - Monster (and Monster Gulf)
+    - CareerBuilder
+    - Dice
+    - TechFetch
+    - Otta / Welcome to the Jungle
+    - Hired
+    - The Muse
+    - JustRemote
+    - Dynamite Jobs
+    - JS Remotely
+    - Flexa
+    - Relocate.me
+    - F6S
+    - Jobrapido
+    - Jobted
+    - JobStreet (and JobStreet Express)
+    - JobsDB
+    - Jora
+    - SEEK
+    - Reed
+    - No Fluff Jobs
+    - Foundit Gulf
+    - GulfTalent
+    - Bayt
+
+- group: needs_candidate_login
+  kind: portal
+  reason: Jobs are only visible after a candidate logs in.
+  could_add: no
+  names: [Superset (campus placements)]
+
+- group: freelance_marketplace
+  kind: portal
+  reason: Freelance marketplaces behind a login; their own hiring boards had no India jobs.
+  could_add: no
+  names: [Toptal, Arc, Contra, Gun.io, Lemon.io]
+
+- group: wrong_region
+  kind: portal
+  reason: Almost no jobs open to people in India.
+  could_add: no
+  names:
+    - Landing.jobs (almost all Portugal)
+    - EURES (EU only)
+    - USAJOBS (US government)
+    - GovernmentJobs (US government)
+    - Python.org jobs (no India jobs)
+
+- group: government_portals
+  kind: portal
+  reason: No job feed; mostly notices or PDFs.
+  could_add: no
+  names:
+    - National Career Service
+    - Employment News
+    - NATS
+    - Apprenticeship India
+    - AICTE internships
+    - Public Service Commission sites
+
+- group: no_job_feed
+  kind: portal
+  reason: No job feed to read (CNCF's feed was empty).
+  could_add: no
+  names: [CNCF, OpenSSF, OWASP]
+
+- group: few_india_jobs
+  kind: portal
+  reason: Checked but not added; too few jobs open to India.
+  could_add: yes, just a new adapter, but low value
+  names: [Jobicy]
+
+- group: staffing_firms
+  kind: portal
+  reason: Their own career sites, not on a job system this tool reads.
+  could_add: no, unless a reader for their site is written
+  names:
+    - Michael Page
+    - Robert Walters
+    - Randstad
+    - Adecco
+    - TeamLease
+    - Quess
+    - CIEL HR
+    - ABC Consultants
+    - Kelly
+    - ManpowerGroup
+    - SutraHR
+    - Flexing It
+
+# ============================== Companies ==============================
+
+- group: icims_classic
+  kind: company
+  reason: Career site runs on iCIMS classic; this tool has no reader for it (only the newer Jibe sites).
+  could_add: yes, with a new iCIMS reader
+  names: [Atlassian, Arm, IDeaS]
+
+- group: sap_successfactors
+  kind: company
+  reason: Career site runs on SAP SuccessFactors; no reader for it.
+  could_add: yes, with a new SuccessFactors reader
+  names: [SAP, Cargill, Globant, HCLTech, Wipro]
+
+- group: taleo
+  kind: company
+  reason: Career site runs on Oracle Taleo; no reader for it.
+  could_add: yes, with a new Taleo reader
+  names: [Optum, Societe Generale]
+
+- group: avature
+  kind: company
+  reason: Career site runs on Avature; no reader for it.
+  could_add: yes, with a new Avature reader
+  names: [Synopsys, Siemens]
+
+- group: phenom
+  kind: company
+  reason: Career site runs on Phenom; no reader for it.
+  could_add: yes, with a new Phenom reader
+  names: [Cencora, NTT DATA]
+
+- group: ripplehire
+  kind: company
+  reason: Career site runs on RippleHire; no reader for it.
+  could_add: yes, with a new RippleHire reader
+  names: [LTIMindtree, Mphasis, Tata Technologies]
+
+- group: in_house_site
+  kind: company
+  reason: Company's own career site with no public job API.
+  could_add: no, each would need its own scraper
+  names:
+    - Google Careers (web page only)
+    - Google DeepMind
+    - Goldman Sachs
+    - IBM
+    - Intuit
+    - Uber
+    - Walmart
+    - TCS
+    - PhonePe
+    - Zomato
+    - Zepto
+    - Myntra
+    - MakeMyTrip
+    - most other Indian startups
+
+- group: api_returns_nothing
+  kind: company
+  reason: Public API exists but does not work for India.
+  could_add: no
+  names:
+    - Apple (search API returned nothing for India)
+    - Wipro job feed (ignores search and paging)
+
+- group: no_india_jobs
+  kind: company
+  reason: Public job board works, but it had no India jobs.
+  could_add: yes, one line in sources.yaml if they start hiring in India
+  names: [Thoughtworks, Pinterest, Riot Games, Netcracker, Hugging Face, Circle]
+
+- group: too_few_india_jobs
+  kind: company
+  reason: Fewer than about 2 India jobs a month, so not worth a scan.
+  could_add: yes, one line in sources.yaml
+  names: [Agoda, Samsara, Brex, Starburst, Cockroach Labs]
+
+- group: unclear_or_off_target
+  kind: company
+  reason: Board is unclear or its India-region jobs are not what we want.
+  could_add: no
+  names:
+    - OKX ("APAC" jobs are mostly Pakistan / Southeast Asia crypto sales)
+    - Binance (two boards with that name; unclear which is the real one)
