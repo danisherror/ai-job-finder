@@ -5,8 +5,8 @@ per job for its description (SmartRecruiters, Workday, Oracle, Eightfold, Rippli
 that call for known jobs and return them without a description; the store then keeps the saved one.
 """
 
-from src.collect import (amazon, ashby, eightfold, greenhouse, himalayas, jibe, lever, oracle, remoteboards,
-                         rippling, smartrecruiters, weworkremotely, workable, workday, ycombinator)
+from src.collect import (amazon, ashby, eightfold, greenhouse, hackernews, himalayas, jibe, lever, oracle,
+                         remoteboards, rippling, smartrecruiters, weworkremotely, workable, workday, ycombinator)
 
 ADAPTERS = {
     "greenhouse": greenhouse.fetch,
@@ -23,5 +23,6 @@ ADAPTERS = {
     "weworkremotely": weworkremotely.fetch,
     "ycombinator": ycombinator.fetch,
     "jibe": jibe.fetch,
+    "hackernews": hackernews.fetch,
     **remoteboards.FETCHERS,
 }

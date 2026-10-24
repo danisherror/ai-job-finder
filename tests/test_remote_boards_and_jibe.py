@@ -73,3 +73,37 @@ def test_jobspresso_splits_company_and_place():
     assert "<" not in job.company and "⚲" not in job.location_raw
     assert job.location_raw.startswith("Remote")
 
+
+
+def test_hasjob_office_jobs_are_in_india():
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring((FIX / "hasjob.atom").read_text())
+    jobs = [rb.hasjob_job(e, Source(name="Hasjob", type="hasjob", board="")) for e in root.iter(f"{rb.ATOM}entry")]
+    first = jobs[0]
+    check(first)
+    assert first.company == "Actionboard" and first.cities == ["Chennai"] and first.india_eligible == "yes"
+    kerala = next(j for j in jobs if j.location_raw.startswith("Kerala"))
+    assert kerala.location_raw == "Kerala, India" and kerala.india_eligible == "yes"
+    anywhere = next(j for j in jobs if j.location_raw == "Anywhere")
+    assert anywhere.work_mode == "remote" and anywhere.india_eligible == "yes"
+
+
+def test_hackernews_reads_post_headers():
+    from src.collect import hackernews as hn
+    src = Source(name="Hacker News", type="hackernews", board="")
+    jobs = {j.company: j for j in (hn.to_job(c, src) for c in load("hackernews_hiring.json")["children"])}
+    singlestore = jobs["SingleStore"]
+    check(singlestore)
+    assert singlestore.title == "Software Engineer, AI Platform" and singlestore.india_eligible == "yes"
+    assert str(singlestore.apply_url) == f"https://news.ycombinator.com/item?id={singlestore.ats_id}"
+    assert jobs["PrairieLearn"].india_eligible == "no"        # Remote US
+    assert jobs["Shepherd"].india_eligible == "no"            # onsite in San Francisco
+    assert jobs["Enveritas"].india_eligible == "yes"          # Remote (Global)
+
+
+def test_hackernews_header_parts():
+    from src.collect.hackernews import parse_header
+    assert parse_header("FunnelStory | MTS, Applied ML | Remote (India) | Full-Time | https://funnelstory.ai") \
+        == ("FunnelStory", "MTS, Applied ML", "Remote (India)")
+    assert parse_header("PrairieLearn (Remote US) — Full-Stack Software Engineer — TypeScript") \
+        == ("PrairieLearn", "Full-Stack Software Engineer", "Remote US")

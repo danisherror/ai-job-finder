@@ -1,4 +1,4 @@
-"""Remote job boards with a free public feed: Remote OK, Remotive, Working Nomads and Jobspresso.
+"""Job boards with a free public feed: Remote OK, Remotive, Working Nomads, Jobspresso and Hasjob.
 Each exposes its own fetch(source, known).
 
 These are job boards (many companies; `company` is the real employer). Each read is one call
@@ -7,6 +7,7 @@ board, which Remote OK and Remotive ask for in return for using their APIs.
 `board` is unused except by Remotive, where it is the category slug (e.g. "software-dev").
 """
 
+import re
 import sys
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
@@ -147,11 +148,54 @@ def fetch_jobspresso(source: Source, known: frozenset[str] = frozenset()) -> lis
     return _recent([jobspresso_job(i, source) for i in _rss_items(get_text(JOBSPRESSO_FEED))])
 
 
+# ---------------------------------------------------------------- Hasjob (Atom)
+
+HASJOB_FEED = "https://hasjob.co/feed"
+ATOM = "{http://www.w3.org/2005/Atom}"
+_HASJOB_COMPANY_RE = re.compile(r"<strong>\s*<a [^>]*>(.*?)</a>", re.S)
+
+
+def hasjob_job(entry: ET.Element, source: Source) -> Job:
+    """Hasjob is an Indian startup board, so an office location without a country is taken to be in India."""
+    html = entry.findtext(f"{ATOM}content") or ""
+    url = entry.findtext(f"{ATOM}id") or entry.find(f"{ATOM}link").get("href")
+    company = _HASJOB_COMPANY_RE.search(html)
+    place = (entry.findtext(f"{ATOM}location") or "").strip()
+    mode = n.work_mode(place)
+    location = place if mode == "remote" or n.mentions_india(place) else f"{place}, India".lstrip(", ")
+    description = n.html_to_text(html)
+    exp_min, exp_max = n.experience_range(description)
+    return Job(
+        source=source.name,
+        ats_id=url,
+        title=(entry.findtext(f"{ATOM}title") or "").strip(),
+        company=n.html_to_text(company.group(1)) if company else url.split("/")[3],
+        location_raw=location,
+        cities=n.indian_cities(location),
+        work_mode=mode,
+        india_eligible=n.india_eligibility(location, mode, description),
+        experience_min=exp_min,
+        experience_max=exp_max,
+        description=description,
+        apply_url=url,
+        posted_at=_iso(entry.findtext(f"{ATOM}published") or entry.findtext(f"{ATOM}updated")),
+    )
+
+
+def fetch_hasjob(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
+    try:
+        root = ET.fromstring(get_text(HASJOB_FEED))
+    except ET.ParseError as e:
+        raise SourceError("bad_response", "not Atom") from e
+    return _recent([hasjob_job(e, source) for e in root.iter(f"{ATOM}entry")])
+
+
 FETCHERS = {
     "remoteok": fetch_remoteok,
     "remotive": fetch_remotive,
     "workingnomads": fetch_workingnomads,
     "jobspresso": fetch_jobspresso,
+    "hasjob": fetch_hasjob,
 }
 
 

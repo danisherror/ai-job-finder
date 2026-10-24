@@ -1,7 +1,7 @@
 # Companies to collect jobs from.
 # type: greenhouse | lever | ashby | smartrecruiters | workday | workable | himalayas
 #       | amazon | oracle | eightfold | rippling | weworkremotely | ycombinator | jibe
-#       | remoteok | remotive | workingnomads | jobspresso
+#       | remoteok | remotive | workingnomads | jobspresso | hasjob | hackernews
 # board: the company's board name on that ATS (checked live 2026-10-23)
 #   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
 #   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
@@ -239,3 +239,10 @@
 - {name: Groupon,           type: greenhouse, board: groupon}               # 3 of 29
 - {name: OpenAI,            type: ashby,      board: openai}                # 7 of 796
 - {name: Spotify,           type: lever,      board: spotify}               # 1 of 90
+
+# --- K. Added 2026-10-24 from the shared list of job portals (most portals have no public feed; see README) ---
+- {name: Hasjob,            type: hasjob,     board: ""}                # Indian startup board, ~15 posts a month
+- {name: Hacker News,       type: hackernews, board: ""}                # monthly "Who is hiring?" thread, ~8 India posts
+- {name: HackerOne,         type: ashby,      board: hackerone}         # 4 India (Pune) of 11
+- {name: Bugcrowd,          type: greenhouse, board: bugcrowd}          # 2 remote India of 8
+- {name: Built In,          type: greenhouse, board: builtin}           # 1 India of 3

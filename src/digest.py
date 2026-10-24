@@ -24,7 +24,8 @@ ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby"
                "rippling": ("rippling.com",), "weworkremotely": ("weworkremotely.com",),
                "ycombinator": ("ycombinator.com",), "jibe": (), "remoteok": ("remoteok.com",),
                "remotive": ("remotive.com",), "workingnomads": ("workingnomads.com",),
-               "jobspresso": ("jobspresso.co",)}
+               "jobspresso": ("jobspresso.co",), "hasjob": ("hasjob.co",),
+               "hackernews": ("news.ycombinator.com",)}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -44,6 +45,8 @@ ATS_JOB_PAGE = {
     "remotive": "{id}",
     "workingnomads": "{id}",
     "jobspresso": "{id}",
+    "hasjob": "{id}",
+    "hackernews": "https://news.ycombinator.com/item?id={id}",
 }
 
 

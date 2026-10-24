@@ -1,8 +1,9 @@
 # AI Job Finder
 
 Collects tech jobs every morning from company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workday,
-Workable, Oracle Cloud HCM, Eightfold, Rippling, Jibe), Amazon's careers site and seven job boards (Himalayas,
-We Work Remotely, YC startup jobs, Remote OK, Remotive, Working Nomads, Jobspresso), keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
+Workable, Oracle Cloud HCM, Eightfold, Rippling, Jibe), Amazon's careers site and nine job boards (Himalayas,
+We Work Remotely, YC startup jobs, Remote OK, Remotive, Working Nomads, Jobspresso, Hasjob, Hacker News
+"Who is hiring?"), keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
 
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
@@ -80,7 +81,7 @@ Foundit, Internshala and Instahyre (block automated access), Wellfound and Cutsh
 Google Careers (web page only, no API) and Apple (its search API returned nothing for India).
 Remote job boards Remote OK, Remotive, Working Nomads and Jobspresso were added on 2026-10-24 even though
 few of their jobs are open to India (about 15 a day between them); each costs one call per scan. Jobicy was not added.
-Python.org jobs (no India jobs) and Wipro's job feed (ignores search and paging) were checked and left out. Hacker News "Who is hiring" was skipped (about 8 India posts a month, free text).
+Python.org jobs (no India jobs) and Wipro's job feed (ignores search and paging) were checked and left out.
 YC jobs need a free YC account to apply.
 From the third shared company list (2026-10-24), these were not added because their career sites use systems
 this tool has no reader for: iCIMS classic (Atlassian, Arm, IDeaS), SAP SuccessFactors (SAP, Cargill, Globant,
@@ -88,6 +89,28 @@ HCLTech, Wipro), Taleo (Optum, Societe Generale), Avature (Synopsys, Siemens), P
 RippleHire (LTIMindtree, Mphasis, Tata Technologies) and in-house sites (Google DeepMind, Goldman Sachs, IBM,
 Intuit, Uber, Walmart, TCS and most Indian startups such as PhonePe, Zomato, Zepto, Myntra and MakeMyTrip).
 Thoughtworks, Pinterest, Riot Games, Netcracker, Hugging Face and Circle have public boards with no India jobs.
+
+From the list of 120 job portals (2026-10-24), Hasjob and Hacker News "Who is hiring?" were added as job boards,
+and HackerOne, Bugcrowd and Built In as companies (their own jobs). Already covered: Himalayas, We Work Remotely,
+Remote OK, Remotive, Working Nomads, Jobspresso, YC jobs and Turing. The rest were left out:
+- Blocked automated access when checked (HTTP 403, a bot check or no answer): WorkIndia, Job Hai, JobGrin,
+  Startup Jobs, FlexJobs, Remote.co, Golang Cafe, Rust Jobs, Ruby on Remote, StepStone, CV-Library, Totaljobs,
+  CareerOne, GrabJobs, JobisJob, Naukrigulf, ClearanceJobs and the Linux Foundation job board.
+- Official API that needs a free key you register for: Adzuna, Jooble, Careerjet and Talent.com. These cover
+  India and could be added once you have a key.
+- Search pages only, no public feed or API: TimesJobs, Shine, iimjobs (and its executive search), Glassdoor,
+  Apna, Freshersworld, Placement India, AmbitionBox, Fresherslive, Unstop, Firstnaukri, eJobIndia, Google Jobs,
+  SimplyHired, ZipRecruiter, Monster (and Monster Gulf), CareerBuilder, Dice, TechFetch, Otta / Welcome to the
+  Jungle, Hired, The Muse, JustRemote, Dynamite Jobs, JS Remotely, Flexa, Relocate.me, F6S, Jobrapido, Jobted,
+  JobStreet (and JobStreet Express), JobsDB, Jora, SEEK, Reed, No Fluff Jobs, Foundit Gulf, GulfTalent and Bayt.
+- Need a candidate login: Superset (campus placements); Toptal, Arc, Contra, Gun.io and Lemon.io are freelance
+  marketplaces, and their own hiring boards had no India jobs.
+- Wrong region: Landing.jobs (almost all Portugal), EURES (EU), USAJOBS and GovernmentJobs (US government).
+- Government and apprenticeship portals (National Career Service, Employment News, NATS, Apprenticeship India,
+  AICTE internships, Public Service Commission sites): no feed, mostly notices or PDFs.
+- No job feed: CNCF (its feed was empty), OpenSSF and OWASP.
+- Staffing firms (Michael Page, Robert Walters, Randstad, Adecco, TeamLease, Quess, CIEL HR, ABC Consultants,
+  Kelly, ManpowerGroup, SutraHR, Flexing It): their own sites, not on a job system this tool reads.
 
 ## Where data lives
 

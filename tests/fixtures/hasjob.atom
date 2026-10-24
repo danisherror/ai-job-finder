@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <title>All jobs – Hasjob</title>
+  <link href="https://hasjob.co/"/>
+  <link rel="self" href="https://hasjob.co/feed"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="https://hasjob.co/opensearch.xml" title="Hasjob" />
+  <updated>2026-10-23T14:32:08.358185+00:00Z</updated>
+  <id>https://hasjob.co/</id>
+  <icon>https://static.hasjob.co/static/img/hasjob-logo-200x200.png</icon>
+  <author><name>Hasjob</name></author>
+
+  <entry>
+    <title type="text">Forward Deployed Engineer — Freshers welcome — Chennai</title>
+    <id>https://hasjob.co/myactionboard.com/ccvh3</id>
+    <link href="https://hasjob.co/myactionboard.com/ccvh3"/>
+    <updated>2026-10-23T14:32:08.358185+00:00</updated>
+    <published>2026-10-23T14:32:08.358185+00:00</published>
+    <location>Chennai</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://app.myactionboard.com/home/"&gt;Actionboard&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Chennai
+      &lt;/p&gt;
+      &lt;p&gt;Forward Deployed Engineer&lt;br&gt;Chennai &amp;middot; Work from office&lt;br&gt;Full-time&lt;br&gt;0&amp;ndash;1 years&lt;/p&gt;
+&lt;p&gt;Work directly with clients to understand their business, design the data, and build the apps, reports and dashboards they rely on every day.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;About Actionboard&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Actionboard is a software company in Chennai. We build finance software that helps businesses run their finance work with less manual effort, see clearly what is happening, and make better decisions. Our products cover reporting and analytics, process automation, AI features, and custom apps built on our own app platform.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;About the role&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Forward Deployed Engineers sit between our clients and our platform. You will learn how a client&amp;rsquo;s business actually runs, work out what they really need, design the data behind it, build the app on our platform and test it, then stay with them until it works in their day-to-day. You will also work alongside experienced developers, helping with smaller tasks, debugging and fixes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What you&amp;rsquo;ll do&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Talk to clients to understand the problem behind each request and how their business works, and turn it into a technical plan&lt;/li&gt;
+&lt;li&gt;Design the data: the entities, how they relate, and the right schema for each app&lt;/li&gt;
+&lt;li&gt;Build apps on our platform: data models, forms, workflows, reports, dashboards and business logic&lt;/li&gt;
+&lt;li&gt;Break big requirements into small parts, keeping data correct, apps fast, and code easy to change later&lt;/li&gt;
+&lt;li&gt;When something breaks, find the root cause, from the source data to the number on the screen, and fix it, with help when you need it&lt;/li&gt;
+&lt;li&gt;Test features and edge cases so problems are caught before the client sees them&lt;/li&gt;
+&lt;li&gt;Help senior developers with smaller tasks, investigations and fixes&lt;/li&gt;
+&lt;li&gt;Write down how each app works: its workflows, data model and changes&lt;/li&gt;
+&lt;li&gt;Bring what you learn from clients back to our product team&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Who we&amp;rsquo;re looking for&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A bachelor&amp;rsquo;s degree in Computer Science, IT or a related field&lt;/li&gt;
+&lt;li&gt;0&amp;ndash;1 year of experience. Freshers are welcome&lt;/li&gt;
+&lt;li&gt;The basics of programming, data structures and object-oriented programming&lt;/li&gt;
+&lt;li&gt;The basics of databases: SQL, tables, relationships and schema design&lt;/li&gt;
+&lt;li&gt;You break a problem into small steps and ask good questions before jumping in&lt;/li&gt;
+&lt;li&gt;You learn new tools on your own and take feedback well&lt;/li&gt;
+&lt;li&gt;You stay with a problem until it works, even when it isn&amp;rsquo;t your part&lt;/li&gt;
+&lt;li&gt;You explain technical ideas clearly to non-technical people, and work well in a team&lt;/li&gt;
+&lt;li&gt;You can work full-time from our office in Chennai&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Good to have&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Hands-on time with any programming language&lt;/li&gt;
+&lt;li&gt;Some knowledge of web apps and APIs&lt;/li&gt;
+&lt;li&gt;Used Git, a debugger or tests before&lt;/li&gt;
+&lt;li&gt;College projects, internships or personal projects you can tell us about&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;What we expect&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We don&amp;rsquo;t expect you to know everything on day one. We care about strong basics, curiosity, clear thinking and how quickly you learn. Over time, you should be able to reason through a technical problem, see how a design choice affects data and performance, and build apps on our platform yourself.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;How you&amp;rsquo;ll grow&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;You will get hands-on experience in app development, database design, debugging and delivering software that clients use every day. As you grow, you will own bigger and more complex apps.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;How hiring works&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Apply through Hasjob &amp;mdash; no resume needed&lt;/li&gt;
+&lt;li&gt;Every application is reviewed by our team, with help from AI&lt;/li&gt;
+&lt;li&gt;If you are shortlisted, we email you a call letter with the date, time and address&lt;/li&gt;
+&lt;li&gt;You then meet us in person at our Chennai office for a conversation and a hands-on working session&lt;/li&gt;
+&lt;/ul&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Founding Data Engineer (BigQuery, Python, SQL)</title>
+    <id>https://hasjob.co/trident-group.in/kbyit</id>
+    <link href="https://hasjob.co/trident-group.in/kbyit"/>
+    <updated>2026-10-23T12:40:40.688812+00:00</updated>
+    <published>2026-10-23T12:40:40.688812+00:00</published>
+    <location>Bangalore</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://tridentautomobiles.com/"&gt;Trident Automobiles&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Bangalore
+      &lt;/p&gt;
+      &lt;p&gt;Trident Automobiles is a multi-brand dealer group: Hyundai, Renault, JCB, BharatBenz.&lt;/p&gt;
+&lt;p&gt;We&#39;re hiring our first data engineer to build the group&#39;s data platform from zero. You design and own the whole foundation and report directly to leadership. &lt;/p&gt;
+&lt;p&gt;What you&#39;ll do&lt;/p&gt;
+&lt;p&gt;- Build pipelines from messy real sources: scheduled exports, APIs (Tally, RealBooks, Interakt, CRM), and RPA for systems with no API&lt;/p&gt;
+&lt;p&gt;- Stand up and own our BigQuery warehouse - Solve customer identity resolution across four brands&lt;/p&gt;
+&lt;p&gt;- Backfill and structure years of historical data&lt;/p&gt;
+&lt;p&gt;- Build Looker Studio dashboards for leadership&lt;/p&gt;
+&lt;p&gt;- Later: internal apps (Firebase) and AI tooling.&lt;/p&gt;
+&lt;p&gt;You&#39;re a fit if you&lt;/p&gt;
+&lt;p&gt;- Have 4+ years building data pipelines end-to-end, ideally in scrappy environments&lt;/p&gt;
+&lt;p&gt;- Are strong in SQL and Python - Have used a cloud warehouse (BigQuery, Redshift or Snowflake; BigQuery a plus)&lt;/p&gt;
+&lt;p&gt;- Are fine with dirty data and pragmatic workarounds&lt;/p&gt;
+&lt;p&gt;- Can explain technical work plainly to non-technical leadership (essential)&lt;/p&gt;
+&lt;p&gt;- Own things without hand-holding Nice to have: RPA (UiPath, Python automation), BI/dashboards, automotive/finance data, Firebase.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Compensation: Very competitive, based on experience.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Automic Admin</title>
+    <id>https://hasjob.co/potentiam.co.uk/m3t8m</id>
+    <link href="https://hasjob.co/potentiam.co.uk/m3t8m"/>
+    <updated>2026-10-19T11:55:35.484215+00:00</updated>
+    <published>2026-10-19T11:55:35.484215+00:00</published>
+    <location>Bangalore</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://www.potentiam.co.uk/"&gt;Potentiam Ltd&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Bangalore
+      &lt;/p&gt;
+      &lt;p&gt;Experience : 9+ years.&lt;/p&gt;
+&lt;p&gt;Location : Bangalore ( Hybrid).&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;We are seeking a talented senior Automic Consultant with proven experience of working directly with end customers. The ideal candidate will possess deep technical expertise in Automic (Automation Engine) and a strong track record of completing installations, upgrades, migrations, and conversions in diverse enterprise environments. This role requires a customer-focused problem solver ready to travel or work remotely for clients, ensuring smooth transitions and optimal automation outcomes.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Key Responsibilities:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lead and execute Automic product installations, upgrades, migrations, and conversions for enterprise clients.&lt;/li&gt;
+&lt;li&gt;Serve as the primary technical contact for end customers during project delivery, ensuring their needs are addressed throughout the engagement.&lt;/li&gt;
+&lt;li&gt;Diagnose, troubleshoot, and resolve technical issues related to Automic deployments.&lt;/li&gt;
+&lt;li&gt;Develop and maintain comprehensive documentation for deployment activities, configurations, and post-project support.&lt;/li&gt;
+&lt;li&gt;Collaborate with client IT teams to plan and coordinate project milestones and deliverables.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Provide knowledge transfer, training, and guidance to client personnel as needed.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Essential&lt;/strong&gt; &lt;strong&gt;Qualifications:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Strong hands-on experience with Automic (Automation Engine), including installation, configuration, and administration.&lt;/li&gt;
+&lt;li&gt;Demonstrated background in customer-facing roles, with excellent communication and interpersonal skills.&lt;/li&gt;
+&lt;li&gt;Deep understanding of IT automation concepts, batch job scheduling, and enterprise IT environments.&lt;/li&gt;
+&lt;li&gt;Scripting (PowerShell, Bash, Python) experience.&lt;/li&gt;
+&lt;li&gt;Experience conducting end-to-end migrations/upgrades of automation platforms with minimal downtime.&lt;/li&gt;
+&lt;li&gt;Experience with databases like Oracle, SQL Server and PostgreSQL.&lt;/li&gt;
+&lt;li&gt;Ability to translate technical concepts to non-technical stakeholders.&lt;/li&gt;
+&lt;li&gt;Experience with UNIX/Linux and/or Windows server administration.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Nice to have Skills:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Familiarity with ITIL processes and change management.&lt;/li&gt;
+&lt;li&gt;Certifications in Automic, DevOps, or related IT automation platforms.&lt;/li&gt;
+&lt;li&gt;Experience with Broadcom AAI (Automation Analytics and Intelligence), formerly known as Automic Automation Intelligence.&lt;/li&gt;
+&lt;li&gt;Experience with Automic Database schema.&lt;/li&gt;
+&lt;li&gt;Experience in developing customized solutions to address specific customer needs for Automic.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;About Potentiam&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Potentiam is a global provider of highly qualified professionals to European SMEs from our offices in Romania, South Africa and India. Potentiam works with clients in finance, energy, leisure, marketing, business services and technology industries, providing technical, professional multi- lingual highly motivated staff, most of whom have had experience of working for international companies. Staff cover a wide range of roles from accounting, marketing, data management, HR, sales/account management, engineering, technology, and operations. Potentiam manages our staff&amp;rsquo;s career development and personal development training, all infrastructure, HR and payroll with our clients directly managing day-to-day staff responsibilities and role training and development.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Data Privacy Notice&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;The personal information you provide during the application and recruitment process will be used solely for recruitment purposes, in accordance with our data protection policies.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;All data shared with third parties complies with applicable confidentiality and retention requirements.&lt;/em&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Product Designer at Chaos Engine Labs - AI-native casual mobile games, Bengaluru</title>
+    <id>https://hasjob.co/chaosenginelabs.ai/wugqy</id>
+    <link href="https://hasjob.co/chaosenginelabs.ai/wugqy"/>
+    <updated>2026-10-17T07:00:11.032168+00:00</updated>
+    <published>2026-10-17T07:00:11.032168+00:00</published>
+    <location>Bangalore</location>
+    <content type="html">
+      &lt;p&gt;&lt;img alt="Logo" src="https://hasjob.co/chaosenginelabs.ai/wugqy/logo"&gt;&lt;br/&gt;
+          &lt;strong&gt;&lt;a href="https://chaosenginelabs.ai"&gt;Chaos Engine Labs&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Bangalore
+      &lt;/p&gt;
+      &lt;p&gt;Chaos Engine Labs (CEL) is a Bengaluru-based, AI-native casual mobile gaming startup backed by marquee investors, including Accel and BITKRAFT Ventures.&lt;/p&gt;
+&lt;p&gt;You would own Product Design for our games end to end, and work directly with the founders.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What you&amp;rsquo;ll do&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Own Product Design for our casual mobile games: core loops, onboarding, menus, meta and monetisation flows&lt;/li&gt;
+&lt;li&gt;Turn rough game ideas into playable flows, wireframes and polished screens quickly&lt;/li&gt;
+&lt;li&gt;Build and maintain a design system our AI agents and engineers can reuse across games&lt;/li&gt;
+&lt;li&gt;Use player data and playtests to improve retention and engagement&lt;/li&gt;
+&lt;li&gt;Work closely with the founders, game designers and engineers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;No years-of-experience bar. What we care about:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You&amp;rsquo;re full-stack: UX, UI, micro-interactions, transitions and animation&lt;/li&gt;
+&lt;li&gt;You work hands-on with Figma, Rive and Adobe MCPs, driving them through AI agents&lt;/li&gt;
+&lt;li&gt;You ship fully developed, working prototypes, not just static screens&lt;/li&gt;
+&lt;li&gt;You know from A/B tests that what looks good doesn&amp;rsquo;t always work&lt;/li&gt;
+&lt;li&gt;You have a portfolio that shows both your thinking and your craft&lt;/li&gt;
+&lt;li&gt;You like speed, ambiguity and owning outcomes end to end, and you&amp;rsquo;re ready to bet on yourself&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Not for you if&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You&amp;rsquo;re strong in only one slice of design&lt;/li&gt;
+&lt;li&gt;You think AI can&amp;rsquo;t do creative work&lt;/li&gt;
+&lt;li&gt;You need clear briefs and process to do your best work. We need someone who builds their own structure.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Brownie points if you&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Can deconstruct any top mobile game, or a game disguised as an app (think Duolingo)&lt;/li&gt;
+&lt;li&gt;Have shipped what you&amp;rsquo;ve designed as a product or website&lt;/li&gt;
+&lt;li&gt;Have worked as a developer at a consumer tech company&lt;/li&gt;
+&lt;li&gt;Have worked on a product with 100K+ DAU&lt;/li&gt;
+&lt;li&gt;Can max out a $200/mo Claude Code plan in a week&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Bengaluru, India. On-site, 6 days a week.&lt;/p&gt;
+&lt;p&gt;What to send us is listed below.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">ERP Test Analyst</title>
+    <id>https://hasjob.co/potentiam.co.uk/7ffez</id>
+    <link href="https://hasjob.co/potentiam.co.uk/7ffez"/>
+    <updated>2026-10-16T05:50:45.086204+00:00</updated>
+    <published>2026-10-16T05:50:45.086204+00:00</published>
+    <location>Bangalore</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://www.potentiam.co.uk/about-us"&gt;Potentiam Offshore Services Pvt.Ltd&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Bangalore
+      &lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Role Overview:&lt;/strong&gt;&amp;nbsp;Looking for an experienced ERP Test Analyst to support the delivery of a major Infor ERP implementation. The role involves coordinating and delivering testing activities across the full test lifecycle, working closely with Test Leads, business stakeholders, and functional SMEs.&lt;/p&gt;
+&lt;p&gt;You will work across functional workstreams, integrations, reporting, and data migration to ensure the Infor solution is robust, fit for purpose, and ready for deployment.&lt;/p&gt;
+&lt;p&gt;This is a structured testing role requiring strong test creation and execution skills across System Integration Testing (SIT), End-to-End (E2E), and User Acceptance Testing (UAT), along with strong coordination, governance, and stakeholder management abilities.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Required Experience&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Proven experience as a Test Analyst or Senior Test Analyst within ERP or large enterprise system delivery.&lt;/li&gt;
+&lt;li&gt;Experience supporting System Integration Testing (SIT), End-to-End (E2E) testing, and User Acceptance Testing (UAT).&lt;/li&gt;
+&lt;li&gt;Strong understanding of ERP business processes and cross-functional integrations.&lt;/li&gt;
+&lt;li&gt;Experience developing and executing detailed test scenarios and scripts.&lt;/li&gt;
+&lt;li&gt;Experience supporting ERP test planning, scheduling, and governance.&lt;/li&gt;
+&lt;li&gt;Experience defining test scope across ERP modules, integrations, and business processes.&lt;/li&gt;
+&lt;li&gt;Experience reviewing requirements and solution designs for clarity and testability.&lt;/li&gt;
+&lt;li&gt;Experience defining and validating business requirements and acceptance criteria.&lt;/li&gt;
+&lt;li&gt;Experience coordinating integration testing between ERP and third-party systems.&lt;/li&gt;
+&lt;li&gt;Experience supporting data migration and reporting validation.&lt;/li&gt;
+&lt;li&gt;Experience with defect management, triage, impact analysis, and resolution tracking.&lt;/li&gt;
+&lt;li&gt;Experience with test management tools such as JIRA, Zephyr, or equivalent.&lt;/li&gt;
+&lt;li&gt;Experience working within structured delivery frameworks and governance models.&lt;/li&gt;
+&lt;li&gt;Strong written and verbal communication skills.&lt;/li&gt;
+&lt;li&gt;Strong organizational and coordination skills.&lt;/li&gt;
+&lt;li&gt;Ability to manage multiple priorities in a fast-paced delivery environment.&lt;/li&gt;
+&lt;li&gt;Collaborative approach with technical and business stakeholders.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mandatory Skills:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Enterprise Application Testing: Infor, SAP, Oracle, or Microsoft Dynamics (Anyone)&lt;/li&gt;
+&lt;li&gt;System Integration Testing (SIT)&lt;/li&gt;
+&lt;li&gt;End-to-End (E2E) Testing&lt;/li&gt;
+&lt;li&gt;User Acceptance Testing (UAT)&lt;/li&gt;
+&lt;li&gt;Test Scenario &amp;amp; Test Script Creation&lt;/li&gt;
+&lt;li&gt;ERP Business Process &amp;amp; Integration Testing&lt;/li&gt;
+&lt;li&gt;Defect Management &amp;amp; Triage&lt;/li&gt;
+&lt;li&gt;JIRA / Zephyr or equivalent Test Management Tools&lt;/li&gt;
+&lt;li&gt;Test Planning, Governance &amp;amp; Status Reporting&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Preferred Skills: (Nice to have)&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Infor ERP solutions, including CloudSuite or equivalent enterprise platforms&lt;/li&gt;
+&lt;li&gt;Experience working alongside Test Leads in large-scale ERP programmes&lt;/li&gt;
+&lt;li&gt;DevOps / CI/CD environments&lt;/li&gt;
+&lt;li&gt;Continuous Testing practices&lt;/li&gt;
+&lt;li&gt;Data Migration Testing&lt;/li&gt;
+&lt;li&gt;ERP Integration Testing&lt;/li&gt;
+&lt;li&gt;Reporting Validation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;About Potentiam:&lt;/strong&gt;&amp;nbsp;Potentiam is a global provider of highly qualified professionals to European SMEs from our offices in Romania, South Africa and India. Potentiam works with clients in finance, energy, leisure, marketing, business services and technology industries, providing technical, professional multi- lingual highly motivated staff, most of whom have had experience of working for international companies. Staff cover a wide range of roles from accounting, marketing, data management, HR, sales/account management, engineering, technology, and operations. Potentiam manages our staffs career development and personal development training, all infrastructure, HR and payroll with our clients directly managing day-to-day staff responsibilities and role training and development.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If you are interested in this opportunity, please submit your CV&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Business Development Manager</title>
+    <id>https://hasjob.co/shivay-technologies.com/0sx8e</id>
+    <link href="https://hasjob.co/shivay-technologies.com/0sx8e"/>
+    <updated>2026-10-14T11:55:35.262458+00:00</updated>
+    <published>2026-10-14T11:55:35.262458+00:00</published>
+    <location>HSR Layout, Bangalore</location>
+    <content type="html">
+      &lt;p&gt;&lt;img alt="Logo" src="https://hasjob.co/shivay-technologies.com/0sx8e/logo"&gt;&lt;br/&gt;
+          &lt;strong&gt;&lt;a href="https://shivay-technologies.com/"&gt;Shivay Technologies&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;HSR Layout, Bangalore
+      &lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Job description&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;strong&gt;Company Overview:&lt;/strong&gt;&lt;br&gt; We are a leading property management company committed to delivering exceptional real estate services to tenants and property owners. We are looking for a dynamic and results-driven Business Development Manager (BDM) to join our team. The ideal candidate will possess a passion for the real estate industry, have a proactive attitude, and be willing to work in the office.&lt;/p&gt;
+&lt;p&gt;&lt;br&gt; &lt;strong&gt;Role and Responsibilities:&lt;/strong&gt;&lt;br&gt; &amp;bull; Build and maintain strong relationships with property owners and potential clients.&lt;br&gt; &amp;bull; Create and execute strategies to acquire new tenants for the company&amp;rsquo;s properties.&lt;br&gt; &amp;bull; Develop and implement sales plans to achieve monthly and quarterly targets.&lt;br&gt; &amp;bull; Conduct property showings for potential tenants and clients.&lt;br&gt; &amp;bull; Answer client inquiries and provide professional advice on property options and leasing terms.&lt;br&gt; &amp;bull; Act as a liaison between tenants and property owners to resolve any concerns.&lt;br&gt; &amp;bull; Negotiate terms and conditions with potential tenants and property owners.&lt;br&gt; &amp;bull; Assist in the lease signing process and ensure compliance with legal requirements.&lt;br&gt; &amp;bull; Spend time on the field visiting properties and meeting clients to establish relationships and promote services.&lt;br&gt; &amp;bull; Travel to various properties within the designated area, with a fuel allowance provided for business-related travel.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Qualifications:&lt;/strong&gt;&lt;br&gt; &amp;bull; Freshers are welcome.&lt;br&gt; &amp;bull; Previous experience in property management or real estate sales is a plus but not mandatory.&lt;br&gt; &amp;bull; Strong communication and interpersonal skills with the ability to build relationships and negotiate effectively.&lt;br&gt; &amp;bull; Ability to work independently and manage multiple tasks in a fast-paced environment.&lt;br&gt; &amp;bull; Proficiency in Microsoft Office.&lt;br&gt; &amp;bull; Self-motivated with a results-driven approach and the ability to meet targets.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benefits: &lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; ESIC (Employees&amp;rsquo; State Insurance Corporation).&lt;/p&gt;
+&lt;p&gt;&amp;bull; Paid Sick leave.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Paid Casual leave.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Provident Fund (PF).&lt;/p&gt;
+&lt;p&gt;&amp;bull; Gratuity.&lt;/p&gt;
+&lt;p&gt;&amp;bull;Health Insurance.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Performance-Based Incentives.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Quarterly performance Bonus.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Team Outing and Team Lunch.&lt;/p&gt;
+&lt;p&gt;&amp;bull;IJP/Promotion/Increment /Appraisal- Based on performance .&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Field Relationship Manager</title>
+    <id>https://hasjob.co/shivay-technologies.com/f3276</id>
+    <link href="https://hasjob.co/shivay-technologies.com/f3276"/>
+    <updated>2026-10-14T11:44:22.373356+00:00</updated>
+    <published>2026-10-14T11:44:22.373356+00:00</published>
+    <location>HSR Layout, Bangalore</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://shivay-technologies.com/"&gt;Shivay Technologies&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;HSR Layout, Bangalore
+      &lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Job description:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Position Overview:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The Field Relationship Manager is responsible for generating new business opportunities and driving revenue growth through field visits to prospective clients in the property management sector. This role involves engaging with property owners and tenants to promote the company&amp;rsquo;s services, develop relationships, and close sales. The ideal candidate will have excellent communication skills and a strong understanding of property management services.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Key Responsibilities:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; Client Relationship Building.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Develop and maintain strong, long-term relationships with current and prospective clients.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Conduct regular field visits to meet property owners and decision-makers, understand their needs, and offer tailored property management solutions.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Provide exceptional customer service to clients, responding promptly to inquiries and addressing concerns effectively.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Sales Presentations &amp;amp; Property Tours:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; Present and explain the company&amp;rsquo;s property management services to potential clients through property tours.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Demonstrate the benefits of the company&amp;rsquo;s offerings, such as leasing, tenant management, and maintenance services.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Assist clients in evaluating the value of property management services for their specific needs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Negotiating &amp;amp; Closing Sales:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; Negotiate and finalize agreements with new clients, ensuring that all terms and conditions are clearly understood and agreed upon.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Close sales by securing new property management contracts and services for the company.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Meet KPIs set by management.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Market Research &amp;amp; Competitive Intelligence:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; Stay updated on industry trends, competitor activities, and market conditions to identify new opportunities and adjust sales strategies.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Reporting &amp;amp; Administrative Duties:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; sales reports - including details of prospects, meetings, and sales progress.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Ensure that all sales processes are followed, including managing contracts and required documentation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Customer Support &amp;amp; Problem Solving:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; Act as the main point of contact for clients, ensuring high levels of customer satisfaction throughout the sales cycle and beyond.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Address any post-sale issues or concerns and work with other teams to resolve them effectively.&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;strong&gt;Skills:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;bull; Strong communication and interpersonal skills.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Ability to build relationships and engage with clients in a consultative manner.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Proven ability to close sales and achieve targets.&lt;/p&gt;
+&lt;p&gt;&amp;bull; Excellent time management and organizational skills.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Build for Bharat Fellow (AI/Engineering/Design)</title>
+    <id>https://hasjob.co/bharatdigital.io/neqif</id>
+    <link href="https://hasjob.co/bharatdigital.io/neqif"/>
+    <updated>2026-10-12T08:55:45.258001+00:00</updated>
+    <published>2026-10-12T08:55:45.258001+00:00</published>
+    <location>Anywhere</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="http://bharatdigital.org/fellowship"&gt;Bharat Digital&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Anywhere
+      &lt;/p&gt;
+      &lt;p&gt;The Build for Bharat Fellowship is a &lt;strong&gt;paid, six-month programme&lt;/strong&gt; that places early-career engineers, designers and AI practitioners inside government departments. Fellows work alongside government teams on real projects, improving public systems used by millions of people.&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What fellows get:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Real-world experience:&lt;/strong&gt; Work on live government projects, interact with users and understand how public services operate.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Learning and mentorship:&lt;/strong&gt; An orientation, regular reviews and expert office hours with practitioners such as Kailash Nadh (CTO, Zerodha), Rukmini S (Founder, Data for India) and Devanshi Sihare (TinkerLabs).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;A community:&lt;/strong&gt; Learn alongside other fellows and connect with people working in public technology.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Some projects from past cohorts&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Official statistics:&lt;/strong&gt; Built &lt;a href=&#34;https://github.com/nso-india/esankhyiki-mcp&#34; rel=&#34;nofollow&#34;&gt;MoSPI&amp;rsquo;s eSankhyiki MCP server&lt;/a&gt;, making official statistics accessible to AI assistants.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Rural libraries:&lt;/strong&gt; Developed Arivu Mitra, a WhatsApp companion for Gram Panchayat librarians in Karnataka using &lt;a href=&#34;https://shridarpatil.github.io/whatomate/&#34; rel=&#34;nofollow&#34;&gt;Whatomate&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Transport:&lt;/strong&gt; Built a transit analytics dashboard for Chennai&amp;rsquo;s transport authority and NHAI&#39;s &lt;a href=&#34;https://rajmargyatra.nhai.gov.in/&#34; rel=&#34;nofollow&#34;&gt;Annual Pass&lt;/a&gt;&amp;nbsp;web and app which has helped sell 1 Cr Annual Passes in a year.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Citizen services:&lt;/strong&gt; Redesigned Tamil Nadu&amp;rsquo;s e-Sevai services, IRCTC ticket UI, e-swathu, etc., to improve the citizen experience.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&#34;https://bharatdigital.org/projects&#34; rel=&#34;nofollow&#34;&gt;Explore more projects&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fellowship at a glance&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Duration&lt;/strong&gt;: January&amp;ndash;June 2027 (6 months, on-site)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Location:&lt;/strong&gt; On-site at a partner government department&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Stipend:&lt;/strong&gt; ₹40,000 per month&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Eligibility:&lt;/strong&gt; Indian citizens graduating in 2027 or who completed their latest degree in 2024&amp;ndash;2026, with demonstrable skills in Engineering, Design or AI&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Application deadline:&lt;/strong&gt; 18 October 2026, 11:59 PM IST&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Apply here:&lt;/strong&gt; &lt;a href=&#34;https://bharatdigital.org/fellowship&#34; rel=&#34;nofollow&#34;&gt;https://bharatdigital.org/fellowship&lt;/a&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Product, Systems &amp; Analytics Lead</title>
+    <id>https://hasjob.co/alcovia.life/1esn0</id>
+    <link href="https://hasjob.co/alcovia.life/1esn0"/>
+    <updated>2026-10-11T05:48:50.089447+00:00</updated>
+    <published>2026-10-11T05:48:50.089447+00:00</published>
+    <location>Gurugram</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://alcovia.life/"&gt;Alcovia&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Gurugram
+      &lt;/p&gt;
+      &lt;p&gt;Gurugram | In-office | 3+ years&#39; experience&lt;/p&gt;
+&lt;p&gt;Rs 16 LPA CTC (Rs 14 lakh fixed + Rs 2 lakh variable). ESOPs for the right candidate.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;We&#39;re building an ambition-building program for teenagers aged 11-18. This is a hands-on role owning product delivery, app adoption, dashboards, data accuracy and business automations, while guiding technical interns and junior developers.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Looking for someone with a technical/engineering background and experience in product management, technical operations or systems engineering. You should be comfortable with SQL, workflow automation such as n8n, product analytics, CRM/project tools and modern app/backend environments.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Apply through Hasjob.&lt;/p&gt;
+&lt;p&gt;Know a hands-on builder who fits? Please share this with them.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">AI/ML Intern - Python, LLM Fine-Tuning and AI Agents</title>
+    <id>https://hasjob.co/testaing.com/72ns5</id>
+    <link href="https://hasjob.co/testaing.com/72ns5"/>
+    <updated>2026-10-10T10:25:11.394473+00:00</updated>
+    <published>2026-10-10T10:25:11.394473+00:00</published>
+    <location>Anywhere</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://www.testaing.com"&gt;testAIng / AiEnsured&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Anywhere
+      &lt;/p&gt;
+      &lt;p&gt;Company: testAIng / AiEnsured&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Starts: 1 November 2026, ends April 2027&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Stipend: Rs 8,000 per month&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Mode: Remote&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;About us&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;AiEnsured works on AI assurance and governance. We are looking for final-year engineering students to contribute to practical AI/ML work.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;What you will work on&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Prepare datasets and fine-tune and evaluate LLMs in Python&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Develop and test AI agents&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Build and test web front ends and APIs for AI applications&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Write automated tests and evaluation scripts for agents, APIs and front ends&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Document code, experiments and findings&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Mandatory&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Final-year B.Tech/B.E. (CS, IT, AI/ML, Data Science or related)&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Strong Python&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- LLM fine-tuning knowledge (dataset prep, training, evaluation), shown in a project&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Basic ML, deep learning and NLP&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Good to have&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- PyTorch, Hugging Face, LoRA/QLoRA&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- REST APIs, JavaScript or a front-end framework&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;- Git&lt;/p&gt;
+&lt;p&gt;- MLOps experience (preferred)&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Sales Professional</title>
+    <id>https://hasjob.co/elrics.com/reit1</id>
+    <link href="https://hasjob.co/elrics.com/reit1"/>
+    <updated>2026-10-09T13:03:26.267091+00:00</updated>
+    <published>2026-10-09T13:03:26.267091+00:00</published>
+    <location>Kerala</location>
+    <content type="html">
+      &lt;p&gt;&lt;img alt="Logo" src="https://hasjob.co/elrics.com/reit1/logo"&gt;&lt;br/&gt;
+          &lt;strong&gt;&lt;a href="https://elrics.com/"&gt;ELRICS&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Kerala
+      &lt;/p&gt;
+      &lt;p&gt;A Sales Professional is responsible for identifying new business opportunities, building strong client relationships, and supporting the company&amp;rsquo;s growth through sales, marketing, and client communication. The role includes generating leads, understanding customer requirements, presenting company services, and maintaining long-term professional relationships with clients.&lt;/p&gt;
+&lt;p&gt;We are looking for enthusiastic and motivated candidates who are passionate about business growth and customer interaction. Experienced professionals with industry knowledge are encouraged to apply.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Sales Head</title>
+    <id>https://hasjob.co/elrics.com/oj535</id>
+    <link href="https://hasjob.co/elrics.com/oj535"/>
+    <updated>2026-10-09T12:56:17.955941+00:00</updated>
+    <published>2026-10-09T12:56:17.955941+00:00</published>
+    <location>Kerala</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="https://elrics.com/"&gt;ELRICS&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Kerala
+      &lt;/p&gt;
+      &lt;p&gt;As the Sales Head at Elrics, you will take complete ownership of all sales and business development activities in Kerala region. Your primary objective will be to drive the company into a highly secure and thriving financial position by strategically leading the sales division.&lt;/p&gt;
+&lt;p&gt;In this critical leadership role, you will be responsible for translating executive management&#39;s vision into actionable sales strategies, ensuring the company achieves its targeted market position and revenue goals. You will act as a visionary leader, guiding, mentoring, and scaling the entire business development team. We are seeking an authoritative, results-driven professional with a strong leadership background in the IT and software industry who can independently steer our company&#39;s commercial growth.&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Front Office Executive</title>
+    <id>https://hasjob.co/ontimeglobal.in/3hk12</id>
+    <link href="https://hasjob.co/ontimeglobal.in/3hk12"/>
+    <updated>2026-10-09T05:49:38.042000+00:00</updated>
+    <published>2026-10-09T05:49:38.042000+00:00</published>
+    <location>Bengaluru</location>
+    <content type="html">
+      &lt;p&gt;
+          &lt;strong&gt;&lt;a href="http://www.ontimeglobal.in"&gt;Ontime Global Pvt Ltd&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Bengaluru
+      &lt;/p&gt;
+      &lt;p&gt;Hi We are looking for *Front Office Executive/Guest Relation Executive _Bangalore-Ecity (Construction and real estate company)&lt;br&gt;Looking for 0 -2Yrs of experience into Front Office and customer handling&lt;br&gt;*Location- Ecity, Bangalore.&lt;br&gt;Position : Permanent &lt;br&gt;Gender : Only Female&lt;br&gt;Proficiently and Good looking and Fluent and pleasable personality with good communication skills&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  <entry>
+    <title type="text">Brand Manager Intern (full-time, 6 months, in-office Surat)</title>
+    <id>https://hasjob.co/monastic.media/zai1s</id>
+    <link href="https://hasjob.co/monastic.media/zai1s"/>
+    <updated>2026-10-05T07:32:36.267843+00:00</updated>
+    <published>2026-10-05T07:32:36.267843+00:00</published>
+    <location>Surat</location>
+    <content type="html">
+      &lt;p&gt;&lt;img alt="Logo" src="https://hasjob.co/monastic.media/zai1s/logo"&gt;&lt;br/&gt;
+          &lt;strong&gt;&lt;a href="https://www.monastic.media"&gt;Monastic Media&lt;/a&gt;&lt;/strong&gt;&lt;br/&gt;Surat
+      &lt;/p&gt;
+      &lt;p&gt;Monastic Media is a D2C performance marketing and e-commerce agency in Piplod, Surat. We make ad videos and run Meta and Google ads for D2C brands: ₹40 Cr+ in ad spend managed, ₹175 Cr+ in revenue created for brands, 5+ years.&lt;/p&gt;
+&lt;p&gt;As a Brand Manager Intern you work next to our Brand Managers on live client brands, every day. You help find content creators on Instagram and reach out to them, prepare briefs and scripts with the team, coordinate shoots in our studio and on location, and track every ad video until it reaches the media buying team on time.&lt;/p&gt;
+&lt;p&gt;Full-time, 6-month internship in our office in Piplod, Surat, every working day, working with the founder, the creative team and the performance marketing team. Stipend is discussed after the interview. Interviews are in person at our office.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What you will do&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Find creators on Instagram, reach out and track their replies&lt;/li&gt;
+&lt;li&gt;Prepare creator briefs and scripts with the Brand Manager&lt;/li&gt;
+&lt;li&gt;Coordinate shoots in our studio and on location&lt;/li&gt;
+&lt;li&gt;Keep project trackers and timelines up to date&lt;/li&gt;
+&lt;li&gt;Follow up with video editors so ads reach media buying on time&lt;/li&gt;
+&lt;li&gt;Join client calls and take clear notes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;What we look for&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Student or fresh graduate (any stream) available for a full-time, 6-month internship&lt;/li&gt;
+&lt;li&gt;Clear communication in English and Hindi (Gujarati is a plus)&lt;/li&gt;
+&lt;li&gt;Organised and quick to follow up&lt;/li&gt;
+&lt;li&gt;You know Instagram well and can tell good content from bad&lt;/li&gt;
+&lt;li&gt;In our office in Piplod, Surat every working day&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Nice to have&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Any internship or college work in marketing, social media or events&lt;/li&gt;
+&lt;li&gt;Interest in ads, UGC and D2C brands&lt;/li&gt;
+&lt;li&gt;Google Sheets or Notion&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Details&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Start: immediately&lt;/li&gt;
+&lt;li&gt;Duration: 6 months, full-time&lt;/li&gt;
+&lt;li&gt;Location: in-office, Piplod, Surat (every working day)&lt;/li&gt;
+&lt;li&gt;Openings: 1&lt;/li&gt;
+&lt;li&gt;Stipend: discussed after the interview&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Full role page: &lt;a href=&#34;https://dashboard.monastic.media/careers/brand-manager-intern?utm_source=hasjob&#34; rel=&#34;nofollow&#34;&gt;dashboard.monastic.media/careers/brand-manager-intern&lt;/a&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  
+</feed>

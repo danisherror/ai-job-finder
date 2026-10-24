@@ -1,0 +1,66 @@
+{
+ "id": 49922569,
+ "title": "Ask HN: Who is hiring? (October 2026)",
+ "children": [
+  {
+   "author": "mwest1066",
+   "children": [],
+   "created_at": "2026-10-01T15:02:37.000Z",
+   "created_at_i": 1790866957,
+   "id": 49922584,
+   "options": [],
+   "parent_id": 49922569,
+   "points": null,
+   "story_id": 49922569,
+   "text": "PrairieLearn (Remote US) \u2014 Full-Stack Software Engineer \u2014 TypeScript &#x2F; Postgres &#x2F; React &#x2F; AI<p>PrairieLearn (<a href=\"https:&#x2F;&#x2F;www.prairielearn.com\" rel=\"nofollow\">https:&#x2F;&#x2F;www.prairielearn.com</a>) is an open-source assessment platform used by universities across the US (Berkeley, Princeton, Michigan, Illinois, and others). We power mastery-based learning and large-scale exams.<p>We\u2019re a small, profitable, early-stage company (bootstrapped, no VC) that is growing quickly. Our users love us and we have very high retention and rapid spread through word of mouth. As an early-stage hire, you\u2019ll work across the stack and enjoy meaningful ownership from day one.<p>Tech we use: Node.js &#x2F; TypeScript backend, Postgres, AWS, React. We\u2019re also developing AI tooling, including LLM agents to help instructors create content, and vision-language models to help grade student work. PrairieLearn is open core: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;PrairieLearn&#x2F;PrairieLearn\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;PrairieLearn&#x2F;PrairieLearn</a><p>Details:<p>- Location: Remote (US only)<p>- Salary: $100k-$180k depending on experience<p>- Benefits: Stock options (0.5% - 1.5%), unlimited PTO, flexible hours<p>- Role: Full-time. (We\u2019re not able to sponsor visas at this time.)<p>Apply at <a href=\"https:&#x2F;&#x2F;www.prairielearn.com&#x2F;jobs-ashby?utm_source=YeEJ5MAKkr&amp;ashby_jid=ee6fdbc3-1c3a-4fa3-bb3f-13ddab449baf\" rel=\"nofollow\">https:&#x2F;&#x2F;www.prairielearn.com&#x2F;jobs-ashby?utm_source=YeEJ5MAKk...</a>",
+   "title": null,
+   "type": "comment",
+   "url": null
+  },
+  {
+   "author": "shepherd-eng",
+   "children": [],
+   "created_at": "2026-10-01T15:02:51.000Z",
+   "created_at_i": 1790866971,
+   "id": 49922593,
+   "options": [],
+   "parent_id": 49922569,
+   "points": null,
+   "story_id": 49922569,
+   "text": "Shepherd (Series B) | ONSITE | San Francisco, CA &amp; New York City, NY<p>At Shepherd, we&#x27;re pursuing the most ambitious technical vision in commercial insurance: fully autonomous underwriting. Shepherd is an AI-native commercial insurance platform transforming how high-hazard industries get covered.<p>The infrastructure behind the AI boom (data centers, semiconductor fabs, renewable energy assets) has to be built and insured, but traditional carriers weren&#x27;t built for this speed. We built Shepherd to solve that.<p>We announced our $42M Series B earlier this year! That brings our total funding to over $60M \u2014 led by Intact Private Capital, the investment arm of one of the largest insurers in the world. Intact is not only our lead investor but also a carrier partner, a testament to the confidence the incumbent industry has in what we&#x27;re building.<p>We\u2019re looking for product-minded, high ownership engineers to join our team! The Engineering team is HQ\u2019d in SF, but we\u2019re growing in NYC now too!<p>We\u2019re hiring for 2 Senior Full Stack Software Engineers, 1 Machine Learning Engineer and 1 AI Product Manager in SF, and 2 Staff Full Stack Software Engineers in NYC. Engineers own projects end-to-end so full stack ability is expected.<p>Check out our open roles here: <a href=\"https:&#x2F;&#x2F;shepherdinsurance.com&#x2F;careers\">https:&#x2F;&#x2F;shepherdinsurance.com&#x2F;careers</a>\nOur stack includes: Typescript, React, Next.js, GraphQL w&#x2F; Apollo, Node.js, Postgres &amp; Redis\n\u2013 If you have experience building AI agents or multi-step reasoning systems, we\u2019d love to hear from you.<p>* In the form, be sure to mention that you heard about this opportunity via Hacker News.\nIf you want to read more about our team and culture, check out our blog: <a href=\"https:&#x2F;&#x2F;shepherdinsurance.com&#x2F;blog\">https:&#x2F;&#x2F;shepherdinsurance.com&#x2F;blog</a>",
+   "title": null,
+   "type": "comment",
+   "url": null
+  },
+  {
+   "author": "cuchoi",
+   "children": [],
+   "created_at": "2026-10-01T18:44:56.000Z",
+   "created_at_i": 1790880296,
+   "id": 49925489,
+   "options": [],
+   "parent_id": 49922569,
+   "points": null,
+   "story_id": 49922569,
+   "text": "Enveritas (YC S18, non-profit) | Backend Software Engineer | Remote (Global) | <a href=\"https:&#x2F;&#x2F;enveritas.org&#x2F;jobs&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;enveritas.org&#x2F;jobs&#x2F;</a> Enveritas is a 501(c)(3) nonprofit working on sustainability issues facing smallholder coffee farmers. We collect field data in 30+ countries and build systems for analyzing risks in coffee, cocoa, and tea supply chains (including EUDR-related deforestation checks).<p>* Backend Software Engineer (Python, PostgreSQL&#x2F;PostGIS, Docker, AWS, Terraform) - $135-$155k -<a href=\"https:&#x2F;&#x2F;enveritas.org&#x2F;jobs&#x2F;backend-software-eng&#x2F;#10d7adef8us\" rel=\"nofollow\">https:&#x2F;&#x2F;enveritas.org&#x2F;jobs&#x2F;backend-software-eng&#x2F;#10d7adef8us</a> (worldwide remote)",
+   "title": null,
+   "type": "comment",
+   "url": null
+  },
+  {
+   "author": "panchamkhaitan",
+   "children": [],
+   "created_at": "2026-10-05T08:08:30.000Z",
+   "created_at_i": 1791187710,
+   "id": 49962002,
+   "options": [],
+   "parent_id": 49922569,
+   "points": null,
+   "story_id": 49922569,
+   "text": "SingleStore | Software Engineer, AI Platform | Full Time, Remote India<p>SingleStore is a distributed SQL database built for high-performance transactional and real-time analytical workloads. As data systems evolve, we\u2019re building the platform for AI applications that operate directly over enterprise data, including retrieval, reasoning, agent workflows, and intelligent automation.<p>Our AI Platform team works at the intersection of distributed systems, cloud infrastructure, and applied AI. Some of the technical problems we\u2019re working on include:<p>- Agent runtimes, orchestration, and MCP-style tool integration<p>- Retrieval&#x2F;RAG pipelines, embeddings, and vector search<p>- Model integrations, evaluation, and observability<p>- Secure multi-tenant AI infrastructure<p>- Reliability, latency, cost controls, and scaling AI systems in production<p>Our stack includes Go, Python, Kubernetes, cloud infrastructure, distributed systems, APIs, and modern AI&#x2F;ML tooling.<p>We\u2019re currently hiring a Software Engineer located in India to join the AI Platform team, along with several other roles across SingleStore.<p>Careers page with all open positions: <a href=\"https:&#x2F;&#x2F;grnh.se&#x2F;ipvpz7d61us\" rel=\"nofollow\">https:&#x2F;&#x2F;grnh.se&#x2F;ipvpz7d61us</a> | <a href=\"https:&#x2F;&#x2F;www.singlestore.com&#x2F;careers&#x2F;jobs&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.singlestore.com&#x2F;careers&#x2F;jobs&#x2F;</a><p>If you want to learn more about the engineering work we do, check out <a href=\"https:&#x2F;&#x2F;www.singlestore.com&#x2F;blog&#x2F;category&#x2F;engineering&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.singlestore.com&#x2F;blog&#x2F;category&#x2F;engineering&#x2F;</a>.<p>Feel free to email me directly via pkhaitan at singlestore dot com.",
+   "title": null,
+   "type": "comment",
+   "url": null
+  }
+ ]
+}
