@@ -7,10 +7,10 @@ from pydantic import BaseModel, Field, HttpUrl
 
 SourceType = Literal["greenhouse", "lever", "ashby", "smartrecruiters", "workday", "workable", "himalayas",
                      "amazon", "oracle", "eightfold", "rippling", "weworkremotely", "ycombinator", "jibe",
-                     "remoteok", "remotive", "workingnomads", "jobspresso", "hasjob", "hackernews"]
+                     "remoteok", "remotive", "workingnomads", "jobspresso", "hasjob", "hackernews", "jooble", "careerjet"]
 # Job boards listing many companies (not one company's own feed).
 AGGREGATOR_TYPES = {"himalayas", "weworkremotely", "ycombinator", "remoteok", "remotive", "workingnomads",
-                    "jobspresso", "hasjob", "hackernews"}
+                    "jobspresso", "hasjob", "hackernews", "jooble", "careerjet"}
 WorkMode = Literal["remote", "hybrid", "onsite", "unknown"]
 IndiaEligible = Literal["yes", "no", "unclear"]
 

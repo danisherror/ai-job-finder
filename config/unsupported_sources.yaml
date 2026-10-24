@@ -43,7 +43,7 @@
   kind: portal
   reason: Official API exists but needs a free key you register for. These cover India.
   could_add: yes, once a key is registered and an adapter is written
-  names: [Adzuna, Jooble, Careerjet, Talent.com]
+  names: [Adzuna, Talent.com]    # Jooble and Careerjet were added 2026-10-24
 
 - group: no_public_api
   kind: portal

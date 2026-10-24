@@ -6,7 +6,7 @@ that call for known jobs and return them without a description; the store then k
 """
 
 from src.collect import (amazon, ashby, eightfold, greenhouse, hackernews, himalayas, jibe, lever, oracle,
-                         remoteboards, rippling, smartrecruiters, weworkremotely, workable, workday, ycombinator)
+                         portals, remoteboards, rippling, smartrecruiters, weworkremotely, workable, workday, ycombinator)
 
 ADAPTERS = {
     "greenhouse": greenhouse.fetch,
@@ -25,4 +25,5 @@ ADAPTERS = {
     "jibe": jibe.fetch,
     "hackernews": hackernews.fetch,
     **remoteboards.FETCHERS,
+    **portals.FETCHERS,
 }

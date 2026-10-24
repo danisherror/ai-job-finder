@@ -96,8 +96,8 @@ Remote OK, Remotive, Working Nomads, Jobspresso, YC jobs and Turing. The rest we
 - Blocked automated access when checked (HTTP 403, a bot check or no answer): WorkIndia, Job Hai, JobGrin,
   Startup Jobs, FlexJobs, Remote.co, Golang Cafe, Rust Jobs, Ruby on Remote, StepStone, CV-Library, Totaljobs,
   CareerOne, GrabJobs, JobisJob, Naukrigulf, ClearanceJobs and the Linux Foundation job board.
-- Official API that needs a free key you register for: Adzuna, Jooble, Careerjet and Talent.com. These cover
-  India and could be added once you have a key.
+- Official API that needs a free key you register for: Adzuna and Talent.com. These cover India and could be
+  added once you have a key. Jooble and Careerjet were added this way (keys go in `.env`).
 - Search pages only, no public feed or API: TimesJobs, Shine, iimjobs (and its executive search), Glassdoor,
   Apna, Freshersworld, Placement India, AmbitionBox, Fresherslive, Unstop, Firstnaukri, eJobIndia, Google Jobs,
   SimplyHired, ZipRecruiter, Monster (and Monster Gulf), CareerBuilder, Dice, TechFetch, Otta / Welcome to the

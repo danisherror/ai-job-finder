@@ -25,7 +25,8 @@ ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby"
                "ycombinator": ("ycombinator.com",), "jibe": (), "remoteok": ("remoteok.com",),
                "remotive": ("remotive.com",), "workingnomads": ("workingnomads.com",),
                "jobspresso": ("jobspresso.co",), "hasjob": ("hasjob.co",),
-               "hackernews": ("news.ycombinator.com",)}
+               "hackernews": ("news.ycombinator.com",), "jooble": ("jooble.org",),
+               "careerjet": ("jobviewtrack.com", "careerjet.co.in")}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -47,6 +48,8 @@ ATS_JOB_PAGE = {
     "jobspresso": "{id}",
     "hasjob": "{id}",
     "hackernews": "https://news.ycombinator.com/item?id={id}",
+    "jooble": "https://jooble.org/jdp/{id}",
+    "careerjet": "https://www.careerjet.co.in",   # its job links change on every call; no stable page
 }
 
 

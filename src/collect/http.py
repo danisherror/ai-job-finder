@@ -20,9 +20,9 @@ class SourceError(Exception):
         self.reason = reason
 
 
-def get_json(url: str, params: dict | None = None):
+def get_json(url: str, params: dict | None = None, headers: dict | None = None):
     """GET a URL and return parsed JSON, retrying temporary failures with backoff."""
-    return _request("GET", url, params=params)
+    return _request("GET", url, params=params, headers=headers)
 
 
 def get_text(url: str, params: dict | None = None) -> str:
@@ -35,12 +35,13 @@ def post_json(url: str, body: dict):
     return _request("POST", url, body=body)
 
 
-def _request(method: str, url: str, params: dict | None = None, body: dict | None = None, as_text: bool = False):
+def _request(method: str, url: str, params: dict | None = None, body: dict | None = None, as_text: bool = False,
+             headers: dict | None = None):
     last: Exception | None = None
     attempt = limited = 0
     while attempt < RETRIES and limited < RATE_LIMIT_RETRIES:
         try:
-            resp = httpx.request(method, url, params=params, json=body, headers=HEADERS, timeout=TIMEOUT,
+            resp = httpx.request(method, url, params=params, json=body, headers={**HEADERS, **(headers or {})}, timeout=TIMEOUT,
                                  follow_redirects=True)
         except httpx.TimeoutException as e:
             last = SourceError("timeout", str(e))
