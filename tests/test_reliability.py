@@ -249,3 +249,40 @@ def test_big_log_files_are_trimmed(conn, tmp_path):
     main.cleanup(conn)
     data = (logs / "daily.log").read_bytes()
     assert len(data) <= main.MAX_LOG_BYTES // 2 + 100 and data.startswith(b"[older lines removed]\nline\n")
+
+
+# ---------------------------------------------------------------- parallel lanes
+
+def test_different_systems_run_at_the_same_time_and_one_system_runs_one_at_a_time(tmp_path, monkeypatch):
+    import threading
+
+    srcs = [Source(name=f"L{i}", type="lever", board=f"l{i}") for i in range(3)] + \
+           [Source(name=f"G{i}", type="greenhouse", board=f"g{i}") for i in range(3)]
+    c = store.connect(tmp_path / "p.db")
+    monkeypatch.setattr(main, "load_sources", lambda: srcs)
+    monkeypatch.setattr(main.time, "sleep", lambda s: None)
+    lock, active, peak = threading.Lock(), {"lever": 0, "greenhouse": 0}, {"lever": 0, "greenhouse": 0, "all": 0}
+    both = threading.Barrier(2, timeout=5)  # passes only if a lever and a greenhouse source run together
+
+    def fetch(source, known=frozenset()):
+        with lock:
+            active[source.type] += 1
+            peak[source.type] = max(peak[source.type], active[source.type])
+            peak["all"] = max(peak["all"], sum(active.values()))
+        if source.name in ("L0", "G0"):
+            both.wait()
+        with lock:
+            active[source.type] -= 1
+        return [job(source, "1")]
+
+    monkeypatch.setattr(main, "ADAPTERS", {"lever": fetch, "greenhouse": fetch})
+    assert main.collect(c, store.start_run(c)) == (6, 6)
+    assert peak == {"lever": 1, "greenhouse": 1, "all": 2}
+
+
+def test_a_crashing_source_in_a_lane_does_not_stop_the_rest(conn, monkeypatch):
+    scan(conn, monkeypatch, Acme=ValueError("feed changed shape"), Bolt=["b1"])
+    rows = dict(conn.execute("SELECT source, result FROM source_runs").fetchall())
+    assert rows == {"Acme": "failed", "Bolt": "ok"}
+    detail = conn.execute("SELECT error_detail FROM source_runs WHERE source = 'Acme'").fetchone()[0]
+    assert "feed changed shape" in detail and "Traceback" in detail

@@ -11,21 +11,25 @@
 """
 
 import fcntl
+import queue
 import sys
 import time
 import traceback
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from src import digest, health, matcher, store, telegram
 from src.collect import ADAPTERS
 from src.collect.http import SourceError
 from src.config import ROOT, load_env, load_profiles, load_sources
+from src.models import Source
 
 LOCK_FILE = ROOT / "private" / "run.lock"
 TAPS_LOCK_FILE = ROOT / "private" / "taps.lock"  # separate, so the hourly job never blocks the daily run
 LOGS_DIR = ROOT / "private" / "logs"
 MAX_LOG_BYTES = 2_000_000
-DELAY_BETWEEN_SOURCES = 1.0  # seconds; be polite
+DELAY_BETWEEN_SOURCES = 1.0  # seconds between sources of one lane; be polite
+MAX_LANES = 8                # source types scanned at the same time
 
 
 def acquire_lock(path: Path = LOCK_FILE):
@@ -43,6 +47,11 @@ def acquire_lock(path: Path = LOCK_FILE):
 def collect(conn, run_id: str) -> tuple[int, int]:
     """Stage 1: fetch every active source into the job pool. Returns (sources scanned, active sources).
 
+    Sources run in lanes, one per source type (Greenhouse, Workday, Eightfold, ...), up to
+    MAX_LANES at a time. Within a lane sources run one after another, because companies on the
+    same system share its servers (Eightfold rate-limited us when scanned back to back). Threads
+    only download; all database work stays on this thread, in the order sources finish.
+
     On a resumed run, sources this run already finished are skipped.
     """
     sources = [s for s in load_sources() if s.active]
@@ -51,31 +60,57 @@ def collect(conn, run_id: str) -> tuple[int, int]:
     todo = [s for s in sources if s.name not in done]
     print(f"Run {run_id}: collecting from {len(todo)} sources" + (f" ({len(done)} already done)" if done else ""))
 
-    for i, source in enumerate(todo):
-        if i:
-            time.sleep(DELAY_BETWEEN_SOURCES)
-        started = store.now()
-        try:
-            jobs = ADAPTERS[source.type](source, store.known_ats_ids(conn, source.name))
-            if store.is_suspicious_zero(conn, source, jobs):
-                store.record_suspicious(conn, run_id, source, started)
-                print(f"  SUSPECT {source.name:<14}    0 jobs (usually {store.usual_count(conn, source.name)}); "
-                      "nothing closed")
-                continue
-            new = store.save_source_result(conn, run_id, source, started, jobs)
-            print(f"  ok      {source.name:<14} {len(jobs):>4} jobs, {new:>4} new")
-        except SourceError as e:
-            store.record_source_failure(conn, run_id, source, started, e.reason, str(e))
-            print(f"  FAILED  {source.name:<14} {e.reason}: {e}")
-        except Exception as e:  # a bug or an unexpected feed shape: record it, keep going
-            store.record_source_failure(conn, run_id, source, started, "error", traceback.format_exc())
-            print(f"  FAILED  {source.name:<14} error: {e!r}")
+    lanes: dict[str, list[Source]] = {}
+    for source in todo:
+        lanes.setdefault(source.type, []).append(source)
+    known = {s.name: store.known_ats_ids(conn, s.name) for s in todo}
+    results: queue.Queue = queue.Queue()
+
+    def run_lane(lane: list[Source]) -> None:
+        for i, source in enumerate(lane):
+            if i:
+                time.sleep(DELAY_BETWEEN_SOURCES)
+            started = store.now()
+            try:
+                results.put((source, started, ADAPTERS[source.type](source, known[source.name]), None))
+            except Exception as e:  # handed to the main thread, which records it
+                results.put((source, started, None, e))
+
+    with ThreadPoolExecutor(max_workers=min(MAX_LANES, len(lanes)) or 1) as pool:
+        for lane in lanes.values():
+            pool.submit(run_lane, lane)
+        for _ in todo:
+            source, started, jobs, error = results.get()
+            save_result(conn, run_id, source, started, jobs, error)
 
     scanned = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ? AND result = 'ok'",
                            (run_id,)).fetchone()[0]
     print(f"Scanned {scanned} of {len(sources)} sources")
     export_jobs(conn)
     return scanned, len(sources)
+
+
+def save_result(conn, run_id: str, source: Source, started: str, jobs: list | None, error: Exception | None) -> None:
+    if isinstance(error, SourceError):
+        store.record_source_failure(conn, run_id, source, started, error.reason, str(error))
+        print(f"  FAILED  {source.name:<14} {error.reason}: {error}")
+        return
+    if error is not None:  # a bug or an unexpected feed shape: record it, keep going
+        detail = "".join(traceback.format_exception(error))
+        store.record_source_failure(conn, run_id, source, started, "error", detail)
+        print(f"  FAILED  {source.name:<14} error: {error!r}")
+        return
+    try:
+        if store.is_suspicious_zero(conn, source, jobs):
+            store.record_suspicious(conn, run_id, source, started)
+            print(f"  SUSPECT {source.name:<14}    0 jobs (usually {store.usual_count(conn, source.name)}); "
+                  "nothing closed")
+            return
+        new = store.save_source_result(conn, run_id, source, started, jobs)
+        print(f"  ok      {source.name:<14} {len(jobs):>4} jobs, {new:>4} new")
+    except Exception as e:  # e.g. a job the store rejects: record it, keep going
+        store.record_source_failure(conn, run_id, source, started, "error", traceback.format_exc())
+        print(f"  FAILED  {source.name:<14} error: {e!r}")
 
 
 def export_jobs(conn) -> None:

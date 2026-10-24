@@ -137,3 +137,8 @@
 - {name: Arista Networks,   type: smartrecruiters, board: aristanetworks}                  # 26
 - {name: Dell,              type: oracle,          board: "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers"}  # 22
 - {name: Accenture,         type: workday,         board: "https://accenture.wd103.myworkdayjobs.com/AccentureCareers"}  # 2,000+ (capped at 1,000; mostly consulting)
+- {name: HPE,               type: workday,         board: "https://hpe.wd5.myworkdayjobs.com/Jobsathpe"}       # 344 (includes Juniper)
+- {name: F5,                type: workday,         board: "https://ffive.wd5.myworkdayjobs.com/f5jobs"}        # 31
+- {name: BrowserStack,      type: workday,         board: "https://browserstack.wd3.myworkdayjobs.com/External"}  # 18
+- {name: Red Hat,           type: workday,         board: "https://redhat.wd5.myworkdayjobs.com/jobs"}         # 9
+- {name: SUSE,              type: workday,         board: "https://suse.wd3.myworkdayjobs.com/Jobsatsuse"}     # 3

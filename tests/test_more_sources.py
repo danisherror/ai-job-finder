@@ -63,8 +63,10 @@ def test_workday_falls_back_to_city_values():
     facets = [{"facetParameter": "locations", "values": [
         {"descriptor": "India, Pune", "id": "a", "count": 3},
         {"descriptor": "India, Bengaluru", "id": "b", "count": 5},
+        {"descriptor": "Bengaluru, Karnātaka, India", "id": "d", "count": 184},   # HPE's order
+        {"descriptor": "All, Indiana, United States of America", "id": "e", "count": 1},
         {"descriptor": "US, Austin", "id": "c", "count": 9}]}]
-    assert workday.india_facet(facets) == ("locations", ["a", "b"])
+    assert workday.india_facet(facets) == ("locations", ["a", "b", "d"])
     assert workday.india_facet([{"facetParameter": "locations", "values": [{"descriptor": "US", "id": "c"}]}]) is None
 
 
@@ -145,3 +147,13 @@ def test_job_board_jobs_close_by_age_not_by_misses(conn):
 ])
 def test_unsafe_apply_links_fall_back_to_the_job_page(source_type, board, ats_id, expected):
     assert digest.safe_apply_url("http://evil.example/x", source_type, board, ats_id, set()) == expected
+
+
+def test_workday_skips_stub_postings(monkeypatch):
+    stub = {"bulletFields": ["R00272731", "Gurugram, Ddc1A"]}
+    real = load("workday_nvidia.json")["item"]
+    facets = [{"facetParameter": "locationCountry", "values": [{"descriptor": "India", "id": "in"}]}]
+    replies = iter([{"facets": facets}, {"total": 2, "jobPostings": [stub, real]}, {"jobPostings": []}])
+    monkeypatch.setattr(workday, "post_json", lambda url, body: next(replies))
+    jobs = workday.fetch(WD, known=frozenset({workday.job_id(real)}))
+    assert [j.ats_id for j in jobs] == [workday.job_id(real)]

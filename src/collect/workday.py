@@ -18,6 +18,7 @@ PAGE = 20          # Workday's maximum page size
 MAX_JOBS = 1000    # safety cap per company
 DETAIL_DELAY = 0.2
 _LOCALE_RE = re.compile(r"^[a-z]{2}-[A-Z]{2}$")
+_INDIA_RE = re.compile(r"\bindia\b", re.I)   # "India, Pune" and "Bengaluru, Karnataka, India", not "Indiana"
 
 
 def site_urls(board: str) -> tuple[str, str]:
@@ -31,7 +32,7 @@ def site_urls(board: str) -> tuple[str, str]:
 
 
 def india_facet(facets: list[dict]) -> tuple[str, list[str]] | None:
-    """The search filter for India: a country-level "India" value, else every "India, <city>" value."""
+    """The search filter for India: a country-level "India" value, else every city value naming India."""
     cities: tuple[str, list[str]] | None = None
     for facet in facets:
         param, values = facet.get("facetParameter"), facet.get("values") or []
@@ -45,7 +46,7 @@ def india_facet(facets: list[dict]) -> tuple[str, list[str]] | None:
         exact = [v["id"] for v in values if (v.get("descriptor") or "").strip().lower() == "india"]
         if exact:
             return param, exact
-        some = [v["id"] for v in values if (v.get("descriptor") or "").lower().startswith("india")]
+        some = [v["id"] for v in values if _INDIA_RE.search(v.get("descriptor") or "")]
         if some and not cities:
             cities = (param, some)
     return cities
@@ -68,6 +69,8 @@ def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
         if not items:
             break
         for raw in items:
+            if not raw.get("externalPath") or not raw.get("title"):
+                continue  # a stub with only bulletFields (Accenture lists some); there is no job page
             detail = None
             if job_id(raw) not in known:
                 time.sleep(DETAIL_DELAY)
