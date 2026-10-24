@@ -1,7 +1,7 @@
 # AI Job Finder
 
 Collects tech jobs every morning from company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workday,
-Workable, Oracle Cloud HCM, Eightfold, Rippling), Amazon's careers site and the Himalayas remote job board, keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
+Workable, Oracle Cloud HCM, Eightfold, Rippling), Amazon's careers site and three job boards (Himalayas, We Work Remotely, YC startup jobs), keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
 
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
@@ -77,7 +77,8 @@ Sites left out on purpose: LinkedIn and Indeed jobs, Naukri and Hirist (their ro
 Foundit, Internshala and Instahyre (block automated access), Wellfound and Cutshort (no public API),
 Google Careers (web page only, no API) and Apple (its search API returned nothing for India).
 Remote job boards Remotive, RemoteOK, Working Nomads and Jobicy were checked on 2026-10-24 and had almost
-no jobs open to India.
+no jobs open to India. Hacker News "Who is hiring" was skipped (about 8 India posts a month, free text).
+YC jobs need a free YC account to apply.
 
 ## Where data lives
 

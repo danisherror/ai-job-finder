@@ -21,7 +21,8 @@ ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby"
                "smartrecruiters": ("smartrecruiters.com",), "workday": ("myworkdayjobs.com",),
                "workable": ("workable.com",), "himalayas": ("himalayas.app",), "amazon": ("amazon.jobs",),
                "oracle": ("oraclecloud.com",), "eightfold": ("eightfold.ai", "careers.microsoft.com"),
-               "rippling": ("rippling.com",)}
+               "rippling": ("rippling.com",), "weworkremotely": ("weworkremotely.com",),
+               "ycombinator": ("ycombinator.com",)}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -34,6 +35,8 @@ ATS_JOB_PAGE = {
     "oracle": "{site}/job/{id}",                   # site is the board URL without query or trailing slash
     "eightfold": "{site}/job/{id}",                # e.g. https://qualcomm.eightfold.ai/careers/job/<id>
     "rippling": "https://ats.rippling.com/{board}/jobs/{id}",
+    "weworkremotely": "{id}",                      # the ID is the job's We Work Remotely URL
+    "ycombinator": "https://www.ycombinator.com/jobs",   # YC job pages need the company slug too
 }
 
 

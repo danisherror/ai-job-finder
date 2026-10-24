@@ -22,12 +22,17 @@ def get_json(url: str, params: dict | None = None):
     return _request("GET", url, params=params)
 
 
+def get_text(url: str, params: dict | None = None) -> str:
+    """GET a URL and return its body as text (RSS feeds, HTML pages)."""
+    return _request("GET", url, params=params, as_text=True)
+
+
 def post_json(url: str, body: dict):
     """POST a JSON body and return parsed JSON (Workday's search works this way)."""
     return _request("POST", url, body=body)
 
 
-def _request(method: str, url: str, params: dict | None = None, body: dict | None = None):
+def _request(method: str, url: str, params: dict | None = None, body: dict | None = None, as_text: bool = False):
     last: Exception | None = None
     for attempt in range(RETRIES):
         try:
@@ -48,6 +53,8 @@ def _request(method: str, url: str, params: dict | None = None, body: dict | Non
                 last = SourceError("http", f"HTTP {resp.status_code}")
             elif resp.status_code != 200:
                 raise SourceError("http", f"HTTP {resp.status_code}")
+            elif as_text:
+                return resp.text
             else:
                 try:
                     return resp.json()

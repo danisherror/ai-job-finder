@@ -118,3 +118,54 @@ def test_redirect_to_a_maintenance_page_is_reported_as_maintenance(monkeypatch):
     with pytest.raises(SourceError) as err:
         http.get_json("https://nvidia.wd5.myworkdayjobs.com/x")
     assert err.value.reason == "maintenance"
+
+
+# ---------------------------------------------------------------- job boards: We Work Remotely, YC
+
+def test_weworkremotely_feed():
+    from src.collect import weworkremotely
+    src = Source(name="We Work Remotely", type="weworkremotely", board="full-stack-programming")
+    items = weworkremotely.parse_feed((FIX / "weworkremotely_fullstack.rss").read_text())
+    worldwide, regional = (weworkremotely.to_job(i, src) for i in items)
+    assert worldwide.location_raw == "Remote - Worldwide" and worldwide.work_mode == "remote"
+    assert worldwide.india_eligible in ("yes", "unclear")
+    assert worldwide.company and ":" not in worldwide.title
+    assert str(worldwide.apply_url).startswith("https://weworkremotely.com/remote-jobs/")
+    assert len(worldwide.description) > 100 and "<p>" not in worldwide.description
+    assert worldwide.posted_at.tzinfo is not None
+    assert regional.india_eligible == "no"  # e.g. "USA Only"
+
+
+def test_weworkremotely_rejects_non_rss():
+    from src.collect import weworkremotely
+    with pytest.raises(SourceError):
+        weworkremotely.parse_feed("<html>oops")
+
+
+def test_ycombinator_job_reads_country_codes():
+    from src.collect import ycombinator
+    src = Source(name="YC Jobs", type="ycombinator", board="india")
+    f = load("ycombinator_india.json")
+    job = ycombinator.to_job(f["postings"][0], f["detail"], src)
+    assert "India" in job.location_raw and job.india_eligible == "yes"   # "IN" means India on YC
+    assert job.company != "YC Jobs" and len(job.description) > 100
+    assert str(job.apply_url).startswith("https://www.ycombinator.com/companies/")
+    us = f["postings"][1]
+    assert ycombinator.location_of(us) == "Remote (US)"
+    assert n.india_eligibility(ycombinator.location_of(us), "remote") == "no"   # skipped without a page call
+
+
+def test_ycombinator_age_to_date():
+    from datetime import datetime, timezone
+
+    from src.collect import ycombinator
+    now = datetime(2026, 10, 24, tzinfo=timezone.utc)
+    assert ycombinator.posted_at("2 days", now).day == 22
+    assert ycombinator.posted_at("about 1 month", now).month == 9
+    assert ycombinator.posted_at(None) is None
+
+
+def test_ycombinator_page_without_data_fails_clearly():
+    from src.collect import ycombinator
+    with pytest.raises(SourceError):
+        ycombinator.page_props("<html></html>")

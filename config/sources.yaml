@@ -1,6 +1,6 @@
 # Companies to collect jobs from.
 # type: greenhouse | lever | ashby | smartrecruiters | workday | workable | himalayas
-#       | amazon | oracle | eightfold | rippling
+#       | amazon | oracle | eightfold | rippling | weworkremotely | ycombinator
 # board: the company's board name on that ATS (checked live 2026-10-23)
 #   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
 #   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
@@ -107,6 +107,10 @@
 
 # --- F. Job boards (many companies; duplicates of company feeds above are skipped) ---
 - {name: Himalayas,       type: himalayas, board: India}                  # remote jobs open to India, ~500 per 2 weeks
+# We Work Remotely: board is category slugs; ~110 engineering jobs in 30 days, ~85% open worldwide (2026-10-24)
+- {name: We Work Remotely, type: weworkremotely, board: "back-end-programming,front-end-programming,full-stack-programming,devops-sysadmin,programming"}
+# YC startups: board is ycombinator.com/jobs/location/<slug>; ~16 India-eligible jobs (2026-10-24)
+- {name: YC Jobs,         type: ycombinator, board: india}
 
 # --- G. Added 2026-10-24: big employers on their own career systems (India job counts checked live that day) ---
 # Amazon (board: country code; only tech job categories are kept)

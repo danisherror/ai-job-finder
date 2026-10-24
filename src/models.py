@@ -6,9 +6,9 @@ from typing import Literal
 from pydantic import BaseModel, Field, HttpUrl
 
 SourceType = Literal["greenhouse", "lever", "ashby", "smartrecruiters", "workday", "workable", "himalayas",
-                     "amazon", "oracle", "eightfold", "rippling"]
+                     "amazon", "oracle", "eightfold", "rippling", "weworkremotely", "ycombinator"]
 # Job boards listing many companies (not one company's own feed).
-AGGREGATOR_TYPES = {"himalayas"}
+AGGREGATOR_TYPES = {"himalayas", "weworkremotely", "ycombinator"}
 WorkMode = Literal["remote", "hybrid", "onsite", "unknown"]
 IndiaEligible = Literal["yes", "no", "unclear"]
 
