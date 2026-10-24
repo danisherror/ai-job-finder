@@ -2,6 +2,7 @@
 
 `board` is the career site URL, e.g.
 https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001
+Some companies serve it from their own domain (Dell: enterpriseplatform.dell.com).
 This is the public JSON the career site itself loads. The list has no full descriptions,
 so each new job costs one extra call; jobs we already store are returned without one.
 """
@@ -18,14 +19,14 @@ from src.models import Job, Source
 PAGE = 25           # Oracle's page size
 MAX_JOBS = 1000     # safety cap per company
 DETAIL_DELAY = 0.2
-_SITE_RE = re.compile(r"/sites/([^/?#]+)")
+_SITE_RE = re.compile(r"/hcmUI/CandidateExperience/(?:[a-z]{2}/)?sites/([^/?#]+)")
 
 
 def site(board: str) -> tuple[str, str]:
     """(host, site number) from a career site URL."""
     u = urlsplit(board if "://" in board else "https://" + board)
     m = _SITE_RE.search(u.path)
-    if "oraclecloud.com" not in u.netloc or not m:
+    if not u.netloc or not m:
         raise SourceError("bad_config", f"not an Oracle career site URL: {board}")
     return u.netloc, m.group(1)
 
@@ -38,21 +39,14 @@ def _search(host: str, site_no: str, **finder) -> dict:
     return items[0]
 
 
-def india_location_id(facets: list[dict]) -> int | None:
-    return next((f["Id"] for f in facets if (f.get("Name") or "").strip().lower() == "india"), None)
-
-
 def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
     host, site_no = site(source.board)
-    first = _search(host, site_no, facetsList="LOCATIONS", limit=1)
-    location_id = india_location_id(first.get("locationsFacet") or [])
-    if location_id is None:
-        return []  # no India jobs on this site
     jobs: list[Job] = []
     offset, total = 0, MAX_JOBS
     while offset < min(total, MAX_JOBS):
-        data = _search(host, site_no, limit=PAGE, offset=offset, locationId=location_id,
-                       sortBy="POSTING_DATES_DESC")
+        # location=India matches the country's own location ID; the location facet only lists the
+        # top 10 places, so India is missing from it on sites like Dell's.
+        data = _search(host, site_no, limit=PAGE, offset=offset, location="India", sortBy="POSTING_DATES_DESC")
         total = data.get("TotalJobsCount") or 0
         items = data.get("requisitionList") or []
         if not items:

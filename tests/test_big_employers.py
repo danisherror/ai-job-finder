@@ -44,13 +44,11 @@ def test_amazon_keeps_only_tech_categories():
     assert cats[0] in amazon.TECH_CATEGORIES and cats[1] not in amazon.TECH_CATEGORIES
 
 
-def test_oracle_job_and_india_location_id():
+def test_oracle_job():
     f = load("oracle_jpmc.json")
     job = oracle.to_job(f["item"], f["detail"], JPM)
     check(job)
     assert str(job.apply_url) == f"https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/{f['item']['Id']}"
-    assert oracle.india_location_id(f["locationsFacet"]) == 300000000289360
-    assert oracle.india_location_id([{"Name": "United States", "Id": 1}]) is None
 
 
 def test_known_oracle_job_has_no_description():
@@ -61,6 +59,8 @@ def test_known_oracle_job_has_no_description():
 
 def test_oracle_site_parsing():
     assert oracle.site(JPM.board) == ("jpmc.fa.oraclecloud.com", "CX_1001")
+    dell = "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers"
+    assert oracle.site(dell) == ("enterpriseplatform.dell.com", "careers")
     with pytest.raises(SourceError):
         oracle.site("https://example.com/careers")
 
@@ -104,3 +104,17 @@ def test_apply_links_on_the_system_are_kept():
     url = "https://careers.qualcomm.com/careers/job/44"
     assert digest.safe_apply_url(url, "eightfold", "https://qualcomm.eightfold.ai/careers?domain=qualcomm.com",
                                  "44", {"careers.qualcomm.com"}) == url
+
+
+def test_redirect_to_a_maintenance_page_is_reported_as_maintenance(monkeypatch):
+    import httpx
+
+    from src.collect import http
+
+    def fake(method, url, **kw):
+        return httpx.Response(200, text="<html>down</html>",
+                              request=httpx.Request("GET", "https://community.workday.com/maintenance-page"))
+    monkeypatch.setattr(http.httpx, "request", fake)
+    with pytest.raises(SourceError) as err:
+        http.get_json("https://nvidia.wd5.myworkdayjobs.com/x")
+    assert err.value.reason == "maintenance"

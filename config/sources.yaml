@@ -125,3 +125,11 @@
 - {name: PayPal,            type: eightfold, board: "https://paypal.eightfold.ai/careers?domain=paypal.com"}               # 14
 # Rippling ATS (board: the name in ats.rippling.com/<board>/jobs)
 - {name: Rippling,          type: rippling,  board: rippling}            # 93
+
+# --- H. Added 2026-10-24 from the shared list of career sites (India job counts checked live that day) ---
+- {name: Paytm,             type: lever,           board: paytm}                           # 152 India of 197
+- {name: Extreme Networks,  type: lever,           board: extremenetworks}                 # 43 of 97
+- {name: Razorpay,          type: greenhouse,      board: razorpaysoftwareprivatelimited}  # 21 of 26
+- {name: Arista Networks,   type: smartrecruiters, board: aristanetworks}                  # 26
+- {name: Dell,              type: oracle,          board: "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers"}  # 22
+- {name: Accenture,         type: workday,         board: "https://accenture.wd103.myworkdayjobs.com/AccentureCareers"}  # 2,000+ (capped at 1,000; mostly consulting)
