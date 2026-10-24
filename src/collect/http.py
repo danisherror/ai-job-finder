@@ -7,6 +7,9 @@ import httpx
 HEADERS = {"User-Agent": "ai-job-finder/0.1 (private job digest)"}  # Ashby returns 403 without one
 TIMEOUT = 30
 RETRIES = 3
+RATE_LIMIT_RETRIES = 5      # HTTP 429 gets more, longer waits: the site asked us to slow down
+RATE_LIMIT_WAIT = 30        # seconds, times the attempt number, unless the site sends Retry-After
+MAX_WAIT = 120
 
 
 class SourceError(Exception):
@@ -34,7 +37,8 @@ def post_json(url: str, body: dict):
 
 def _request(method: str, url: str, params: dict | None = None, body: dict | None = None, as_text: bool = False):
     last: Exception | None = None
-    for attempt in range(RETRIES):
+    attempt = limited = 0
+    while attempt < RETRIES and limited < RATE_LIMIT_RETRIES:
         try:
             resp = httpx.request(method, url, params=params, json=body, headers=HEADERS, timeout=TIMEOUT,
                                  follow_redirects=True)
@@ -49,7 +53,13 @@ def _request(method: str, url: str, params: dict | None = None, body: dict | Non
                 raise SourceError("not_found", url)          # wrong board name; retrying won't help
             if resp.status_code in (401, 403):
                 raise SourceError("blocked", f"HTTP {resp.status_code}")
-            if resp.status_code == 429 or resp.status_code >= 500:
+            if resp.status_code == 429:
+                last = SourceError("rate_limited", "HTTP 429")
+                limited += 1
+                if limited < RATE_LIMIT_RETRIES:
+                    time.sleep(_retry_after(resp, limited))
+                continue
+            if resp.status_code >= 500:
                 last = SourceError("http", f"HTTP {resp.status_code}")
             elif resp.status_code != 200:
                 raise SourceError("http", f"HTTP {resp.status_code}")
@@ -60,6 +70,15 @@ def _request(method: str, url: str, params: dict | None = None, body: dict | Non
                     return resp.json()
                 except ValueError as e:
                     raise SourceError("bad_response", "not JSON") from e
-        time.sleep(2 ** (attempt + 1))
+        attempt += 1
+        time.sleep(2 ** attempt)
     assert last is not None
     raise last
+
+
+def _retry_after(resp: httpx.Response, limited: int) -> float:
+    try:
+        wait = float(resp.headers.get("Retry-After", ""))
+    except ValueError:
+        wait = RATE_LIMIT_WAIT * limited
+    return min(max(wait, 1), MAX_WAIT)

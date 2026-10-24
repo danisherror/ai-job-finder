@@ -169,3 +169,30 @@ def test_ycombinator_page_without_data_fails_clearly():
     from src.collect import ycombinator
     with pytest.raises(SourceError):
         ycombinator.page_props("<html></html>")
+
+
+def test_rate_limits_wait_longer_then_succeed(monkeypatch):
+    import httpx
+
+    from src.collect import http
+    waits, replies = [], iter([429, 429, 200])
+
+    def fake(method, url, **kw):
+        code = next(replies)
+        return httpx.Response(code, json={"ok": True}, headers={"Retry-After": "7"} if code == 429 else {},
+                              request=httpx.Request(method, url))
+    monkeypatch.setattr(http.httpx, "request", fake)
+    monkeypatch.setattr(http.time, "sleep", waits.append)
+    assert http.get_json("https://example.com/x") == {"ok": True}
+    assert waits == [7, 7]
+
+
+def test_rate_limit_that_never_lifts_is_reported(monkeypatch):
+    import httpx
+
+    from src.collect import http
+    monkeypatch.setattr(http.httpx, "request", lambda m, u, **kw: httpx.Response(429, request=httpx.Request(m, u)))
+    monkeypatch.setattr(http.time, "sleep", lambda s: None)
+    with pytest.raises(SourceError) as err:
+        http.get_json("https://example.com/x")
+    assert err.value.reason == "rate_limited"

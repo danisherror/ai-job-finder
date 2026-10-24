@@ -20,7 +20,7 @@ from src.models import Job, Source
 
 MAX_JOBS = 1000     # safety cap per company
 DELAY = 0.3         # between calls
-SLOW_HOSTS = {"apply.careers.microsoft.com": 1.0}   # these answer HTTP 429 when called faster
+SLOW_HOSTS = {"apply.careers.microsoft.com": 2.0}   # answered HTTP 429 after ~300 calls 1s apart
 _DAYS_RE = re.compile(r"(\d)\s*days?\s*/\s*week", re.I)
 
 
