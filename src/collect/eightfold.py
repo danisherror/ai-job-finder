@@ -38,8 +38,9 @@ def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
     base, domain = site(source.board)
     delay = SLOW_HOSTS.get(urlsplit(base).netloc, DELAY)
     jobs: list[Job] = []
-    start, total = 0, MAX_JOBS
-    while start < min(total, MAX_JOBS):
+    cap = source.max_jobs or MAX_JOBS
+    start, total = 0, cap
+    while start < min(total, cap):
         if start:
             time.sleep(delay)
         data = get_json(f"{base}/api/pcsx/search", params={
@@ -49,7 +50,7 @@ def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
         items = data.get("positions") or []
         if not items:
             break
-        for raw in items:
+        for raw in items[:cap - start]:
             detail = None
             if str(raw["id"]) not in known:
                 time.sleep(delay)

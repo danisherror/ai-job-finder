@@ -42,8 +42,9 @@ def _search(host: str, site_no: str, **finder) -> dict:
 def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
     host, site_no = site(source.board)
     jobs: list[Job] = []
-    offset, total = 0, MAX_JOBS
-    while offset < min(total, MAX_JOBS):
+    cap = source.max_jobs or MAX_JOBS
+    offset, total = 0, cap
+    while offset < min(total, cap):
         # location=India matches the country's own location ID; the location facet only lists the
         # top 10 places, so India is missing from it on sites like Dell's.
         data = _search(host, site_no, limit=PAGE, offset=offset, location="India", sortBy="POSTING_DATES_DESC")
@@ -51,7 +52,7 @@ def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
         items = data.get("requisitionList") or []
         if not items:
             break
-        for raw in items:
+        for raw in items[:cap - offset]:
             detail = None
             if raw["Id"] not in known:
                 time.sleep(DETAIL_DELAY)

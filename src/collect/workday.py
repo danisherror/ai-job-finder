@@ -60,15 +60,16 @@ def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:
         return []  # no India locations on this site
     applied = {facet[0]: facet[1]}
     jobs: list[Job] = []
+    cap = source.max_jobs or MAX_JOBS
     total, offset = None, 0
-    while offset < min(total if total is not None else MAX_JOBS, MAX_JOBS):
+    while offset < min(total if total is not None else cap, cap):
         data = post_json(f"{api}/jobs", {"appliedFacets": applied, "limit": PAGE, "offset": offset, "searchText": ""})
         if total is None:
             total = data.get("total") or 0   # later pages report 0
         items = data.get("jobPostings") or []
         if not items:
             break
-        for raw in items:
+        for raw in items[:cap - offset]:
             if not raw.get("externalPath") or not raw.get("title"):
                 continue  # a stub with only bulletFields (Accenture lists some); there is no job page
             detail = None

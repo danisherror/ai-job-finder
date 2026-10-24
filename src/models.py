@@ -18,6 +18,7 @@ class Source(BaseModel):
     type: SourceType
     board: str
     active: bool = True
+    max_jobs: int | None = None   # cap on India jobs read per scan (Workday, Oracle, Eightfold); None = default
 
     @property
     def aggregator(self) -> bool:

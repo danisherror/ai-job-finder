@@ -157,3 +157,14 @@ def test_workday_skips_stub_postings(monkeypatch):
     monkeypatch.setattr(workday, "post_json", lambda url, body: next(replies))
     jobs = workday.fetch(WD, known=frozenset({workday.job_id(real)}))
     assert [j.ats_id for j in jobs] == [workday.job_id(real)]
+
+
+def test_workday_respects_a_per_company_cap(monkeypatch):
+    real = load("workday_nvidia.json")["item"]
+    page = [dict(real, externalPath=f"/job/x/Eng_JR{i}") for i in range(20)]
+    facets = [{"facetParameter": "locationCountry", "values": [{"descriptor": "India", "id": "in"}]}]
+    replies = iter([{"facets": facets}, {"total": 100, "jobPostings": page}, {"jobPostings": page}])
+    monkeypatch.setattr(workday, "post_json", lambda url, body: next(replies))
+    capped = WD.model_copy(update={"max_jobs": 25})
+    jobs = workday.fetch(capped, known=frozenset(workday.job_id(p) for p in page))
+    assert len(jobs) == 25
