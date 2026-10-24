@@ -176,3 +176,15 @@ def test_workday_reads_country_code_city_values():
         {"id": "b", "descriptor": "USA-CA San Jose"},
         {"id": "c", "descriptor": "INDIANA-Remote"}]}]}]
     assert workday.india_facet(facets) == ("locations", ["a"])
+
+
+def test_workday_reads_city_only_values():
+    facets = [{"facetParameter": "locationMainGroup", "values": [{"facetParameter": "locations", "values": [
+        {"id": "a", "descriptor": "Chennai, DLF IT Park"},      # Barclays lists offices without the country
+        {"id": "b", "descriptor": "Bengaluru"},
+        {"id": "c", "descriptor": "Indianapolis"},
+        {"id": "d", "descriptor": "London"}]}]}]
+    assert workday.india_facet(facets) == ("locations", ["a", "b"])
+    # a value naming India still wins over city-only values
+    facets[0]["values"][0]["values"].append({"id": "e", "descriptor": "India, Pune"})
+    assert workday.india_facet(facets) == ("locations", ["e"])

@@ -33,25 +33,36 @@ def site_urls(board: str) -> tuple[str, str]:
 
 
 def india_facet(facets: list[dict]) -> tuple[str, list[str]] | None:
-    """The search filter for India: a country-level "India" value, else every city value naming India."""
-    cities: tuple[str, list[str]] | None = None
+    """The search filter for India: a country-level "India" value, else every city value naming India,
+    else every value naming an Indian city ("Bengaluru", "Chennai, DLF IT Park"), as GE and Barclays list them."""
+    found = _india_facet(facets)
+    return found[1] if found else None
+
+
+def _india_facet(facets: list[dict]) -> tuple[int, tuple[str, list[str]]] | None:
+    """(rank, facet): rank 0 is a single country value, 1 values naming India, 2 values naming only a city."""
+    best: tuple[int, tuple[str, list[str]]] | None = None
     for facet in facets:
         param, values = facet.get("facetParameter"), facet.get("values") or []
         nested = [v for v in values if "facetParameter" in v]
         if nested:
-            found = india_facet(nested)
-            if found and len(found[1]) == 1:
-                return found
-            cities = cities or found
+            found = _india_facet(nested)
+            if found and found[0] < 2 and len(found[1][1]) == 1:
+                return 0, found[1]
+            if found and (not best or found[0] < best[0]):
+                best = found
             continue
         exact = [v["id"] for v in values if (v.get("descriptor") or "").strip().lower() == "india"]
         if exact:
-            return param, exact
+            return 0, (param, exact)
         some = [v["id"] for v in values
                 if _INDIA_RE.search(v.get("descriptor") or "") or _IND_CODE_RE.match(v.get("descriptor") or "")]
-        if some and not cities:
-            cities = (param, some)
-    return cities
+        if some and (not best or best[0] > 1):
+            best = 1, (param, some)
+        city = [v["id"] for v in values if n.indian_cities(v.get("descriptor") or "")]
+        if city and not best:
+            best = 2, (param, city)
+    return best
 
 
 def fetch(source: Source, known: frozenset[str] = frozenset()) -> list[Job]:

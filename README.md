@@ -82,6 +82,12 @@ Remote job boards Remote OK, Remotive, Working Nomads and Jobspresso were added 
 few of their jobs are open to India (about 15 a day between them); each costs one call per scan. Jobicy was not added.
 Python.org jobs (no India jobs) and Wipro's job feed (ignores search and paging) were checked and left out. Hacker News "Who is hiring" was skipped (about 8 India posts a month, free text).
 YC jobs need a free YC account to apply.
+From the third shared company list (2026-10-24), these were not added because their career sites use systems
+this tool has no reader for: iCIMS classic (Atlassian, Arm, IDeaS), SAP SuccessFactors (SAP, Cargill, Globant,
+HCLTech, Wipro), Taleo (Optum, Societe Generale), Avature (Synopsys, Siemens), Phenom (Cencora, NTT DATA),
+RippleHire (LTIMindtree, Mphasis, Tata Technologies) and in-house sites (Google DeepMind, Goldman Sachs, IBM,
+Intuit, Uber, Walmart, TCS and most Indian startups such as PhonePe, Zomato, Zepto, Myntra and MakeMyTrip).
+Thoughtworks, Pinterest, Riot Games, Netcracker, Hugging Face and Circle have public boards with no India jobs.
 
 ## Where data lives
 

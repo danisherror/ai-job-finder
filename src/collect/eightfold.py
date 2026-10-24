@@ -24,7 +24,7 @@ MAX_JOBS = 1000     # safety cap per company
 DELAY = 1.5         # between calls; all *.eightfold.ai sites share servers and answered 429/403
                     # to back-to-back scans 0.3s apart
 SLOW_HOSTS = {"apply.careers.microsoft.com": 2.0}   # answered HTTP 429 after ~300 calls 1s apart
-LEGACY_HOSTS = {"explore.jobs.netflix.net"}          # the newer API answers "PCSX is not enabled"
+LEGACY_HOSTS = {"explore.jobs.netflix.net", "hsbc.eightfold.ai", "netapp.eightfold.ai"}  # newer API: "PCSX is not enabled"
 _DAYS_RE = re.compile(r"(\d)\s*days?\s*/\s*week", re.I)
 
 

@@ -169,3 +169,73 @@
 - {name: Remotive,          type: remotive,      board: software-dev}    # ~10; they ask for only a few calls a day
 - {name: Working Nomads,    type: workingnomads, board: ""}              # ~40
 - {name: Jobspresso,        type: jobspresso,    board: ""}              # ~20
+
+# --- J. Added 2026-10-24 from the third shared list (India job counts checked live that day) ---
+# Workday
+- {name: Genpact,           type: workday,    board: "https://genpact.wd108.myworkdayjobs.com/External_Careers", max_jobs: 300}   # 1,250, mostly operations; capped
+- {name: Citi,              type: workday,    board: "https://citi.wd5.myworkdayjobs.com/2", max_jobs: 500}                     # 918
+- {name: Hitachi,           type: workday,    board: "https://hitachi.wd1.myworkdayjobs.com/hitachi", max_jobs: 500}            # 786 (includes GlobalLogic)
+- {name: Amgen,             type: workday,    board: "https://amgen.wd1.myworkdayjobs.com/Careers", max_jobs: 500}              # 754 (Hyderabad tech centre)
+- {name: PwC,               type: workday,    board: "https://pwc.wd3.myworkdayjobs.com/Global_Experienced_Careers", max_jobs: 300}  # 641, mostly consulting
+- {name: DBS Bank,          type: workday,    board: "https://dbs.wd3.myworkdayjobs.com/dbs_careers"}               # 471
+- {name: Barclays,          type: workday,    board: "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays"}  # 322 (locations list only the city)
+- {name: GE Vernova,        type: workday,    board: "https://gevernova.wd5.myworkdayjobs.com/Vernova_ExternalSite"}  # 321 (city only)
+- {name: Deutsche Bank,     type: workday,    board: "https://db.wd3.myworkdayjobs.com/DBWebsite"}                  # 294
+- {name: Valeo,             type: workday,    board: "https://valeo.wd3.myworkdayjobs.com/valeo_jobs"}              # 198
+- {name: Palo Alto Networks, type: workday,   board: "https://paloaltonetworks.wd5.myworkdayjobs.com/panwexternalcareers"}  # 148
+- {name: GSK,               type: workday,    board: "https://gsk.wd5.myworkdayjobs.com/GSKCareers"}                # 140
+- {name: Harman,            type: workday,    board: "https://harman.wd3.myworkdayjobs.com/HARMAN"}                 # 125
+- {name: Kraft Heinz,       type: workday,    board: "https://heinz.wd1.myworkdayjobs.com/KraftHeinz_Careers"}      # 82
+- {name: Fractal Analytics, type: workday,    board: "https://fractal.wd1.myworkdayjobs.com/Careers"}               # 60 (city only)
+- {name: Flex,              type: workday,    board: "https://flextronics.wd1.myworkdayjobs.com/Careers"}           # 52
+- {name: Wolters Kluwer,    type: workday,    board: "https://wk.wd3.myworkdayjobs.com/External"}                   # 47
+- {name: Guidewire,         type: workday,    board: "https://guidewire.wd5.myworkdayjobs.com/external"}            # 44
+- {name: S&P Global,        type: workday,    board: "https://spgi.wd5.myworkdayjobs.com/SPGI_Careers"}             # 42
+- {name: Nasdaq,            type: workday,    board: "https://nasdaq.wd1.myworkdayjobs.com/Global_External_Site"}   # 36
+- {name: Rakuten Symphony,  type: workday,    board: "https://rakuten.wd1.myworkdayjobs.com/RakutenSymphony"}       # 32
+- {name: Warner Bros. Discovery, type: workday, board: "https://warnerbros.wd5.myworkdayjobs.com/global"}           # 26
+- {name: NCR Voyix,         type: workday,    board: "https://ncr.wd1.myworkdayjobs.com/ext_apac"}                  # 24
+- {name: Fiserv,            type: workday,    board: "https://fiserv.wd5.myworkdayjobs.com/EXT"}                    # 19
+- {name: Equifax,           type: workday,    board: "https://equifax.wd5.myworkdayjobs.com/External"}              # 17
+- {name: FactSet,           type: workday,    board: "https://factset.wd108.myworkdayjobs.com/FactSetCareers"}      # 15
+- {name: Expedia Group,     type: workday,    board: "https://expedia.wd108.myworkdayjobs.com/search"}              # 11
+- {name: Amadeus,           type: workday,    board: "https://amadeus.wd502.myworkdayjobs.com/jobs"}                # 10
+- {name: GE Aerospace,      type: workday,    board: "https://geaerospace.wd5.myworkdayjobs.com/GE_ExternalSite"}   # 10 (city only)
+- {name: Postman,           type: workday,    board: "https://postman.wd108.myworkdayjobs.com/careers"}             # 9
+- {name: Fidelity Investments, type: workday, board: "https://fmr.wd1.myworkdayjobs.com/FidelityCareers"}           # 9
+- {name: Bentley Systems,   type: workday,    board: "https://bentleysystems.wd5.myworkdayjobs.com/bentley"}        # 8
+- {name: Boeing,            type: workday,    board: "https://boeing.wd1.myworkdayjobs.com/EXTERNAL_CAREERS"}       # 6
+- {name: Lowe's,            type: workday,    board: "https://lowes.wd5.myworkdayjobs.com/LWS_External_CS"}         # 4
+- {name: Roche,             type: workday,    board: "https://roche.wd3.myworkdayjobs.com/roche-ext"}               # 4
+- {name: Cloudera,          type: workday,    board: "https://cloudera.wd5.myworkdayjobs.com/External_Career"}      # 2
+- {name: Baker Hughes,      type: workday,    board: "https://bakerhughes.wd5.myworkdayjobs.com/BakerHughes"}       # 1
+# Oracle Cloud HCM
+- {name: EXL,               type: oracle,     board: "https://fa-ewjt-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2", max_jobs: 300}  # 2,200, mostly operations; capped
+- {name: KPMG,              type: oracle,     board: "https://ejgk.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_3", max_jobs: 300}   # 562, mostly consulting
+- {name: Honeywell,         type: oracle,     board: "https://ibqbjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1"}   # 304
+- {name: Zensar,            type: oracle,     board: "https://fa-etvl-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1"}  # 194
+- {name: BNY,               type: oracle,     board: "https://eofe.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/bny-careers"}  # 155
+- {name: Chubb,             type: oracle,     board: "https://fa-ewgu-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2001"}  # 38
+- {name: American Express,  type: oracle,     board: "https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1"}     # 37
+# Eightfold (HSBC and NetApp run the older API)
+- {name: HSBC,              type: eightfold,  board: "https://hsbc.eightfold.ai/careers?domain=hsbc.com"}            # 186
+- {name: Ericsson,          type: eightfold,  board: "https://ericsson.eightfold.ai/careers?domain=ericsson.com"}    # 100
+- {name: NetApp,            type: eightfold,  board: "https://netapp.eightfold.ai/careers?domain=netapp.com"}        # 72
+# Jibe / iCIMS
+- {name: Avalara,           type: jibe,       board: "https://careers.avalara.com"}       # 125
+- {name: ZS Associates,     type: jibe,       board: "https://jobs.zs.com"}               # 52
+- {name: Cvent,             type: jibe,       board: "https://careers.cvent.com"}         # 46
+# SmartRecruiters
+- {name: NielsenIQ,         type: smartrecruiters, board: nielseniq}       # 70
+- {name: Wise,              type: smartrecruiters, board: Wise}            # 37 (Hyderabad)
+- {name: Western Digital,   type: smartrecruiters, board: westerndigital}  # 3
+- {name: Canva,             type: smartrecruiters, board: Canva}           # 2
+# Greenhouse / Ashby / Lever
+- {name: Sigmoid,           type: greenhouse, board: sigmoid}               # 34 India of 39
+- {name: DevRev,            type: greenhouse, board: devrev}                # 16 of 42
+- {name: Tower Research Capital, type: greenhouse, board: towerresearchcapital}  # 12 of 100
+- {name: Agoda,             type: greenhouse, board: agoda}                 # 11 of 316
+- {name: AlphaGrep,         type: greenhouse, board: alphagrepsecurities}   # 4 of 11
+- {name: Groupon,           type: greenhouse, board: groupon}               # 3 of 29
+- {name: OpenAI,            type: ashby,      board: openai}                # 7 of 796
+- {name: Spotify,           type: lever,      board: spotify}               # 1 of 90
