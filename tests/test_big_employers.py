@@ -120,6 +120,19 @@ def test_redirect_to_a_maintenance_page_is_reported_as_maintenance(monkeypatch):
     assert err.value.reason == "maintenance"
 
 
+
+def test_job_url_with_maintenance_in_its_title_is_not_a_maintenance_page(monkeypatch):
+    import httpx
+
+    from src.collect import http
+
+    url = "https://valeo.wd3.myworkdayjobs.com/wday/cxs/valeo/valeo_jobs/job/Chennai/Maintenance-Technician_REQ1"
+
+    def fake(method, u, **kw):
+        return httpx.Response(200, json={"ok": True}, request=httpx.Request(method, u))
+    monkeypatch.setattr(http.httpx, "request", fake)
+    assert http.get_json(url) == {"ok": True}
+
 # ---------------------------------------------------------------- job boards: We Work Remotely, YC
 
 def test_weworkremotely_feed():

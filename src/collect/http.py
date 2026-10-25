@@ -62,8 +62,10 @@ def _request(method: str, url: str, params: dict | None = None, body: dict | Non
         except httpx.HTTPError as e:
             last = SourceError("network", str(e))
         else:
-            if "maintenance" in resp.url.path.lower():
-                raise SourceError("maintenance", str(resp.url))  # e.g. Workday's weekly window; try next run
+            if "maintenance" in resp.url.path.lower() and "maintenance" not in httpx.URL(url).path.lower():
+                # Sent to a maintenance page, e.g. Workday's weekly window; try next run.
+                # (A job URL that itself says "Maintenance-Technician" is not this.)
+                raise SourceError("maintenance", str(resp.url))
             if resp.status_code == 404:
                 raise SourceError("not_found", url)          # wrong board name; retrying won't help
             if resp.status_code in (401, 403):
