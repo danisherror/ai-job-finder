@@ -1,0 +1,124 @@
+{
+ "objects": [
+  {
+   "resource_uri": "/api/v1/job_search/423905",
+   "employer": {
+    "resource_uri": "/api/v1/candidate_opportunity_employer/45710",
+    "profile_image_src": "https://media.instahyre.com/images/profile/base/employer/45710/7416414d27/greenstitch_io_logo.webp",
+    "id": 45710,
+    "company_name": "GreenStitch.io",
+    "company_tagline": "Data-driven sustainability solutions",
+    "company_founded": 2023,
+    "employee_count": 10,
+    "instahyre_note": "GreenStitch is a SaaS platform for GHG measurement and management in the fashion and textile industry specializing in Scope 3 and product cycle to measure carbon emissions across the farm-to-fashion value chain. ",
+    "show_diversity_employer_icon": false,
+    "show_featured_employer_icon": false
+   },
+   "interview_status": null,
+   "reviewed_at": null,
+   "public_url": "https://www.instahyre.com/job-423905-sde-2-at-greenstitch-bangalore/",
+   "is_strong_match": null,
+   "score": null,
+   "candidate_title": "SDE 2",
+   "id": 423905,
+   "title": "SDE 2",
+   "locations": "Bangalore",
+   "keywords": [
+    "architect",
+    "architecture",
+    "distributed",
+    "microservices",
+    "scalable",
+    "software",
+    "system design"
+   ],
+   "accept_outstation": true,
+   "gender": 0,
+   "is_sourced": false
+  },
+  {
+   "resource_uri": "/api/v1/job_search/331759",
+   "employer": {
+    "resource_uri": "/api/v1/candidate_opportunity_employer/36312",
+    "profile_image_src": "https://media.instahyre.com/images/profile/base/employer/36312/7c56e4b1cd/1636357166114.webp",
+    "id": 36312,
+    "company_name": "Kotak811",
+    "company_tagline": "Neo-baking that you can trust",
+    "company_founded": 2016,
+    "employee_count": 1000,
+    "instahyre_note": "Kotak811 is a digital-first mobile banking platform that offers banking solutions along with 180 features that include paying bills, shopping, investing, managing credit and debit cards, mobile recharge and FASTag. ",
+    "show_diversity_employer_icon": false,
+    "show_featured_employer_icon": false
+   },
+   "interview_status": null,
+   "reviewed_at": null,
+   "public_url": "https://www.instahyre.com/job-331759-sde-2-at-kotak811-bangalore/",
+   "is_strong_match": null,
+   "score": null,
+   "candidate_title": "SDE 2",
+   "id": 331759,
+   "title": "SDE 2",
+   "locations": "Bangalore",
+   "keywords": [
+    "DynamoDB",
+    "Java",
+    "MongoDB",
+    "MySQL",
+    "Node",
+    "PostgreSQL",
+    "RabbitMQ",
+    "Spring Boot",
+    "microservices"
+   ],
+   "accept_outstation": true,
+   "gender": 0,
+   "is_sourced": false
+  },
+  {
+   "resource_uri": "/api/v1/job_search/16894",
+   "employer": {
+    "resource_uri": "/api/v1/candidate_opportunity_employer/6992",
+    "profile_image_src": "https://media.instahyre.com/images/profile/base/employer/6992/59acf99b62/47497857_309202126470355_3542562117494243328_.webp",
+    "id": 6992,
+    "company_name": "thinkify.io",
+    "company_tagline": "Engineering Simplified",
+    "company_founded": 2018,
+    "employee_count": 10,
+    "instahyre_note": "Thinkify is an IT company providing various services of UI/UX Design, Dev Ops, Mobile, Test Automation, and Web Development. Some of their major clients include Swiggy, Nestaway, Infoworks, and Zoomcar. ",
+    "show_diversity_employer_icon": false,
+    "show_featured_employer_icon": false
+   },
+   "interview_status": null,
+   "reviewed_at": null,
+   "public_url": "https://www.instahyre.com/job-16894-sdet-backend-at-thinkify-2-bangalore/",
+   "is_strong_match": null,
+   "score": null,
+   "candidate_title": "SDET - Backend",
+   "id": 16894,
+   "title": "SDET - Backend",
+   "locations": "Bangalore",
+   "keywords": [
+    "Appium",
+    "Automation Testing",
+    "Big Data",
+    "C++",
+    "Charles Proxy",
+    "Java",
+    "JavaScript",
+    "Mobile Apps Testing",
+    "Python",
+    "REST Assured",
+    "Ruby",
+    "SDET",
+    "Selenium"
+   ],
+   "accept_outstation": true,
+   "gender": 0,
+   "is_sourced": false
+  }
+ ],
+ "meta": {
+  "next": null,
+  "total_count": 3
+ }
+}

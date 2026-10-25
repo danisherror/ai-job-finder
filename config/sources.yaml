@@ -3,6 +3,9 @@
 #       | amazon | oracle | eightfold | rippling | weworkremotely | ycombinator | jibe
 #       | remoteok | remotive | workingnomads | jobspresso | hasjob | hackernews | jooble | careerjet
 #       | atlassian | ripplehire | phenom | avature | talentbrew | icims | socgen | jobicy | adzuna
+#       | linkedin | hirist | iimjobs | instahyre | unstop | foundit | shine | timesjobs | ambitionbox
+#       | wellfound | internshala | themuse | cutshort | freshersworld | google | apple | ibm | goldman | sapsf
+#       | makemytrip | sitemap
 # board: the company's board name on that ATS (checked live 2026-10-23)
 #   smartrecruiters: the company identifier in api.smartrecruiters.com/v1/companies/<id>
 #   workday: the full career site URL, e.g. https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
@@ -12,6 +15,13 @@
 #   phenom: the career site URL with its locale path, e.g. https://careers.nttdata.com/global/en
 #   avature: the portal URL plus ?search=<words>, e.g. https://jobs.siemens.com/en_US/externaljobs?search=India
 #   talentbrew, icims, socgen: the career site's base URL (read through its sitemap and job pages)
+#   linkedin, hirist, iimjobs, foundit, shine, timesjobs: search keywords separated by "|" (India only, no key)
+#   ambitionbox, wellfound, internshala: list page names separated by "|" (see src/collect/indiaportals.py)
+#   unstop: "jobs", "internships" or both; instahyre, cutshort: ""; themuse: places, or "" for the main cities
+#   freshersworld: category pages separated by "|", e.g. jobs/category/it-software-job-vacancies
+#   google, ibm, goldman: a country (default India); apple: a location code (default india-INDC)
+#   sapsf: the SuccessFactors site URL plus its India filter, e.g. https://careers.wipro.com?location=India
+#   sitemap: the sitemap URL that lists the job pages, e.g. https://jobs.uber.com/en/jobs/sitemap.xml
 # SmartRecruiters and Workday only collect India jobs, and fetch each new job's page once (first scan is slow).
 # max_jobs: optional cap on India jobs read per scan for Workday, Oracle and Eightfold (default 1,000).
 
@@ -282,3 +292,34 @@
 - {name: Jobicy,            type: jobicy,     board: ""}               # ~40 of the newest 100 open worldwide
 # Adzuna: turn on once ADZUNA_APP_ID and ADZUNA_APP_KEY are in .env (free key at developer.adzuna.com)
 - {name: Adzuna,            type: adzuna,     board: "software engineer|developer|data engineer|devops", active: false}
+
+# --- N. Added 2026-10-25: portals and career sites read through their own web pages (no key, no login) ---
+# These were on the unsupported list. Most answer a normal browser but not an unknown user agent.
+# LinkedIn Jobs, Foundit, Google, Wipro and HCLTech use pages their robots.txt asks crawlers to avoid; they
+# are read on purpose (see config/unsupported_sources.yaml).
+# Job portals (India; counts are what one scan found on 2026-10-25)
+- {name: LinkedIn Jobs,     type: linkedin,    board: "software engineer|software developer|data engineer|data scientist|machine learning engineer|devops engineer|full stack developer|frontend developer|backend developer|software engineer intern"}  # 10 a page; at most 150 new descriptions a scan
+- {name: Naukri (via AmbitionBox), type: ambitionbox, board: "software-engineer-jobs-prf|software-developer-jobs-prf|java-jobs-ski|python-jobs-ski|javascript-jobs-ski|react-js-jobs-ski|node-js-jobs-ski|data-engineer-jobs-prf|data-scientist-jobs-prf|devops-jobs-ski|machine-learning-jobs-ski|full-stack-developer-jobs-prf|front-end-developer-jobs-prf|backend-developer-jobs-prf|software-engineering-intern-jobs-prf"}  # 20 newest per list
+- {name: Foundit,           type: foundit,     board: "software engineer|software developer|data engineer|data scientist|devops|full stack developer"}  # ~300 in 2 weeks
+- {name: Hirist,            type: hirist,      board: "software developer|data engineer|devops|machine learning|frontend|backend|qa automation"}  # ~35 per keyword in 2 weeks
+- {name: iimjobs,           type: iimjobs,     board: "technology|software engineer|data science|product manager"}  # mostly senior roles
+- {name: Instahyre,         type: instahyre,   board: ""}              # 12,700 listed; no dates in the list, so 100 newest pages a scan
+- {name: TimesJobs,         type: timesjobs,   board: "software developer|software engineer|data engineer|data scientist|devops"}  # ~300 in 2 weeks
+- {name: Shine,             type: shine,       board: "software engineer|software developer|data engineer|data scientist"}  # its API returned HTTP 502 for a while on 2026-10-25
+- {name: Cutshort,          type: cutshort,    board: ""}              # ~36,000 tech job pages in its sitemap; 200 new a scan
+- {name: Wellfound,         type: wellfound,   board: "software-engineer|backend-engineer|frontend-engineer|full-stack-engineer|data-scientist|data-engineer|machine-learning-engineer|devops-engineer|mobile-engineer"}  # ~30 per role; some are outside India
+- {name: Internshala,       type: internshala, board: "internships/computer-science-internship|internships/software-development-internship|internships/web-development-internship|internships/data-science-internship|jobs/software-development-jobs|jobs/web-development-jobs|jobs/data-science-jobs"}  # fresher jobs and internships
+- {name: Freshersworld,     type: freshersworld, board: "jobs/category/it-software-job-vacancies"}  # fresher jobs; 100 newest a scan
+- {name: Unstop,            type: unstop,      board: "jobs|internships"}  # campus and fresher hiring, all fields
+- {name: The Muse,          type: themuse,     board: ""}              # ~10 India jobs in 2 weeks
+# Big employers on their own career sites
+- {name: Google,            type: google,      board: India}           # 274 (Google, DeepMind, YouTube)
+- {name: Apple,             type: apple,       board: india-INDC}      # 192
+- {name: IBM,               type: ibm,         board: India}           # 1,036; short summaries only
+- {name: Goldman Sachs,     type: goldman,     board: India}           # 98
+- {name: Wipro,             type: sapsf,       board: "https://careers.wipro.com?location=India"}           # 5,588; 150 new a scan
+- {name: HCLTech,           type: sapsf,       board: "https://careers.hcltech.com?custCountryRegion=India"}  # 12,387; 150 new a scan
+- {name: MakeMyTrip,        type: makemytrip,  board: ""}              # 31
+- {name: Uber,              type: sitemap,     board: "https://jobs.uber.com/en/jobs/sitemap.xml"}  # 717 worldwide; each opened once
+- {name: Intuit,            type: talentbrew,  board: "https://jobs.intuit.com"}                    # 27
+- {name: Cargill,           type: talentbrew,  board: "https://careers.cargill.com"}                # 76

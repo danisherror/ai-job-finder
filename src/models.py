@@ -9,10 +9,14 @@ SourceType = Literal["greenhouse", "lever", "ashby", "smartrecruiters", "workday
                      "amazon", "oracle", "eightfold", "rippling", "weworkremotely", "ycombinator", "jibe",
                      "remoteok", "remotive", "workingnomads", "jobspresso", "hasjob", "hackernews", "jooble", "careerjet",
                      "atlassian", "ripplehire", "phenom", "avature", "talentbrew", "icims", "socgen", "jobicy",
-                     "adzuna"]
+                     "adzuna", "linkedin", "hirist", "iimjobs", "instahyre", "unstop", "foundit", "shine",
+                     "timesjobs", "ambitionbox", "wellfound", "internshala", "themuse", "cutshort",
+                     "google", "apple", "ibm", "goldman", "sapsf", "makemytrip", "sitemap", "freshersworld"]
 # Job boards listing many companies (not one company's own feed).
 AGGREGATOR_TYPES = {"himalayas", "weworkremotely", "ycombinator", "remoteok", "remotive", "workingnomads",
-                    "jobspresso", "hasjob", "hackernews", "jooble", "careerjet", "jobicy", "adzuna"}
+                    "jobspresso", "hasjob", "hackernews", "jooble", "careerjet", "jobicy", "adzuna",
+                    "linkedin", "hirist", "iimjobs", "instahyre", "unstop", "foundit", "shine", "timesjobs",
+                    "ambitionbox", "wellfound", "internshala", "themuse", "cutshort", "freshersworld"}
 WorkMode = Literal["remote", "hybrid", "onsite", "unknown"]
 IndiaEligible = Literal["yes", "no", "unclear"]
 

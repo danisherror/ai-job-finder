@@ -1,0 +1,79 @@
+{
+ "took": 11,
+ "timed_out": false,
+ "_shards": {
+  "total": 20,
+  "successful": 20,
+  "skipped": 0,
+  "failed": 0
+ },
+ "hits": {
+  "total": {
+   "value": 3,
+   "relation": "eq"
+  },
+  "max_score": null,
+  "hits": [
+   {
+    "_index": "genesis-prod-1788036777996",
+    "_id": "9fd3f06ca05182f047c51dcc3bd1196b3bb91ddf4548705f63208484ac4c7b0c",
+    "_score": null,
+    "_source": {
+     "url": "https://careers.ibm.com/careers/JobDetail?jobId=138160",
+     "dcdate": "2026-10-24",
+     "title": "Data Engineer-Data Platforms-Azure",
+     "description": "A career in IBM Consulting is built on long-term client relationships and close collaboration worldwide. You'll work with leading companies across industries, helping them shape their hybrid cloud and AI journeys. With support from our strategic...",
+     "field_keyword_05": "India",
+     "field_keyword_08": "Software Engineering",
+     "field_keyword_17": "Hybrid",
+     "field_keyword_18": "Professional",
+     "field_keyword_19": "Bangalore, IN",
+     "field_text_01": 138160
+    },
+    "sort": [
+     1792800000000
+    ]
+   },
+   {
+    "_index": "genesis-prod-1788036777996",
+    "_id": "0c659daf7aa4e3699e081cbf7a88159353af5c261d81cba38e03c14e3fb49756",
+    "_score": null,
+    "_source": {
+     "url": "https://careers.ibm.com/careers/JobDetail?jobId=138014",
+     "dcdate": "2026-10-24",
+     "title": "Data Engineer-Data Platforms-SnowFlake",
+     "description": "A career in IBM Consulting is built on long-term client relationships and close collaboration worldwide. You'll work with leading companies across industries, helping them shape their hybrid cloud and AI journeys. With support from our strategic...",
+     "field_keyword_05": "India",
+     "field_keyword_08": "Software Engineering",
+     "field_keyword_17": "Hybrid",
+     "field_keyword_18": "Professional",
+     "field_keyword_19": "GURGAON, IN",
+     "field_text_01": 138014
+    },
+    "sort": [
+     1792800000000
+    ]
+   },
+   {
+    "_index": "genesis-prod-1788036777996",
+    "_id": "552bb0a830a88bc09081bbb1c825f25a5dcb50c1a951d88cac90c74a77d53009",
+    "_score": null,
+    "_source": {
+     "url": "https://careers.ibm.com/careers/JobDetail?jobId=138117",
+     "dcdate": "2026-10-24",
+     "title": "Data Engineer-Data Platforms-Databricks",
+     "description": "A career in IBM Consulting is built on long-term client relationships and close collaboration worldwide. You'll work with leading companies across industries, helping them shape their hybrid cloud and AI journeys. With support from our strategic...",
+     "field_keyword_05": "India",
+     "field_keyword_08": "Data & Analytics",
+     "field_keyword_17": "Hybrid",
+     "field_keyword_18": "Professional",
+     "field_keyword_19": "Bangalore, IN",
+     "field_text_01": 138117
+    },
+    "sort": [
+     1792800000000
+    ]
+   }
+  ]
+ }
+}

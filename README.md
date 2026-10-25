@@ -1,9 +1,11 @@
 # AI Job Finder
 
 Collects tech jobs every morning from company job boards (Greenhouse, Lever, Ashby, SmartRecruiters, Workday,
-Workable, Oracle Cloud HCM, Eightfold, Rippling, Jibe), Amazon's careers site and nine job boards (Himalayas,
-We Work Remotely, YC startup jobs, Remote OK, Remotive, Working Nomads, Jobspresso, Hasjob, Hacker News
-"Who is hiring?"), keeps the ones open to people in India, and sends each person a short ranked list on Telegram by 7:00 AM IST.
+Workable, Oracle Cloud HCM, Eightfold, Rippling, Jibe, SuccessFactors and more), big employers' own career sites
+(Amazon, Google, Apple, IBM, Goldman Sachs, Wipro, HCLTech, Uber, ...), Indian job portals (LinkedIn, Naukri via
+AmbitionBox, Foundit, Hirist, Instahyre, TimesJobs, Shine, Cutshort, Wellfound, Internshala, Freshersworld,
+Unstop) and remote job boards, keeps the ones open to people in India, and sends each person a short ranked list
+on Telegram by 7:00 AM IST.
 
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
@@ -74,55 +76,50 @@ Their first list covers only jobs from the last 7 days and has at most 10 jobs.
      `board: "https://jobs.siemens.com/en_US/externaljobs?search=India"`
    - TalentBrew (Radancy), iCIMS classic: the career site's base URL, e.g. `board: "https://careers.arm.com"`
      or `board: "https://ideasglobal-sas.icims.com"`. These are read through the site's sitemap and job pages.
+   - SAP SuccessFactors: the career site URL plus its India filter, e.g. `type: sapsf,
+     board: "https://careers.wipro.com?location=India"` (look at the site's search results to find the filter)
+   - Any other site whose sitemap lists job pages with a number at the end of the URL: `type: sitemap` and the
+     sitemap URL, e.g. `board: "https://jobs.uber.com/en/jobs/sitemap.xml"` (the pages need schema.org job data)
 2. Add a line to `config/sources.yaml`: `- {name: Acme, type: lever, board: acme}`
 3. Check it: `uv run python -m src.main collect` should show `ok  Acme  N jobs`.
 
 On its first scan, jobs older than 7 days are stored as already seen, so nobody gets a flood of old jobs.
 To pause a company, add `active: false` to its line.
 
-SmartRecruiters, Workday, Oracle, Eightfold, Rippling, RippleHire, Phenom, Avature, TalentBrew and iCIMS sources
-open each new job's page once for its description, so a big company's first scan takes a few minutes; later scans
-only open new jobs. Avature and the sitemap readers (TalentBrew, iCIMS, Societe Generale) open at most 150-200 new
-jobs per scan, newest first where the site allows; the rest follow on the next scans.
+SmartRecruiters, Workday, Oracle, Eightfold, Rippling, RippleHire, Phenom, Avature, TalentBrew, iCIMS,
+SuccessFactors, LinkedIn and Instahyre sources open each new job's page once for its description, so a big
+source's first scan takes a few minutes; later scans only open new jobs. They open at most 100-200 new jobs per
+scan, newest first where the site allows; the rest follow on the next scans.
 
-Sites left out on purpose: LinkedIn and Indeed jobs, Naukri and Hirist (their robots.txt forbids it),
-Foundit, Internshala and Instahyre (block automated access), Wellfound and Cutshort (no public API),
-Google Careers (web page only, no API) and Apple (its search API returned nothing for India).
-Remote job boards Remote OK, Remotive, Working Nomads, Jobspresso and Jobicy were added on 2026-10-24 even though
-few of their jobs are open to India (about 15 a day between them, plus ~40 of Jobicy's newest 100); each costs one
-call per scan.
-Python.org jobs (no India jobs) and Wipro's job feed (ignores search and paging) were checked and left out.
-YC jobs need a free YC account to apply.
-From the third shared company list (2026-10-24), readers were later written for Atlassian, Arm, IDeaS, Optum
-(UnitedHealth Group), Societe Generale, Synopsys, Siemens, Cencora, NTT DATA, LTIMindtree, Mphasis and Tata
-Technologies. Still not added: SAP SuccessFactors sites (SAP, Cargill, Globant, HCLTech, Wipro), because their only
-readable job feed is under a path their robots.txt disallows (and SAP's site shows a bot check), and in-house sites
-(Google DeepMind, Goldman Sachs, IBM, Intuit, Uber, Walmart, TCS and most Indian startups such as PhonePe, Zomato,
-Zepto, Myntra and MakeMyTrip). The full list is in `config/unsupported_sources.yaml`.
-Thoughtworks, Pinterest, Riot Games, Netcracker, Hugging Face and Circle have public boards with no India jobs.
+### Job portals and career sites read through their web pages (added 2026-10-25)
 
-From the list of 120 job portals (2026-10-24), Hasjob and Hacker News "Who is hiring?" were added as job boards,
-and HackerOne, Bugcrowd and Built In as companies (their own jobs). Already covered: Himalayas, We Work Remotely,
-Remote OK, Remotive, Working Nomads, Jobspresso, YC jobs and Turing. The rest were left out:
-- Blocked automated access when checked (HTTP 403, a bot check or no answer): WorkIndia, Job Hai, JobGrin,
-  Startup Jobs, FlexJobs, Remote.co, Golang Cafe, Rust Jobs, Ruby on Remote, StepStone, CV-Library, Totaljobs,
-  CareerOne, GrabJobs, JobisJob, Naukrigulf, ClearanceJobs and the Linux Foundation job board.
-- Official API that needs a key: Jooble, Careerjet and Adzuna have readers (keys go in `.env`; Adzuna stays off
-  in `sources.yaml` until its app ID and key are there). Talent.com's API is only for approved publishers and has
-  no public documentation, so it has no reader.
-- Search pages only, no public feed or API: TimesJobs, Shine, iimjobs (and its executive search), Glassdoor,
-  Apna, Freshersworld, Placement India, AmbitionBox, Fresherslive, Unstop, Firstnaukri, eJobIndia, Google Jobs,
-  SimplyHired, ZipRecruiter, Monster (and Monster Gulf), CareerBuilder, Dice, TechFetch, Otta / Welcome to the
-  Jungle, Hired, The Muse, JustRemote, Dynamite Jobs, JS Remotely, Flexa, Relocate.me, F6S, Jobrapido, Jobted,
-  JobStreet (and JobStreet Express), JobsDB, Jora, SEEK, Reed, No Fluff Jobs, Foundit Gulf, GulfTalent and Bayt.
-- Need a candidate login: Superset (campus placements); Toptal, Arc, Contra, Gun.io and Lemon.io are freelance
-  marketplaces, and their own hiring boards had no India jobs.
-- Wrong region: Landing.jobs (almost all Portugal), EURES (EU), USAJOBS and GovernmentJobs (US government).
-- Government and apprenticeship portals (National Career Service, Employment News, NATS, Apprenticeship India,
-  AICTE internships, Public Service Commission sites): no feed, mostly notices or PDFs.
-- No job feed: CNCF (its feed was empty), OpenSSF and OWASP.
-- Staffing firms (Michael Page, Robert Walters, Randstad, Adecco, TeamLease, Quess, CIEL HR, ABC Consultants,
-  Kelly, ManpowerGroup, SutraHR, Flexing It): their own sites, not on a job system this tool reads.
+These need no key or login. Most of them refuse unknown programs but answer a normal browser, so these readers
+send a browser User-Agent. LinkedIn Jobs, Foundit, Google Careers, Wipro and HCLTech use pages their robots.txt
+asks crawlers to avoid; they are read on purpose, about one call a second (LinkedIn every 2 seconds, and it
+stops opening job pages at the first "slow down" answer). Code: `src/collect/indiaportals.py` (portals),
+`src/collect/careersites.py` (company sites) and `src/collect/jobpages.py` (sitemap and job-page readers).
+- Short descriptions only: Hirist, iimjobs, Foundit, Naukri via AmbitionBox (skills list), TimesJobs, Shine and
+  IBM (a snippet). The AI match has less to go on for these.
+- AmbitionBox shows Naukri's jobs. Only the first page (20 newest) of each list is readable without a bot check,
+  so its source lists 15 keyword pages.
+- Instahyre's list has no dates or sort order, and many of its jobs are years old.
+- Shine's API was slow and returned errors for a while on 2026-10-25; a failed scan just shows in the health summary.
+- Wellfound, TimesJobs, The Muse and Uber also return jobs outside India; the rules drop those.
+
+Still left out (details and reasons in `config/unsupported_sources.yaml`):
+- Bot checks even for a browser User-Agent: Indeed, Glassdoor, Naukri's own search (reCAPTCHA), SimplyHired,
+  ZipRecruiter, Monster, Startup Jobs, StepStone, Totaljobs, SEEK, JobStreet, Bayt, GulfTalent and others.
+  These would need a real (headless) browser.
+- Reachable but few India tech jobs: Apna, WorkIndia, Golang Cafe, remote boards such as JustRemote and Flexa,
+  and US / UK / Europe portals.
+- Company sites whose job list could not be found: SAP, Globant, Walmart, TCS, PhonePe, Zomato, Zepto, Myntra.
+  Many of their jobs arrive through LinkedIn, Naukri, Instahyre or Hirist anyway.
+- Login needed (Superset, freelance marketplaces), government portals (notices and PDFs), staffing firms.
+
+Remote job boards Remote OK, Remotive, Working Nomads, Jobspresso and Jobicy have few jobs open to India (about
+15 a day between them, plus ~40 of Jobicy's newest 100); each costs one call per scan. YC jobs need a free YC
+account to apply. Jooble, Careerjet and Adzuna use official APIs with a key in `.env` (Adzuna stays off in
+`sources.yaml` until its app ID and key are there).
 
 ## Where data lives
 

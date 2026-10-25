@@ -194,7 +194,7 @@ def test_icims_and_socgen_pages():
 
 def test_read_pages_returns_known_jobs_bare_and_caps_new_ones(monkeypatch):
     opened = []
-    monkeypatch.setattr(jobpages, "get_text", lambda url, params=None: opened.append(url) or text("socgen_job.html"))
+    monkeypatch.setattr(jobpages, "get_text", lambda url, params=None, headers=None: opened.append(url) or text("socgen_job.html"))
     monkeypatch.setattr(jobpages, "MAX_NEW", 2)
     pages = [(str(i), f"https://careers.societegenerale.com/en/job-offers/x-{i}-en") for i in range(5)]
     jobs = jobpages.read_pages(SG, pages, known=frozenset({"0"}))

@@ -1,0 +1,743 @@
+{
+ "jobSearchStatus": 200,
+ "jobSearchStatusText": "OK",
+ "jobSearchResponse": {
+  "data": [
+   {
+    "id": "69555224",
+    "jobId": 69555224,
+    "kiwiJobId": "156152373",
+    "kiwiCompanyId": "441700",
+    "kiwiRecruiterId": "704548",
+    "redirectUrl": "https://careers.oracle.com/jobs/#en/sites/jobsearch/job/348303/?location=India&locationId=300000000106947",
+    "title": "Senior Platform Software Engineer",
+    "locations": "India",
+    "minimumExperience": {
+     "years": 3
+    },
+    "maximumExperience": {
+     "years": 5
+    },
+    "minimumSalary": {
+     "currency": "INR",
+     "absoluteValue": 0,
+     "absoluteMonthlyValue": 0
+    },
+    "maximumSalary": {
+     "currency": "INR",
+     "absoluteValue": 0,
+     "absoluteMonthlyValue": 0
+    },
+    "createdAt": 1792866811000,
+    "updatedAt": "13 hours ago",
+    "industries": [
+     "IT/Computers - Hardware & Networking"
+    ],
+    "functions": [
+     "Product and Research"
+    ],
+    "jobTypes": [],
+    "employmentTypes": [
+     "Full time"
+    ],
+    "skills": "API functionality, Documentation, Performance optimization,Software Architecture, Debugging, API versioning, Software testing, Coding Standards",
+    "skillsWithSynonyms": [
+     {
+      "synonyms": [
+       "Software Architecture",
+       "Architecture",
+       "Architecting",
+       "Technical Architecture",
+       "Systems Architecture",
+       "System Architecture",
+       "Application Architecture",
+       "IT Architecture",
+       "Software Architecting",
+       "Software Architectural Design",
+       "Software System Architecture",
+       "System Design & Architecture",
+       "System Design and Architecture",
+       "System Design",
+       "Systems Design",
+       "Software System Design"
+      ],
+      "value": "software architecture"
+     },
+     {
+      "synonyms": [
+       "Debugging",
+       "Code Debugging",
+       "Software Debugging",
+       "Program Debugging",
+       "Bug Fixing",
+       "Defect Fixing",
+       "Debug",
+       "Bugfixing",
+       "Bug Fixes",
+       "Defect Resolution",
+       "Bug Resolution",
+       "Issue Fixing",
+       "Issue Resolution",
+       "Troubleshooting",
+       "Error Fixing",
+       "Debuging",
+       "Application Debugging",
+       "Debugged",
+       "Bug Debugging"
+      ],
+      "value": "debugging"
+     },
+     {
+      "synonyms": [
+       "Document Creation",
+       "Document Preparation",
+       "Document Writing",
+       "Documentation",
+       "Documentation Management",
+       "Documentation Skills",
+       "Documentation Writing",
+       "Documentations",
+       "Documenting",
+       "Product Documentation",
+       "Software Documentation",
+       "Software Technical Documentation",
+       "System Documentation",
+       "Tech Docs",
+       "Technical Document Writing",
+       "Technical Documentation",
+       "Technical Documentation Writing",
+       "Technical Documents",
+       "Technical Writing",
+       "User Documentation",
+       "doc",
+       "document",
+       "documents",
+       "technical docs"
+      ],
+      "value": "documentation"
+     },
+     {
+      "synonyms": [
+       "Performance Optimization",
+       "Performance Tuning",
+       "Performance Tuning & Optimization",
+       "Perf Tuning",
+       "Application Performance Tuning",
+       "System Performance Tuning",
+       "Performance Improvement",
+       "Performance Optimisation",
+       "Application Performance Optimization",
+       "Software Performance Optimization",
+       "System Performance Optimization",
+       "Perf Optimization",
+       "System Performance",
+       "Systems Performance",
+       "Performance Engineering",
+       "Performance Enhancement",
+       "Improving Performance",
+       "Application Performance Optimisation",
+       "App Performance Optimization",
+       "App Performance Optimisation",
+       "App Performance Tuning",
+       "Code Optimization",
+       "Code Optimisation",
+       "System Performance Optimisation",
+       "Performance Tunning",
+       "System Optimization",
+       "Systems Optimization",
+       "System Optimisation",
+       "Systems Optimisation",
+       "System Tuning",
+       "Perfomance Tuning",
+       "Performance Tuning and Optimization"
+      ],
+      "value": "performance optimization"
+     },
+     {
+      "synonyms": [
+       "Software Testing",
+       "Testing",
+       "QA Testing",
+       "Quality Assurance",
+       "QA",
+       "Software QA",
+       "Application Testing",
+       "Software Quality Assurance",
+       "Test",
+       "Quality Assurance Testing",
+       "SQA",
+       "Quality Testing",
+       "Software Quality Testing",
+       "Software Test",
+       "QA Test",
+       "Software QA Testing",
+       "Test Engineering",
+       "Software Test Engineering",
+       "Testing Engineering",
+       "Test Engg"
+      ],
+      "value": "software testing"
+     },
+     {
+      "synonyms": [
+       "Coding Standards",
+       "Code Standards",
+       "Coding Guidelines",
+       "Code Guidelines",
+       "Coding Conventions",
+       "Code Conventions",
+       "Programming Standards",
+       "Programming Guidelines",
+       "Code Style Guidelines"
+      ],
+      "value": "coding standards"
+     }
+    ],
+    "recruiterId": 719861,
+    "companyId": 441866,
+    "designations": [
+     "Software Engineer/Programmer"
+    ],
+    "maximumSalaryINRFilter": 0,
+    "minimumSalaryINRFilter": 0,
+    "maximumSalaryINRMonthlyFilter": 0,
+    "minimumSalaryINRMonthlyFilter": 0,
+    "minimumExperienceFilter": 3,
+    "maximumExperienceFilter": 5,
+    "questionnaire": false,
+    "employerTypes": [
+     "Company"
+    ],
+    "walkInVenue": {},
+    "companyName": "Oracle",
+    "referenceCode": "d7eba2e18267392eeefc91edc09e8680",
+    "status": 1,
+    "accountId": 0,
+    "applyUrl": "https://careers.oracle.com/jobs/#en/sites/jobsearch/job/348303/?location=India&locationId=300000000106947",
+    "currencyCode": "INR",
+    "hideSalary": 0,
+    "companyLogoUrl": "https://media.monsterindia.com/logos/xSP_orclinx/jdlogo.gif",
+    "hideCompanyName": 0,
+    "recruiterContactNumber": "None",
+    "showContactDetails": 0,
+    "jobSource": "SCRAPPING",
+    "postingBoard": "SINGLE",
+    "graceJob": 0,
+    "quickJob": 0,
+    "jobFrom": "MOIN_MOHQ",
+    "isoCode": "en",
+    "recruiterName": "Oracle",
+    "companyProfile": "Only Oracle brings together the data, infrastructure, applications, and expertise to power everything from industry innovations to life-saving care. And with AI embedded across our products and services, we help customers turn that promise into a better future for all. Discover your potential at a company leading the way in AI and cloud solutions that impact billions of lives. True innovation starts when everyone is empowered to contribute. That's why we're committed to growing a workforce that promotes opportunities for all with competitive benefits that support our people with flexible medical, life insurance, and retirement options. We also encourage employees to give back to their communities through our volunteer programs. We're committed to including people with disabilities at all stages of the employment process. If you require accessibility assistance or accommodation for a disability at any point, let us know by emailing accommodation-request_mb@oracle.com or by calling 1-888-404-2494 in the United States. Oracle is an Equal Employment Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, sexual orientation, gender identity, disability and protected veterans' status, or any other characteristic protected by law. Oracle will consider for employment qualified applicants with arrest and conviction records pursuant to applicable law.",
+    "channelId": 1,
+    "channelName": "India",
+    "isBold": 1,
+    "isJdLogo": 1,
+    "isSearchLogo": 1,
+    "siteContext": "rexmonster",
+    "freshness": 1792866811000,
+    "closedAt": 1796754600000,
+    "activeJob": true,
+    "isJobActive": true,
+    "isCJT": 0,
+    "isMicrosite": 0,
+    "redirectStage": 2,
+    "totalApplicants": 0,
+    "isGptwCompany": 0,
+    "jobSalaryConfidential": false,
+    "isUrgentlyHiring": false,
+    "quickApplyJob": 0,
+    "jobClassification": "SYNDICATE",
+    "isTestJob": false,
+    "jdUrl": "/job/senior-platform-software-engineer-oracle-india-69555224",
+    "isSaved": false,
+    "isApplied": false,
+    "minimumSalaryFilter": 0,
+    "maximumSalaryFilter": 0,
+    "companyLogo": "https://media.monsterindia.com/logos/xSP_orclinx/jdlogo.gif",
+    "exp": "3-5 Years",
+    "salary": "0-0 INR",
+    "postedBy": "13 hours ago",
+    "isFresh": true,
+    "isHotJob": false,
+    "isSelected": false,
+    "isProfileComplete": false,
+    "lastUpdated": 1792868362000,
+    "seoJdUrl": "/job/senior-platform-software-engineer-oracle-india-69555224",
+    "seoCompanyUrl": "/search/oracle-441866-jobs-career",
+    "order": 0
+   },
+   {
+    "id": "69549060",
+    "jobId": 69549060,
+    "kiwiJobId": "156138273",
+    "kiwiCompanyId": "1375736",
+    "kiwiRecruiterId": "1654358",
+    "redirectUrl": "https://www.linkedin.com/jobs/view/4482876025/",
+    "title": "Senior Software Engineer",
+    "locations": "Hyderabad, India",
+    "minimumExperience": {
+     "years": 7
+    },
+    "maximumExperience": {
+     "years": 9
+    },
+    "minimumSalary": {
+     "currency": "INR",
+     "absoluteValue": 0,
+     "absoluteMonthlyValue": 0
+    },
+    "maximumSalary": {
+     "currency": "INR",
+     "absoluteValue": 0,
+     "absoluteMonthlyValue": 0
+    },
+    "createdAt": 1792863389000,
+    "updatedAt": "10 hours ago",
+    "industries": [
+     "Other"
+    ],
+    "functions": [
+     "AI/Software Development"
+    ],
+    "jobTypes": [],
+    "employmentTypes": [
+     "Full time"
+    ],
+    "skills": "object-oriented programming,Cloud Services, Distributed Systems",
+    "skillsWithSynonyms": [
+     {
+      "synonyms": [
+       "Cloud Services",
+       "Cloud Computing",
+       "Cloud",
+       "Cloud Technology",
+       "Cloud Technologies",
+       "Cloud Solutions",
+       "Cloud Platform Services",
+       "Cloud Computing Solutions",
+       "Cloud-Based Solutions",
+       "Cloud Technology Solutions",
+       "Cloud Service",
+       "Cloud Computing Services",
+       "Cloud-Based Services",
+       "Cloud Platform Technologies"
+      ],
+      "value": "cloud services"
+     },
+     {
+      "synonyms": [
+       "Object-Oriented Programming",
+       "OOPs",
+       "OOP",
+       "Object Oriented Programming",
+       "OO Programming",
+       "Object-Oriented Programming Concepts",
+       "Object Oriented Concepts",
+       "OOP Concepts",
+       "Object-Oriented Coding",
+       "Object-Oriented Development",
+       "Object Oriented Development",
+       "Object-Oriented",
+       "Object Oriented",
+       "Object Oriented Programming Concepts",
+       "OOPS Concepts",
+       "Object-Oriented Programming (OOP)"
+      ],
+      "value": "object-oriented programming"
+     },
+     {
+      "synonyms": [
+       "Distributed Architecture",
+       "Distributed Computing",
+       "Distributed Computing Systems",
+       "Distributed Software Systems",
+       "Distributed System",
+       "Distributed System Design",
+       "Distributed Systems",
+       "Distributed Systems Design",
+       "Large-Scale Distributed Systems",
+       "distributed infrastructures"
+      ],
+      "value": "distributed systems"
+     }
+    ],
+    "recruiterId": 102440557,
+    "companyId": 1247926,
+    "maximumSalaryINRFilter": 0,
+    "minimumSalaryINRFilter": 0,
+    "maximumSalaryINRMonthlyFilter": 0,
+    "minimumSalaryINRMonthlyFilter": 0,
+    "minimumExperienceFilter": 7,
+    "maximumExperienceFilter": 9,
+    "questionnaire": false,
+    "employerTypes": [
+     "Company"
+    ],
+    "walkInVenue": {},
+    "companyName": "Microsoft Corp",
+    "referenceCode": "39a06805ce84e2f485a468a2b26d9ef0",
+    "status": 1,
+    "accountId": 0,
+    "applyUrl": "https://www.linkedin.com/jobs/view/4482876025/",
+    "currencyCode": "INR",
+    "hideSalary": 0,
+    "companyLogoUrl": "https://media.monsterindia.com/logos/xOP_micrcorpinx1774477241312/jdlogo.gif",
+    "hideCompanyName": 0,
+    "showContactDetails": 0,
+    "jobSource": "SCRAPPING",
+    "postingBoard": "SINGLE",
+    "graceJob": 0,
+    "quickJob": 0,
+    "jobFrom": "MOIN_OPERIA",
+    "isoCode": "en",
+    "recruiterName": "Microsoft",
+    "channelId": 1,
+    "channelName": "India",
+    "isBold": 1,
+    "isJdLogo": 1,
+    "isSearchLogo": 1,
+    "siteContext": "rexmonster",
+    "freshness": 1792863389000,
+    "closedAt": 1796668200000,
+    "activeJob": true,
+    "isJobActive": true,
+    "isCJT": 0,
+    "isMicrosite": 0,
+    "redirectStage": 2,
+    "totalApplicants": 1,
+    "isGptwCompany": 0,
+    "jobSalaryConfidential": false,
+    "isUrgentlyHiring": false,
+    "quickApplyJob": 0,
+    "jobClassification": "SYNDICATE",
+    "isTestJob": false,
+    "jdUrl": "/job/senior-software-engineer-microsoft-corp-hyderabad-secunderabad-telangana-69549060",
+    "isSaved": false,
+    "isApplied": false,
+    "minimumSalaryFilter": 0,
+    "maximumSalaryFilter": 0,
+    "companyLogo": "https://media.monsterindia.com/logos/xOP_micrcorpinx1774477241312/jdlogo.gif",
+    "exp": "7-9 Years",
+    "salary": "0-0 INR",
+    "postedBy": "14 hours ago",
+    "isFresh": true,
+    "isHotJob": false,
+    "isSelected": false,
+    "isProfileComplete": false,
+    "lastUpdated": 1792878496000,
+    "seoJdUrl": "/job/senior-software-engineer-microsoft-corp-hyderabad-secunderabad-telangana-india-69549060",
+    "seoCompanyUrl": "/search/microsoft-corp-1247926-jobs-career",
+    "order": 1
+   },
+   {
+    "id": "69555161",
+    "jobId": 69555161,
+    "kiwiJobId": "156152179",
+    "kiwiCompanyId": "441700",
+    "kiwiRecruiterId": "704548",
+    "redirectUrl": "https://careers.oracle.com/jobs/#en/sites/jobsearch/job/348297/?location=India&locationId=300000000106947",
+    "title": "Senior Platform Software Engineer",
+    "locations": "Bengaluru, India",
+    "minimumExperience": {
+     "years": 3
+    },
+    "maximumExperience": {
+     "years": 5
+    },
+    "minimumSalary": {
+     "currency": "INR",
+     "absoluteValue": 0,
+     "absoluteMonthlyValue": 0
+    },
+    "maximumSalary": {
+     "currency": "INR",
+     "absoluteValue": 0,
+     "absoluteMonthlyValue": 0
+    },
+    "createdAt": 1792866696000,
+    "updatedAt": "13 hours ago",
+    "industries": [
+     "IT/Computers - Hardware & Networking"
+    ],
+    "functions": [
+     "Product and Research"
+    ],
+    "jobTypes": [],
+    "employmentTypes": [
+     "Full time"
+    ],
+    "skills": "API functionality, Secure coding practices, Performance optimization, Observability,Software Architecture, Debugging, API versioning, Software Design",
+    "skillsWithSynonyms": [
+     {
+      "synonyms": [
+       "Software Architecture",
+       "Architecture",
+       "Architecting",
+       "Technical Architecture",
+       "Systems Architecture",
+       "System Architecture",
+       "Application Architecture",
+       "IT Architecture",
+       "Software Architecting",
+       "Software Architectural Design",
+       "Software System Architecture",
+       "System Design & Architecture",
+       "System Design and Architecture",
+       "System Design",
+       "Systems Design",
+       "Software System Design"
+      ],
+      "value": "software architecture"
+     },
+     {
+      "synonyms": [
+       "Secure Coding Practices",
+       "Secure Coding",
+       "Secure Programming Practices",
+       "Secure Software Development Practices",
+       "Secure Development Practices",
+       "Secure Application Coding",
+       "Defensive Coding",
+       "Secure Coding Standards"
+      ],
+      "value": "secure coding practices"
+     },
+     {
+      "synonyms": [
+       "Debugging",
+       "Code Debugging",
+       "Software Debugging",
+       "Program Debugging",
+       "Bug Fixing",
+       "Defect Fixing",
+       "Debug",
+       "Bugfixing",
+       "Bug Fixes",
+       "Defect Resolution",
+       "Bug Resolution",
+       "Issue Fixing",
+       "Issue Resolution",
+       "Troubleshooting",
+       "Error Fixing",
+       "Debuging",
+       "Application Debugging",
+       "Debugged",
+       "Bug Debugging"
+      ],
+      "value": "debugging"
+     },
+     {
+      "synonyms": [
+       "Performance Optimization",
+       "Performance Tuning",
+       "Performance Tuning & Optimization",
+       "Perf Tuning",
+       "Application Performance Tuning",
+       "System Performance Tuning",
+       "Performance Improvement",
+       "Performance Optimisation",
+       "Application Performance Optimization",
+       "Software Performance Optimization",
+       "System Performance Optimization",
+       "Perf Optimization",
+       "System Performance",
+       "Systems Performance",
+       "Performance Engineering",
+       "Performance Enhancement",
+       "Improving Performance",
+       "Application Performance Optimisation",
+       "App Performance Optimization",
+       "App Performance Optimisation",
+       "App Performance Tuning",
+       "Code Optimization",
+       "Code Optimisation",
+       "System Performance Optimisation",
+       "Performance Tunning",
+       "System Optimization",
+       "Systems Optimization",
+       "System Optimisation",
+       "Systems Optimisation",
+       "System Tuning",
+       "Perfomance Tuning",
+       "Performance Tuning and Optimization"
+      ],
+      "value": "performance optimization"
+     },
+     {
+      "synonyms": [
+       "Software Design",
+       "Software Designing",
+       "Program Design",
+       "Application Design",
+       "Systems Design",
+       "Software Design Engineering"
+      ],
+      "value": "software design"
+     },
+     {
+      "synonyms": [
+       "Observability",
+       "O11y",
+       "Software Observability",
+       "IT Observability",
+       "Application Observability",
+       "System Observability",
+       "Observability Engineering"
+      ],
+      "value": "observability"
+     }
+    ],
+    "recruiterId": 719861,
+    "companyId": 441866,
+    "designations": [
+     "Software Engineer/Programmer"
+    ],
+    "maximumSalaryINRFilter": 0,
+    "minimumSalaryINRFilter": 0,
+    "maximumSalaryINRMonthlyFilter": 0,
+    "minimumSalaryINRMonthlyFilter": 0,
+    "minimumExperienceFilter": 3,
+    "maximumExperienceFilter": 5,
+    "questionnaire": false,
+    "employerTypes": [
+     "Company"
+    ],
+    "walkInVenue": {},
+    "companyName": "Oracle",
+    "referenceCode": "1139e3174e93f3134e132a806c9e7cb4",
+    "status": 1,
+    "accountId": 0,
+    "applyUrl": "https://careers.oracle.com/jobs/#en/sites/jobsearch/job/348297/?location=India&locationId=300000000106947",
+    "currencyCode": "INR",
+    "hideSalary": 0,
+    "companyLogoUrl": "https://media.monsterindia.com/logos/xSP_orclinx/jdlogo.gif",
+    "hideCompanyName": 0,
+    "recruiterContactNumber": "None",
+    "showContactDetails": 0,
+    "jobSource": "SCRAPPING",
+    "postingBoard": "SINGLE",
+    "graceJob": 0,
+    "quickJob": 0,
+    "jobFrom": "MOIN_MOHQ",
+    "isoCode": "en",
+    "recruiterName": "Oracle",
+    "companyProfile": "Only Oracle brings together the data, infrastructure, applications, and expertise to power everything from industry innovations to life-saving care. And with AI embedded across our products and services, we help customers turn that promise into a better future for all. Discover your potential at a company leading the way in AI and cloud solutions that impact billions of lives. True innovation starts when everyone is empowered to contribute. That's why we're committed to growing a workforce that promotes opportunities for all with competitive benefits that support our people with flexible medical, life insurance, and retirement options. We also encourage employees to give back to their communities through our volunteer programs. We're committed to including people with disabilities at all stages of the employment process. If you require accessibility assistance or accommodation for a disability at any point, let us know by emailing accommodation-request_mb@oracle.com or by calling 1-888-404-2494 in the United States. Oracle is an Equal Employment Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, national origin, sexual orientation, gender identity, disability and protected veterans' status, or any other characteristic protected by law. Oracle will consider for employment qualified applicants with arrest and conviction records pursuant to applicable law.",
+    "channelId": 1,
+    "channelName": "India",
+    "isBold": 1,
+    "isJdLogo": 1,
+    "isSearchLogo": 1,
+    "siteContext": "rexmonster",
+    "freshness": 1792866696000,
+    "closedAt": 1796754600000,
+    "activeJob": true,
+    "isJobActive": true,
+    "isCJT": 0,
+    "isMicrosite": 0,
+    "redirectStage": 2,
+    "totalApplicants": 2,
+    "isGptwCompany": 0,
+    "jobSalaryConfidential": false,
+    "isUrgentlyHiring": false,
+    "quickApplyJob": 0,
+    "jobClassification": "SYNDICATE",
+    "isTestJob": false,
+    "jdUrl": "/job/senior-platform-software-engineer-oracle-bengaluru-bangalore-69555161",
+    "isSaved": false,
+    "isApplied": false,
+    "minimumSalaryFilter": 0,
+    "maximumSalaryFilter": 0,
+    "companyLogo": "https://media.monsterindia.com/logos/xSP_orclinx/jdlogo.gif",
+    "exp": "3-5 Years",
+    "salary": "0-0 INR",
+    "postedBy": "13 hours ago",
+    "isFresh": true,
+    "isHotJob": false,
+    "isSelected": false,
+    "isProfileComplete": false,
+    "lastUpdated": 1792868362000,
+    "seoJdUrl": "/job/senior-platform-software-engineer-oracle-bengaluru-bangalore-india-69555161",
+    "seoCompanyUrl": "/search/oracle-441866-jobs-career",
+    "order": 2
+   }
+  ],
+  "meta": {
+   "paging": {
+    "cursors": {
+     "next": "50",
+     "previous": "0"
+    },
+    "total": 9442,
+    "limit": 50
+   },
+   "resultId": "c8a8782c-e77d-44bb-8feb-31db2cb736f7",
+   "searchId": "d6e528b939787855d9e1defacc97edb0",
+   "version": "DEFAULT",
+   "buildVersion": "0.0.1"
+  },
+  "spellCheckApplied": false,
+  "filters": {},
+  "selectedFilters": {},
+  "filterLabels": {
+   "functions": "Function",
+   "roles": "Role",
+   "experienceRanges": "Experience (in years)",
+   "jobCities": "City",
+   "salaryRanges": "Salary (INR)",
+   "isGptwCompany": "Great Place to Work",
+   "jobCountries": "Country",
+   "qualifications": "Qualification",
+   "employerTypes": "Employer Type",
+   "companies": "Top Companies",
+   "jobStates": "State",
+   "industries": "Industry",
+   "jobFreshness": "Job Freshness",
+   "locations": "Location",
+   "jobTypes": "Job Type"
+  },
+  "spellCheck": {
+   "originalText": "software engineer",
+   "suggestion": "",
+   "showingResultsFor": "software engineer"
+  },
+  "apiId": "DEFAULT",
+  "IS_NEW_SEARCH_PAGE": "true"
+ },
+ "userProfilesStatus": "",
+ "userProfilesStatusText": "",
+ "userProfilesResponse": "",
+ "seoSrpTupleStatus": "",
+ "seoSrpTupleStatusText": "",
+ "seoSrpTupleResponse": "",
+ "seoSrpTupleV2Response": "",
+ "similarSkillsStatus": 200,
+ "similarSkillsStatusText": "OK",
+ "similarSkillsResponse": {
+  "data": []
+ },
+ "topLocationsResponse": [
+  "India",
+  "Kolkata",
+  "Bangalore",
+  "Noida",
+  "Hyderabad",
+  "Delhi",
+  "Mumbai",
+  "Chennai",
+  "Gurgaon",
+  "Pune"
+ ],
+ "similarJobsStatus": "",
+ "similarJobsStatusText": "",
+ "similarJobsStatusResponse": "",
+ "SEARCH_URL": "",
+ "reqParams": {
+  "srpSearchObject": "?start=0&limit=50&query=software%20engineer&sort=1&",
+  "decodedParam": {
+   "start": "0",
+   "limit": "50",
+   "query": "software engineer",
+   "sort": "1"
+  }
+ }
+}

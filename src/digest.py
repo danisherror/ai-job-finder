@@ -30,7 +30,14 @@ ATS_DOMAINS = {"greenhouse": ("greenhouse.io",), "lever": ("lever.co",), "ashby"
                "careerjet": ("jobviewtrack.com", "careerjet.co.in"), "atlassian": ("icims.com", "atlassian.com"),
                "ripplehire": ("ripplehire.com",), "phenom": (), "avature": ("avature.net",), "talentbrew": (),
                "icims": ("icims.com",), "socgen": ("societegenerale.com",), "jobicy": ("jobicy.com",),
-               "adzuna": ("adzuna.in",)}
+               "adzuna": ("adzuna.in",), "linkedin": ("linkedin.com",), "hirist": ("hirist.tech",),
+               "iimjobs": ("iimjobs.com",), "instahyre": ("instahyre.com",), "unstop": ("unstop.com",),
+               "foundit": ("foundit.in",), "shine": ("shine.com",), "timesjobs": ("timesjobs.com",),
+               "ambitionbox": ("ambitionbox.com",), "wellfound": ("wellfound.com",),
+               "internshala": ("internshala.com",), "themuse": ("themuse.com",), "cutshort": ("cutshort.io",),
+               "google": ("google.com",), "apple": ("jobs.apple.com",), "ibm": ("ibm.com",),
+               "goldman": ("higher.gs.com",), "sapsf": (), "makemytrip": ("careers.makemytrip.com",),
+               "sitemap": (), "freshersworld": ("freshersworld.com",)}
 ATS_JOB_PAGE = {
     "greenhouse": "https://job-boards.greenhouse.io/{board}/jobs/{id}",
     "lever": "https://jobs.lever.co/{board}/{id}",
@@ -63,6 +70,27 @@ ATS_JOB_PAGE = {
     "socgen": "{site}/en/jobs",                    # job pages need the title too
     "jobicy": "{id}",                              # the ID is the job's Jobicy URL
     "adzuna": "https://www.adzuna.in/details/{id}",
+    "linkedin": "https://www.linkedin.com/jobs/view/{id}",
+    "hirist": "https://www.hirist.tech/j/job-{id}",
+    "iimjobs": "https://www.iimjobs.com/j/job-{id}",
+    "instahyre": "https://www.instahyre.com/search-jobs/",   # job pages need the title too
+    "unstop": "https://unstop.com/jobs",            # job pages need the title too
+    "foundit": "https://www.foundit.in/",
+    "shine": "https://www.shine.com/",
+    "timesjobs": "https://www.timesjobs.com/jobs",   # job pages need an encoded key, not the ID
+    "ambitionbox": "https://www.ambitionbox.com/jobs",
+    "wellfound": "https://wellfound.com/jobs",
+    "internshala": "https://internshala.com/internships",
+    "themuse": "https://www.themuse.com/jobs",
+    "cutshort": "https://cutshort.io/jobs",
+    "google": "https://www.google.com/about/careers/applications/jobs/results/{id}",
+    "apple": "https://jobs.apple.com/en-in/search",
+    "ibm": "https://careers.ibm.com/careers/JobDetail?jobId={id}",
+    "goldman": "https://higher.gs.com/results",
+    "sapsf": "{site}/search/",                     # site is the career site without its filter
+    "makemytrip": "https://careers.makemytrip.com/",
+    "sitemap": "{site}",                           # the sitemap itself; job links are on the company's host
+    "freshersworld": "https://www.freshersworld.com/jobs",
 }
 
 

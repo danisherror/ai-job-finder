@@ -1,96 +1,74 @@
 # Companies and job portals this tool does NOT collect jobs from, and why.
 # This file is a record only; the tool never reads it. Sources it does collect from are in sources.yaml.
-# Checked 2026-10-23 to 2026-10-24. A site may change, so a "blocked" or "no API" entry can be re-checked later.
+# Checked 2026-10-23 to 2026-10-24; re-checked 2026-10-25 with a normal browser User-Agent and with
+# robots.txt rules set aside on purpose (the owner asked for every source that can be read).
+# A site may change, so a "blocked" or "no API" entry can be re-checked later.
 #
 # Each group has a reason and the names it applies to. "could_add" says whether it can be added later and how.
 
-# ============================== Job portals ==============================
+# Added 2026-10-25 with new readers, so no longer listed here (several had been listed as blocked only
+# because they refuse this tool's own User-Agent; they answer a normal browser):
+#   Portals: LinkedIn job listings, Naukri (read through AmbitionBox, which shows Naukri's jobs), AmbitionBox,
+#     Foundit, Hirist, iimjobs, Instahyre, TimesJobs, Shine, Cutshort, Wellfound, Internshala, Freshersworld,
+#     Unstop, The Muse.
+#   Companies: Google Careers and Google DeepMind (one reader), Apple, IBM, Goldman Sachs, Wipro and HCLTech
+#     (SuccessFactors search API), MakeMyTrip, Uber (sitemap), Intuit and Cargill (TalentBrew).
+# Readers that go against robots.txt on purpose (checked 2026-10-25): LinkedIn (its public job search),
+# Foundit (/middleware/ search API), Google Careers (search result pages), Wipro and HCLTech (/services/ search
+# API). The other new readers use pages robots.txt allows. All run at about one call a second.
 
-- group: robots_txt_forbids
-  kind: portal
-  reason: Their robots.txt forbids automated collection, so they are left out on purpose.
-  could_add: no
-  names: [LinkedIn job listings (LinkedIn's own openings are collected), Indeed, Naukri, Hirist]
+# ============================== Job portals ==============================
 
 - group: blocks_automated_access
   kind: portal
-  reason: Blocked automated access when checked (HTTP 403, a bot check or no answer).
-  could_add: no
+  reason: >-
+    Blocked even a normal browser User-Agent on 2026-10-25: HTTP 403, a Cloudflare / Akamai bot check,
+    or no answer. Getting past these needs a real browser, which this tool does not run.
+  could_add: only with a headless browser (e.g. Playwright), and some would still challenge it
   names:
-    - Foundit
-    - Internshala
-    - Instahyre
-    - WorkIndia
-    - Job Hai
-    - JobGrin
-    - Startup Jobs
-    - FlexJobs
-    - Remote.co
-    - Golang Cafe
-    - Rust Jobs
-    - Ruby on Remote
-    - StepStone
-    - CV-Library
-    - Totaljobs
-    - CareerOne
-    - GrabJobs
-    - JobisJob
-    - Naukrigulf
-    - ClearanceJobs
-    - Linux Foundation job board
+    - Indeed (403)
+    - Glassdoor (403)
+    - Naukri's own search API (asks for a reCAPTCHA; its jobs come in through AmbitionBox instead)
+    - Startup Jobs (Cloudflare)
+    - FlexJobs (no answer)
+    - Remote.co (no answer)
+    - Ruby on Remote (Cloudflare)
+    - StepStone (403)
+    - Totaljobs (403)
+    - CareerOne (Cloudflare)
+    - GrabJobs (Cloudflare)
+    - ClearanceJobs (403)
+    - SimplyHired (Cloudflare)
+    - ZipRecruiter (Cloudflare)
+    - Monster (403)
+    - JobStreet and JobsDB (Cloudflare)
+    - SEEK (403)
+    - GulfTalent (Cloudflare)
+    - Bayt (Cloudflare)
+    - Naukrigulf (no answer)
+    - Job Hai (no answer)
+    - Jobted (JavaScript check)
+    - F6S (bot check page)
+    - Gun.io (bot check page)
 
-- group: no_public_api_docs
+- group: reachable_not_worth_a_reader
   kind: portal
-  reason: Its API is for approved publisher partners; no public documentation to build a reader from.
-  could_add: yes, if they approve a publisher account and share the API format
-  names: [Talent.com]    # Jooble, Careerjet and Adzuna have readers (Adzuna is off until its key is in .env)
-
-- group: no_public_api
-  kind: portal
-  reason: Search web pages only; no public feed or API to read.
-  could_add: no
+  reason: >-
+    Answered on 2026-10-25, but either almost no India tech jobs or no usable list. Left out to keep
+    each scan short; each would be a small reader if wanted.
+  could_add: yes, a reader each
   names:
-    - Wellfound
-    - Cutshort
-    - TimesJobs
-    - Shine
-    - iimjobs (and its executive search)
-    - Glassdoor
-    - Apna
-    - Freshersworld
-    - Placement India
-    - AmbitionBox
-    - Fresherslive
-    - Unstop
-    - Firstnaukri
-    - eJobIndia
-    - Google Jobs
-    - SimplyHired
-    - ZipRecruiter
-    - Monster (and Monster Gulf)
-    - CareerBuilder
-    - Dice
-    - TechFetch
-    - Otta / Welcome to the Jungle
-    - Hired
-    - The Muse
-    - JustRemote
-    - Dynamite Jobs
-    - JS Remotely
-    - Flexa
-    - Relocate.me
-    - F6S
-    - Jobrapido
-    - Jobted
-    - JobStreet (and JobStreet Express)
-    - JobsDB
-    - Jora
-    - SEEK
-    - Reed
-    - No Fluff Jobs
-    - Foundit Gulf
-    - GulfTalent
-    - Bayt
+    - Apna (public feed works but ignores search words, 7 jobs a page, almost all non-tech)
+    - WorkIndia (blue-collar jobs)
+    - JobGrin, Placement India, Fresherslive, eJobIndia (small or low-quality listings; not examined closely)
+    - Firstnaukri (now redirects to Naukri's campus page)
+    - Golang Cafe (has an India page, a handful of jobs)
+    - Rust Jobs, JS Remotely, JustRemote, Dynamite Jobs, Flexa, Relocate.me, Arc (remote boards, few India jobs)
+    - Welcome to the Jungle (Otta), CareerBuilder, Dice, TechFetch (US / Europe)
+    - CV-Library, Reed, No Fluff Jobs, Jobrapido, Jora (UK / Europe / Australia; Jora's India site redirects)
+    - Foundit Gulf (Gulf jobs)
+    - Talent.com (pages answer; its API is for approved partners only)
+    - Hired (now redirects to LHH)
 
 - group: needs_candidate_login
   kind: portal
@@ -129,13 +107,13 @@
 
 - group: no_job_feed
   kind: portal
-  reason: No job feed to read (CNCF's feed was empty).
+  reason: No job feed to read (CNCF's feed was empty; the Linux Foundation job board's address no longer resolves).
   could_add: no
-  names: [CNCF, OpenSSF, OWASP]
+  names: [CNCF, OpenSSF, OWASP, Linux Foundation job board]
 
 - group: staffing_firms
   kind: portal
-  reason: Their own career sites, not on a job system this tool reads.
+  reason: Their own career sites, not on a job system this tool reads. Not re-checked on 2026-10-25.
   could_add: no, unless a reader for their site is written
   names:
     - Michael Page
@@ -157,42 +135,23 @@
 # Optum / UnitedHealth Group, Societe Generale (Taleo), Synopsys, Siemens (Avature), Cencora, NTT DATA (Phenom),
 # LTIMindtree, Mphasis, Tata Technologies (RippleHire).
 
-- group: sap_successfactors
+- group: no_readable_job_list
   kind: company
   reason: >-
-    Career site runs on SAP SuccessFactors. Its pages are drawn by JavaScript and the only readable job feed
-    (an RSS feed of the 20 newest matches) is under /services/, which their robots.txt disallows.
-    SAP's own site also shows a bot check (HTTP 403).
-  could_add: only by reading the disallowed /services/ feed, so not done
-  names: [SAP, Cargill, Globant, HCLTech, Wipro]
-
-- group: in_house_site
-  kind: company
-  reason: Company's own career site with no public job API.
-  could_add: no, each would need its own scraper
+    Checked 2026-10-25: the career page loads its jobs in the browser from a source not found, or
+    shows a bot check. Most of these companies' jobs also reach the tool through LinkedIn, Naukri
+    (AmbitionBox), Instahyre or Hirist.
+  could_add: maybe, with more digging per site or a headless browser
   names:
-    - Google Careers (web page only)
-    - Google DeepMind
-    - Goldman Sachs
-    - IBM
-    - Intuit
-    - Uber
-    - Walmart
-    - TCS
-    - PhonePe
-    - Zomato
-    - Zepto
-    - Myntra
-    - MakeMyTrip
+    - SAP (new jobs.sap.com site; jobs loaded by script)
+    - Globant (SuccessFactors-based, but its search page returns 404)
+    - Walmart (careers.walmart.com is US only; its India Workday site returns errors)
+    - TCS (HTTP 403)
+    - PhonePe (job list loaded by script)
+    - Zomato / Eternal (no job list found)
+    - Zepto (bot check)
+    - Myntra (WordPress site; no job list found)
     - most other Indian startups
-
-- group: api_returns_nothing
-  kind: company
-  reason: Public API exists but does not work for India.
-  could_add: no
-  names:
-    - Apple (search API returned nothing for India)
-    - Wipro job feed (ignores search and paging; see sap_successfactors)
 
 - group: no_india_jobs
   kind: company

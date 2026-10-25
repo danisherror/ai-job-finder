@@ -2,13 +2,14 @@
 
 `known` holds the ats_ids already stored for that source. Adapters that need an extra call
 per job for its description (SmartRecruiters, Workday, Oracle, Eightfold, Rippling, YC, RippleHire,
-Phenom, Avature, and the sitemap readers in jobpages) skip that call for known jobs and return them
-without a description; the store then keeps the saved one (and the saved title, if none is given).
+Phenom, Avature, the sitemap readers in jobpages, and LinkedIn, Instahyre, SuccessFactors and MakeMyTrip)
+skip that call for known jobs and return them without a description; the store then keeps the saved one
+(and the saved title, if none is given).
 """
 
-from src.collect import (amazon, ashby, atlassian, avature, eightfold, greenhouse, hackernews, himalayas, jibe,
-                         jobpages, lever, oracle, phenom, portals, remoteboards, ripplehire, rippling, smartrecruiters,
-                         weworkremotely, workable, workday, ycombinator)
+from src.collect import (amazon, ashby, atlassian, avature, careersites, eightfold, greenhouse, hackernews, himalayas,
+                         indiaportals, jibe, jobpages, lever, oracle, phenom, portals, remoteboards, ripplehire,
+                         rippling, smartrecruiters, weworkremotely, workable, workday, ycombinator)
 
 ADAPTERS = {
     "greenhouse": greenhouse.fetch,
@@ -33,4 +34,6 @@ ADAPTERS = {
     **jobpages.FETCHERS,
     **remoteboards.FETCHERS,
     **portals.FETCHERS,
+    **indiaportals.FETCHERS,
+    **careersites.FETCHERS,
 }

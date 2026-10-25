@@ -1,0 +1,329 @@
+{
+ "data": [
+  {
+   "id": 1678325,
+   "title": "SOTI - Senior Software Developer - .Net/C#/AngularJS",
+   "min": 7,
+   "max": 13,
+   "createdBy": 280802,
+   "creatorDomainName": "soti.net",
+   "categoryId": 16,
+   "jobdesignation": "Senior Software Developer",
+   "status": 1,
+   "jobDetailUrl": "https://www.hirist.tech/j/soti-senior-software-developer-netcangularjs-1678325",
+   "femaleCandidate": 0,
+   "differentlyAbled": 0,
+   "exDefence": 0,
+   "workFromHome": 0,
+   "femaleBackWorkForce": 0,
+   "confidential": 0,
+   "premium": 1,
+   "brandedJd": 0,
+   "star": 0,
+   "applyStatus": 1,
+   "applyCount": 59,
+   "createdTimeMs": 1791956936960,
+   "createdTime": 1791916200000,
+   "tagIdString": "7 206 1372 387 690 691 1612",
+   "tags": [
+    {
+     "id": 7,
+     "name": ".Net",
+     "isMandatory": true
+    },
+    {
+     "id": 206,
+     "name": "C#",
+     "isMandatory": true
+    },
+    {
+     "id": 1372,
+     "name": "AngularJS",
+     "isMandatory": true
+    },
+    {
+     "id": 387,
+     "name": "SQL Server",
+     "isMandatory": false
+    },
+    {
+     "id": 690,
+     "name": "Data Structure",
+     "isMandatory": false
+    },
+    {
+     "id": 691,
+     "name": "Algorithm",
+     "isMandatory": false
+    },
+    {
+     "id": 1612,
+     "name": "Full Stack",
+     "isMandatory": true
+    }
+   ],
+   "locations": [
+    {
+     "id": 70,
+     "name": "Cochin/Kochi"
+    },
+    {
+     "id": 17,
+     "name": "Kerala"
+    }
+   ],
+   "companyStatus": 1,
+   "createdByAlias": "Cochin/Kochi/Kerala",
+   "applyUrl": "",
+   "videoUrl": "",
+   "assessmentFlags": 0,
+   "mediaResume": 0,
+   "industry": "",
+   "functionalArea": 18,
+   "minSal": 0,
+   "maxSal": 0,
+   "hideSal": 1,
+   "hits": 176,
+   "otherLocation": "",
+   "brandJobFlag": 0,
+   "companyData": {
+    "companyId": 5946,
+    "companyName": "SOTI Inc."
+   },
+   "refCode": "sp_prm",
+   "showCompanyLogoFlag": 0,
+   "latitude": null,
+   "longitude": null,
+   "refJobId": 1678325,
+   "location": [
+    {
+     "id": 70,
+     "name": "Cochin/Kochi"
+    },
+    {
+     "id": 17,
+     "name": "Kerala"
+    }
+   ],
+   "minRatingAb": 3.8
+  },
+  {
+   "id": 1677905,
+   "title": "Alif Semiconductor - Senior Software Developer - SD/SDIO/eMMC",
+   "min": 4,
+   "max": 10,
+   "createdBy": 232585,
+   "creatorDomainName": "alifsemi.com",
+   "categoryId": 4,
+   "jobdesignation": "Senior Software Developer",
+   "status": 1,
+   "jobDetailUrl": "https://www.hirist.tech/j/alif-semiconductor-senior-software-developer-sdsdioemmc-1677905",
+   "femaleCandidate": 0,
+   "differentlyAbled": 0,
+   "exDefence": 0,
+   "workFromHome": 0,
+   "femaleBackWorkForce": 0,
+   "confidential": 0,
+   "premium": 1,
+   "brandedJd": 0,
+   "star": 0,
+   "applyStatus": 1,
+   "applyCount": 22,
+   "createdTimeMs": 1791805927277,
+   "createdTime": 1791743400000,
+   "tagIdString": "205 243 214 552 9359 2729 153",
+   "tags": [
+    {
+     "id": 205,
+     "name": "C",
+     "isMandatory": true
+    },
+    {
+     "id": 243,
+     "name": "ARM",
+     "isMandatory": true
+    },
+    {
+     "id": 214,
+     "name": "Device Driver",
+     "isMandatory": true
+    },
+    {
+     "id": 552,
+     "name": "RTOS",
+     "isMandatory": true
+    },
+    {
+     "id": 9359,
+     "name": "eMMC Driver",
+     "isMandatory": true
+    },
+    {
+     "id": 2729,
+     "name": "Communication Protocols",
+     "isMandatory": false
+    },
+    {
+     "id": 153,
+     "name": "Embedded System",
+     "isMandatory": true
+    }
+   ],
+   "locations": [
+    {
+     "id": 88,
+     "name": "Anywhere in India/Multiple Locations"
+    },
+    {
+     "id": 132,
+     "name": "Remote"
+    }
+   ],
+   "companyStatus": 1,
+   "createdByAlias": "Anywhere in India/Multiple Locations/Remote",
+   "applyUrl": "",
+   "videoUrl": "",
+   "assessmentFlags": 1,
+   "mediaResume": 0,
+   "industry": "",
+   "functionalArea": 25,
+   "minSal": 0,
+   "maxSal": 0,
+   "hideSal": 1,
+   "hits": 307,
+   "otherLocation": "",
+   "brandJobFlag": 0,
+   "companyData": {
+    "companyId": 0,
+    "companyName": "Alif Semiconductor"
+   },
+   "refCode": "sp_prm",
+   "showCompanyLogoFlag": 0,
+   "latitude": null,
+   "longitude": null,
+   "refJobId": 1677905,
+   "location": [
+    {
+     "id": 88,
+     "name": "Anywhere in India/Multiple Locations"
+    },
+    {
+     "id": 132,
+     "name": "Remote"
+    }
+   ],
+   "minRatingAb": 3.8
+  },
+  {
+   "id": 1677866,
+   "title": "Oracle - Software Developer II - Java Technologies",
+   "min": 4,
+   "max": 7,
+   "createdBy": 207898,
+   "creatorDomainName": "oracle.com",
+   "categoryId": 1,
+   "jobdesignation": "Software Developer II",
+   "status": 1,
+   "jobDetailUrl": "https://www.hirist.tech/j/oracle-software-developer-ii-java-technologies-4-7-yrs-1677866",
+   "femaleCandidate": 0,
+   "differentlyAbled": 0,
+   "exDefence": 0,
+   "workFromHome": 0,
+   "femaleBackWorkForce": 0,
+   "confidential": 0,
+   "premium": 0,
+   "brandedJd": 0,
+   "star": 0,
+   "applyStatus": 1,
+   "applyCount": 2220,
+   "createdTimeMs": 1791784940804,
+   "createdTime": 1791743400000,
+   "tagIdString": "5 348 603 49472 131844 19 690 691",
+   "tags": [
+    {
+     "id": 5,
+     "name": "Java",
+     "isMandatory": true
+    },
+    {
+     "id": 348,
+     "name": "Multithreading",
+     "isMandatory": true
+    },
+    {
+     "id": 603,
+     "name": "RDBMS",
+     "isMandatory": true
+    },
+    {
+     "id": 49472,
+     "name": "Backend Architecture",
+     "isMandatory": true
+    },
+    {
+     "id": 131844,
+     "name": "Server Side Component",
+     "isMandatory": false
+    },
+    {
+     "id": 19,
+     "name": "OOPS",
+     "isMandatory": true
+    },
+    {
+     "id": 690,
+     "name": "Data Structure",
+     "isMandatory": true
+    },
+    {
+     "id": 691,
+     "name": "Algorithm",
+     "isMandatory": true
+    }
+   ],
+   "locations": [
+    {
+     "id": 3,
+     "name": "Bangalore"
+    }
+   ],
+   "companyStatus": 1,
+   "createdByAlias": "Bangalore",
+   "applyUrl": "",
+   "videoUrl": "",
+   "assessmentFlags": 0,
+   "mediaResume": 0,
+   "industry": "",
+   "functionalArea": 16,
+   "minSal": 0,
+   "maxSal": 0,
+   "hideSal": 1,
+   "hits": 4694,
+   "otherLocation": "",
+   "brandJobFlag": 1,
+   "companyData": {
+    "companyId": 34,
+    "companyName": "Oracle India"
+   },
+   "refCode": "sp_br",
+   "showCompanyLogoFlag": 0,
+   "latitude": null,
+   "longitude": null,
+   "refJobId": 1677866,
+   "location": [
+    {
+     "id": 3,
+     "name": "Bangalore"
+    }
+   ],
+   "minRatingAb": 3.8
+  }
+ ],
+ "page": "0",
+ "limit": 50,
+ "count": 50,
+ "totalJobs": 1735,
+ "count1Year": 24239,
+ "totalPages": 34,
+ "hasMore": true
+}

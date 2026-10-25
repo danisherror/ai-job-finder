@@ -1,0 +1,116 @@
+{
+ "jobSearchResult": [
+  {
+   "response": {
+    "jobLocationShort": [
+     "Hyderabad, IND-36, IND, 500032<br/>"
+    ],
+    "supportedLocales": [
+     "en_US"
+    ],
+    "jobLocationCountry": [
+     "India"
+    ],
+    "sfstd_jobLocation_obj": [
+     "Hyderabad"
+    ],
+    "jobLocationState": [
+     "Telangana"
+    ],
+    "custRMKMappingPicklist": [
+     "Cloud"
+    ],
+    "jobLocationShortWithCoordinates": [
+     {
+      "value": "Hyderabad, IND-36, IND, 500032<br/>",
+      "key": "17.4358411,78.3467857"
+     }
+    ],
+    "unifiedStandardEnd": "11/27/26",
+    "unifiedUrlTitle": "AI-LEAD-L1",
+    "unifiedStandardStart": "10/25/26",
+    "currency": [
+     "INR"
+    ],
+    "id": "199467",
+    "unifiedStandardTitle": "AI LEAD L1",
+    "urlTitle": "AI-LEAD-L1"
+   }
+  },
+  {
+   "response": {
+    "jobLocationShort": [
+     "Pune, IND-27, IND, 411005<br/>"
+    ],
+    "supportedLocales": [
+     "en_US"
+    ],
+    "jobLocationCountry": [
+     "India"
+    ],
+    "sfstd_jobLocation_obj": [
+     "Pune"
+    ],
+    "jobLocationState": [
+     "Maharashtra"
+    ],
+    "custRMKMappingPicklist": [
+     "Cloud"
+    ],
+    "jobLocationShortWithCoordinates": [
+     {
+      "value": "Pune, IND-27, IND, 411005<br/>",
+      "key": "18.5293345,73.8528475"
+     }
+    ],
+    "unifiedStandardEnd": "11/13/26",
+    "unifiedUrlTitle": "ServiceNow-Secops",
+    "unifiedStandardStart": "10/25/26",
+    "currency": [
+     "INR"
+    ],
+    "id": "198761",
+    "unifiedStandardTitle": "ServiceNow- Secops",
+    "urlTitle": "ServiceNow-Secops"
+   }
+  },
+  {
+   "response": {
+    "jobLocationShort": [
+     "Bengaluru, IND-29, IND, 560035<br/>"
+    ],
+    "supportedLocales": [
+     "en_US"
+    ],
+    "jobLocationCountry": [
+     "India"
+    ],
+    "sfstd_jobLocation_obj": [
+     "Bengaluru"
+    ],
+    "jobLocationState": [
+     "Karnataka"
+    ],
+    "custRMKMappingPicklist": [
+     "Cloud"
+    ],
+    "jobLocationShortWithCoordinates": [
+     {
+      "value": "Bengaluru, IND-29, IND, 560035<br/>",
+      "key": "12.9048022,77.6821069"
+     }
+    ],
+    "unifiedStandardEnd": "12/4/26",
+    "unifiedUrlTitle": "LEAD-ADMINISTRATOR-L1",
+    "unifiedStandardStart": "10/25/26",
+    "currency": [
+     "INR"
+    ],
+    "id": "212266",
+    "unifiedStandardTitle": "LEAD ADMINISTRATOR L1",
+    "urlTitle": "LEAD-ADMINISTRATOR-L1"
+   }
+  }
+ ],
+ "totalJobs": 3
+}

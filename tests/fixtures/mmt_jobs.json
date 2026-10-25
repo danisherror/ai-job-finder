@@ -1,0 +1,106 @@
+{
+ "allJobs": [
+  {
+   "job_id": "a6aa3c928ed60c",
+   "job_code": "JOB_2164",
+   "group_company": "MakeMyTrip (India) Limited",
+   "parent_department": "Holidays",
+   "department": "Content",
+   "division": "MMTGC",
+   "business_unit": "Content",
+   "location": [
+    "Gurgaon, Haryana, India (Gurgaon_MMT)"
+   ],
+   "location_city": [
+    "Gurgaon"
+   ],
+   "location_country": "India",
+   "job_title": "Content Manager",
+   "post_on_careers_page": 1,
+   "post_on_refer_page": 0,
+   "post_on_ijp_page": 0,
+   "employee_type": "Employee",
+   "job_created_timestamp": "11-09-2026 14:56:00",
+   "job_updated_timestamp": "25-10-2026 13:38:53",
+   "experience_to": "12",
+   "experience_from": "10",
+   "is_remote": 0,
+   "designation_code": "MR1112"
+  },
+  {
+   "job_id": "a67c188c9a61d2",
+   "job_code": "JOB_1445",
+   "group_company": "MakeMyTrip (India) Limited",
+   "parent_department": "Org",
+   "department": "Legal",
+   "division": "MMTGC",
+   "business_unit": "Finance",
+   "location": [
+    "Gurgaon, Haryana, India (Gurgaon_MMT)"
+   ],
+   "location_city": [
+    "Gurgaon"
+   ],
+   "location_country": "India",
+   "job_title": "Litigation",
+   "post_on_careers_page": 1,
+   "post_on_refer_page": 1,
+   "post_on_ijp_page": 0,
+   "employee_type": "Employee",
+   "job_created_timestamp": "28-02-2025 15:28:33",
+   "job_updated_timestamp": "25-10-2026 13:30:25",
+   "experience_to": "",
+   "experience_from": "",
+   "is_remote": 0,
+   "designation_code": "MR403"
+  }
+ ],
+ "businessUnits": [
+  {
+   "name": "Supply",
+   "count": 8
+  },
+  {
+   "name": "Finance",
+   "count": 4
+  },
+  {
+   "name": "Revenue Management",
+   "count": 3
+  },
+  {
+   "name": "User Experience",
+   "count": 1
+  },
+  {
+   "name": "Technology",
+   "count": 3
+  },
+  {
+   "name": "Corporate",
+   "count": 2
+  },
+  {
+   "name": "Product Management",
+   "count": 7
+  },
+  {
+   "name": "Marketing",
+   "count": 2
+  },
+  {
+   "name": "Content",
+   "count": 1
+  }
+ ],
+ "locations": [
+  "Gurgaon",
+  "Amritsar",
+  "Mumbai",
+  "Ahmedabad",
+  "Agra",
+  "Manali",
+  "Noida",
+  "Bangalore"
+ ]
+}
