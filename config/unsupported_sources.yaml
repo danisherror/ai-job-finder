@@ -25,6 +25,9 @@
     Blocked even a normal browser User-Agent on 2026-10-25: HTTP 403, a Cloudflare / Akamai bot check,
     or no answer. Getting past these needs a real browser, which this tool does not run.
   could_add: only with a headless browser (e.g. Playwright), and some would still challenge it
+  # Tested 2026-10-25 with Playwright: headless Chromium and headless Chrome were both blocked by every site here
+  # except Jobted and Gun.io. A visible Chrome window got through Indeed, Glassdoor, Naukri, SimplyHired, Startup
+  # Jobs, Remote.co, FlexJobs, Naukrigulf and Bayt; Ruby on Remote and F6S still blocked it.
   names:
     - Indeed (403)
     - Glassdoor (403)
@@ -134,6 +137,7 @@
 # Added 2026-10-24 with new readers, so no longer listed here: Atlassian, Arm, IDeaS (iCIMS),
 # Optum / UnitedHealth Group, Societe Generale (Taleo), Synopsys, Siemens (Avature), Cencora, NTT DATA (Phenom),
 # LTIMindtree, Mphasis, Tata Technologies (RippleHire).
+# Added 2026-10-25: PhonePe (SmartRecruiters, PHONEPELIMITED; its careers page links there).
 
 - group: no_readable_job_list
   kind: company
@@ -147,9 +151,12 @@
     - Globant (SuccessFactors-based, but its search page returns 404)
     - Walmart (careers.walmart.com is US only; its India Workday site returns errors)
     - TCS (HTTP 403)
-    - PhonePe (job list loaded by script)
-    - Zomato / Eternal (no job list found)
-    - Zepto (bot check)
+    - Zomato / Eternal (re-checked 2026-10-25: eternal.com/careers says it hires only through employee referrals; no job list)
+    - Zepto (re-checked 2026-10-25: behind an AWS bot check; it leads to zepto.darwinbox.in, which had 1 open job)
+    - >-
+      Flipkart (checked 2026-10-25: flipkartcareers.com/jobslist is a fixed sample page, not a live list; the real
+      list is TurboHire, flipkart.turbohire.co, with 5 jobs, mostly warehouse and procurement. A TurboHire reader
+      would POST thapi.azurewebsites.net/api/careerpagev2/filteredjobs?orgId=4d757ba0-3d57-448a-b82c-238ed87ac90f)
     - Myntra (WordPress site; no job list found)
     - most other Indian startups
 

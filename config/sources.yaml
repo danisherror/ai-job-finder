@@ -106,6 +106,7 @@
 - {name: LinkedIn,        type: smartrecruiters, board: LinkedIn3}        # 44 (LinkedIn's own careers page)
 - {name: Experian,        type: smartrecruiters, board: Experian}         # 31
 - {name: Bosch,           type: smartrecruiters, board: BoschGroup}       # 631
+- {name: PhonePe,         type: smartrecruiters, board: PHONEPELIMITED}   # 118, all India (added 2026-10-25)
 # Workday
 - {name: NVIDIA,          type: workday, board: "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"}       # 242
 - {name: Salesforce,      type: workday, board: "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site"}      # 113
