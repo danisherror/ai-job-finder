@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS sources (
     board           TEXT NOT NULL,
     active          INTEGER NOT NULL DEFAULT 1,
     usual_count     INTEGER,             -- typical job count, for suspicious-zero checks
-    first_scan_at   TEXT                 -- set after the first successful scan
+    first_scan_at   TEXT,                -- set after the first successful scan
+    last_scanned_at TEXT                 -- last successful scan; `collect` skips sources scanned recently
 );
 
 CREATE TABLE IF NOT EXISTS jobs (
@@ -135,7 +136,19 @@ def connect(path: str | Path | None = None) -> sqlite3.Connection:
     conn.execute("PRAGMA foreign_keys = ON")
     conn.execute("PRAGMA journal_mode = WAL")
     conn.executescript(SCHEMA)
+    _add_last_scanned_at(conn)
     return conn
+
+
+def _add_last_scanned_at(conn) -> None:
+    """Older databases lack sources.last_scanned_at: add it, filled from each source's last successful scan."""
+    columns = {r[1] for r in conn.execute("PRAGMA table_info(sources)")}
+    if "last_scanned_at" in columns:
+        return
+    with conn:
+        conn.execute("ALTER TABLE sources ADD COLUMN last_scanned_at TEXT")
+        conn.execute("""UPDATE sources SET last_scanned_at =
+                            (SELECT MAX(finished) FROM source_runs WHERE source = sources.name AND result = 'ok')""")
 
 
 # ---------------------------------------------------------------- identity
@@ -202,6 +215,13 @@ def done_sources(conn, run_id: str) -> set[str]:
     """Sources this run has already finished (ok or suspicious). Failed ones are tried again on resume."""
     rows = conn.execute("SELECT source FROM source_runs WHERE run_id = ? AND result IN ('ok', 'suspicious')",
                         (run_id,)).fetchall()
+    return {r[0] for r in rows}
+
+
+def recently_scanned(conn, days: float) -> set[str]:
+    """Sources whose last successful scan was less than `days` days ago."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat(timespec="seconds")
+    rows = conn.execute("SELECT name FROM sources WHERE last_scanned_at >= ?", (cutoff,)).fetchall()
     return {r[0] for r in rows}
 
 
@@ -378,7 +398,8 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
             (run_id, source.name, started, ts, len(jobs), new),
         )
         conn.execute(
-            "UPDATE sources SET first_scan_at = COALESCE(first_scan_at, ?) WHERE name = ?", (ts, source.name)
+            "UPDATE sources SET first_scan_at = COALESCE(first_scan_at, ?), last_scanned_at = ? WHERE name = ?",
+            (ts, ts, source.name),
         )
     with conn:
         conn.execute("UPDATE sources SET usual_count = ? WHERE name = ?", (usual_count(conn, source.name), source.name))

@@ -24,6 +24,7 @@ Install the daily schedule with the steps in `launchd/README.md`.
 ```sh
 uv run python -m src.main daily              # everything: collect, match, send (what the 6:45 job runs)
 uv run python -m src.main collect            # only fetch jobs (no AI); also refreshes all_jobs.csv
+                                             # skips sources scanned in the last day: --days N to change, --all to scan every one
 uv run python -m src.main export             # rewrite private/exports/all_jobs.csv from the stored jobs
 uv run python -m src.main match              # only score new jobs for each person
 uv run python -m src.main digest --dry-run   # print each person's list without sending it

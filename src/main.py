@@ -1,7 +1,9 @@
 """Entry point.
 
     uv run python -m src.main daily              collect, match, send lists (the 6:45 job)
-    uv run python -m src.main collect            fetch all sources into the job pool (also writes the CSV exports)
+    uv run python -m src.main collect [--days N] [--all]
+                                                 fetch sources into the job pool (also writes the CSV exports);
+                                                 skips sources scanned in the last N days (default 1), --all scans every one
     uv run python -m src.main export             write the CSV exports (all jobs; software internships and 2027-graduate jobs in India)
     uv run python -m src.main match              score new jobs for each person
     uv run python -m src.main digest [--dry-run] send (or just print) each person's list
@@ -30,6 +32,7 @@ LOGS_DIR = ROOT / "private" / "logs"
 MAX_LOG_BYTES = 2_000_000
 DELAY_BETWEEN_SOURCES = 1.0  # seconds between sources of one lane; be polite
 MAX_LANES = 8                # source types scanned at the same time
+RESCAN_AFTER_DAYS = 1.0      # `collect` skips sources successfully scanned more recently than this
 
 
 def acquire_lock(path: Path = LOCK_FILE):
@@ -44,7 +47,7 @@ def acquire_lock(path: Path = LOCK_FILE):
     return handle
 
 
-def collect(conn, run_id: str) -> tuple[int, int]:
+def collect(conn, run_id: str, skip_within_days: float | None = None) -> tuple[int, int]:
     """Stage 1: fetch every active source into the job pool. Returns (sources scanned, active sources).
 
     Sources run in lanes, one per source type (Greenhouse, Workday, Eightfold, ...), up to
@@ -52,13 +55,18 @@ def collect(conn, run_id: str) -> tuple[int, int]:
     same system share its servers (Eightfold rate-limited us when scanned back to back). Threads
     only download; all database work stays on this thread, in the order sources finish.
 
-    On a resumed run, sources this run already finished are skipped.
+    On a resumed run, sources this run already finished are skipped. With skip_within_days, sources
+    whose last successful scan is more recent than that are skipped too (failed ones are always retried).
     """
     sources = [s for s in load_sources() if s.active]
     store.sync_sources(conn, sources)
     done = store.done_sources(conn, run_id)
-    todo = [s for s in sources if s.name not in done]
-    print(f"Run {run_id}: collecting from {len(todo)} sources" + (f" ({len(done)} already done)" if done else ""))
+    recent = store.recently_scanned(conn, skip_within_days) - done if skip_within_days else set()
+    todo = [s for s in sources if s.name not in done and s.name not in recent]
+    notes = ([f"{len(done)} already done"] if done else []) + \
+            ([f"{len(recent)} skipped, scanned in the last {skip_within_days:g} day(s); use --all to include them"]
+             if recent else [])
+    print(f"Run {run_id}: collecting from {len(todo)} sources" + (f" ({'; '.join(notes)})" if notes else ""))
 
     lanes: dict[str, list[Source]] = {}
     for source in todo:
@@ -223,6 +231,16 @@ def forget(conn, person: str) -> None:
           + (f"; files: {', '.join(str(f.relative_to(ROOT)) for f in deleted)}" if deleted else "; no files"))
 
 
+def option(argv: list[str], name: str, default):
+    """The value after `name` in argv (e.g. --days 3), else default."""
+    if name in argv:
+        i = argv.index(name)
+        if i + 1 < len(argv):
+            return argv[i + 1]
+        sys.exit(f"{name} needs a value")
+    return default
+
+
 def main(argv: list[str]) -> None:
     load_env()
     command = argv[1] if len(argv) > 1 else "daily"
@@ -233,9 +251,11 @@ def main(argv: list[str]) -> None:
     lock = acquire_lock()  # noqa: F841  (kept open for the life of the process)
     conn = store.connect()
     if command == "collect":
+        skip_days = None if "--all" in argv else float(option(argv, "--days", RESCAN_AFTER_DAYS))
         run_id, _ = store.resume_or_start_run(conn)
-        scanned, _ = collect(conn, run_id)
-        store.finish_run(conn, run_id, "done" if scanned else "failed")
+        scanned, _ = collect(conn, run_id, skip_within_days=skip_days)
+        tried = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ?", (run_id,)).fetchone()[0]
+        store.finish_run(conn, run_id, "failed" if tried and not scanned else "done")
     elif command == "export":
         export_jobs(conn)
     elif command == "match":
