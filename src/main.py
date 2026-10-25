@@ -72,24 +72,26 @@ def collect(conn, run_id: str, skip_within_days: float | None = None) -> tuple[i
     for source in todo:
         lanes.setdefault(source.type, []).append(source)
     known = {s.name: store.known_ats_ids(conn, s.name) for s in todo}
+    width = max((len(s.name) for s in todo), default=14)
     results: queue.Queue = queue.Queue()
 
     def run_lane(lane: list[Source]) -> None:
         for i, source in enumerate(lane):
             if i:
                 time.sleep(DELAY_BETWEEN_SOURCES)
-            started = store.now()
+            started, clock = store.now(), time.monotonic()
             try:
-                results.put((source, started, ADAPTERS[source.type](source, known[source.name]), None))
+                jobs, error = ADAPTERS[source.type](source, known[source.name]), None
             except Exception as e:  # handed to the main thread, which records it
-                results.put((source, started, None, e))
+                jobs, error = None, e
+            results.put((source, started, time.monotonic() - clock, jobs, error))
 
     with ThreadPoolExecutor(max_workers=min(MAX_LANES, len(lanes)) or 1) as pool:
         for lane in lanes.values():
             pool.submit(run_lane, lane)
         for _ in todo:
-            source, started, jobs, error = results.get()
-            save_result(conn, run_id, source, started, jobs, error)
+            source, started, seconds, jobs, error = results.get()
+            save_result(conn, run_id, source, started, jobs, error, seconds, width)
 
     scanned = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ? AND result = 'ok'",
                            (run_id,)).fetchone()[0]
@@ -98,27 +100,37 @@ def collect(conn, run_id: str, skip_within_days: float | None = None) -> tuple[i
     return scanned, len(sources)
 
 
-def save_result(conn, run_id: str, source: Source, started: str, jobs: list | None, error: Exception | None) -> None:
+def format_duration(seconds: float) -> str:
+    """How long a source took, e.g. '8.4s' or '2m 05s'."""
+    if seconds < 59.95:  # would round to "60.0s"
+        return f"{seconds:.1f}s"
+    minutes, secs = divmod(round(seconds), 60)
+    return f"{minutes}m {secs:02d}s"
+
+
+def save_result(conn, run_id: str, source: Source, started: str, jobs: list | None, error: Exception | None,
+                seconds: float = 0.0, width: int = 14) -> None:
+    name, took = f"{source.name:<{width}}", f"{format_duration(seconds):>7}"
     if isinstance(error, SourceError):
         store.record_source_failure(conn, run_id, source, started, error.reason, str(error))
-        print(f"  FAILED  {source.name:<14} {error.reason}: {error}")
+        print(f"  FAILED  {name} {took}  {error.reason}: {error}")
         return
     if error is not None:  # a bug or an unexpected feed shape: record it, keep going
         detail = "".join(traceback.format_exception(error))
         store.record_source_failure(conn, run_id, source, started, "error", detail)
-        print(f"  FAILED  {source.name:<14} error: {error!r}")
+        print(f"  FAILED  {name} {took}  error: {error!r}")
         return
     try:
         if store.is_suspicious_zero(conn, source, jobs):
             store.record_suspicious(conn, run_id, source, started)
-            print(f"  SUSPECT {source.name:<14}    0 jobs (usually {store.usual_count(conn, source.name)}); "
+            print(f"  SUSPECT {name} {took}      0 jobs (usually {store.usual_count(conn, source.name)}); "
                   "nothing closed")
             return
         new = store.save_source_result(conn, run_id, source, started, jobs)
-        print(f"  ok      {source.name:<14} {len(jobs):>4} jobs, {new:>4} new")
+        print(f"  ok      {name} {took}  {len(jobs):>5} jobs, {new:>5} new")
     except Exception as e:  # e.g. a job the store rejects: record it, keep going
         store.record_source_failure(conn, run_id, source, started, "error", traceback.format_exc())
-        print(f"  FAILED  {source.name:<14} error: {e!r}")
+        print(f"  FAILED  {name} {took}  error: {e!r}")
 
 
 def export_jobs(conn) -> None:
