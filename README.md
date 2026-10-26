@@ -9,6 +9,75 @@ on Telegram by 7:00 AM IST.
 
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph sched["launchd (this Mac)"]
+        daily["daily job<br/>6:45 AM IST"]
+        hourly["taps job<br/>every hour"]
+    end
+
+    subgraph config["config/"]
+        sources["sources.yaml"]
+        profiles["profiles/*.yaml<br/>+ private/resumes/"]
+    end
+
+    subgraph web["Job sources"]
+        ats["Company job boards<br/>Greenhouse, Lever, Ashby,<br/>Workday, Oracle, Eightfold, ..."]
+        sites["Career sites<br/>Amazon, Google, Wipro, ..."]
+        portals["India portals<br/>LinkedIn, Naukri, Foundit, ..."]
+        remote["Remote boards and APIs<br/>Remote OK, Jooble, YC, ..."]
+    end
+
+    main["src/main.py<br/>CLI + daily pipeline"]
+
+    subgraph collect["1. Collect (no AI)"]
+        adapters["src/collect/*<br/>one adapter per source type,<br/>run in parallel lanes"]
+        http["collect/http.py<br/>polite fetching, retries"]
+        normalize["normalize.py<br/>text, city, work mode,<br/>India eligibility, experience"]
+    end
+
+    subgraph matchstage["2. Match (per person)"]
+        rules["rules.py<br/>hard filters in code"]
+        matcher["matcher.py<br/>batches of 15 jobs"]
+        llm["llm.py + prompts.py<br/>claude -p (Haiku)"]
+    end
+
+    subgraph send["3. Send"]
+        digest["digest.py<br/>pick, rank, format"]
+        telegram["telegram.py"]
+    end
+
+    db[("private/jobs.db<br/>SQLite: jobs, matches,<br/>runs, source runs")]
+    exports["private/exports/*.csv"]
+    health["health.py<br/>alerts + weekly summary"]
+    tg(["Telegram<br/>each person's list"])
+    evaluate["evaluate.py + baseline.py<br/>labelled match-quality check"]
+
+    daily --> main
+    hourly -->|"button taps, /start"| telegram
+    sources --> adapters
+    profiles --> rules
+    main --> adapters --> http --> web
+    adapters --> normalize --> db
+    main --> rules
+    db --> rules --> matcher --> llm
+    matcher -->|"scores"| db
+    main --> digest
+    db --> digest --> telegram --> tg
+    digest --> exports
+    db --> exports
+    main --> health --> telegram
+    db -.-> evaluate
+    llm -.-> evaluate
+```
+
+Each morning `daily` runs three stages over one SQLite file: **collect** fetches every active source in
+`config/sources.yaml` and stores new or changed jobs; **match** drops jobs that fail a person's hard rules and asks
+Claude to score the rest; **send** picks each person's best new matches and sends them on Telegram. The hourly job
+saves button taps and tells you if the daily run has stopped.
+
 ## Setup (once)
 
 ```sh
