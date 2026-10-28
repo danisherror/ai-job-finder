@@ -58,6 +58,7 @@ def collect(conn, run_id: str, skip_within_days: float | None = None) -> tuple[i
     On a resumed run, sources this run already finished are skipped. With skip_within_days, sources
     whose last successful scan is more recent than that are skipped too (failed ones are always retried).
     """
+    run_clock = time.monotonic()
     sources = [s for s in load_sources() if s.active]
     store.sync_sources(conn, sources)
     done = store.done_sources(conn, run_id)
@@ -95,17 +96,21 @@ def collect(conn, run_id: str, skip_within_days: float | None = None) -> tuple[i
 
     scanned = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ? AND result = 'ok'",
                            (run_id,)).fetchone()[0]
-    print(f"Scanned {scanned} of {len(sources)} sources")
+    print(f"Scanned {scanned} of {len(sources)} sources in {format_duration(time.monotonic() - run_clock)}")
     export_jobs(conn)
+    print(f"Collect finished at {time.strftime('%H:%M')}, took {format_duration(time.monotonic() - run_clock)} in total")
     return scanned, len(sources)
 
 
 def format_duration(seconds: float) -> str:
-    """How long a source took, e.g. '8.4s' or '2m 05s'."""
+    """How long something took, e.g. '8.4s', '2m 05s' or '1h 03m 20s'."""
     if seconds < 59.95:  # would round to "60.0s"
         return f"{seconds:.1f}s"
     minutes, secs = divmod(round(seconds), 60)
-    return f"{minutes}m {secs:02d}s"
+    if minutes < 60:
+        return f"{minutes}m {secs:02d}s"
+    hours, minutes = divmod(minutes, 60)
+    return f"{hours}h {minutes:02d}m {secs:02d}s"
 
 
 def save_result(conn, run_id: str, source: Source, started: str, jobs: list | None, error: Exception | None,
