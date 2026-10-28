@@ -7,7 +7,15 @@
     uv run python -m src.main export             write the CSV exports (all jobs; software internships and 2027-graduate jobs in India)
     uv run python -m src.main match              score new jobs for each person
     uv run python -m src.main digest [--dry-run] send (or just print) each person's list
-    uv run python -m src.main taps               save Applied/Skipped button taps (the hourly job)
+    uv run python -m src.main share [--days N] [--all]
+                                                 collect (skipping sources scanned in the last N days, default 1),
+                                                 then send the new internships and 2027-graduate jobs to every
+                                                 bot subscriber. No AI. Each job is sent only once.
+    uv run python -m src.main broadcast [--dry-run]
+                                                 send (or just print) the internship and 2027-graduate lists
+                                                 to every bot subscriber (the daily run does this)
+    uv run python -m src.main taps               answer bot commands (/start, /stop, /latest) and save
+                                                 Applied/Skipped button taps (the hourly job)
     uv run python -m src.main health [--send]    print (or send to the owner) the weekly health summary
     uv run python -m src.main forget <person>    delete everything stored about someone (remove their profile first)
 """
@@ -20,7 +28,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from src import digest, health, matcher, store, telegram
+from src import broadcast, digest, health, matcher, store, telegram
 from src.collect import ADAPTERS
 from src.collect.http import SourceError
 from src.config import ROOT, load_env, load_profiles, load_sources
@@ -189,6 +197,13 @@ def send(conn, run_id: str | None = None, dry_run: bool = False, once_a_day: boo
     return failures
 
 
+def report_broadcast(r: dict) -> None:
+    if r.get("skipped"):
+        print(f"  subscribers  skipped: {r['skipped']}")
+    elif not r.get("dry_run"):
+        print(f"  subscribers  {r['subscribers']}: sent {r['sent']}, failed {r['failed']}")
+
+
 def daily(conn) -> None:
     """The 6:45 job: collect, match, send, then alerts, the weekly summary and cleanup."""
     run_id, resumed = store.resume_or_start_run(conn)
@@ -198,6 +213,7 @@ def daily(conn) -> None:
         scanned, total = collect(conn, run_id)
         match_results = match(conn, run_id)
         send_failures = send(conn, run_id, once_a_day=True)
+        report_broadcast(broadcast.send_daily(conn))
     except Exception:
         store.finish_run(conn, run_id, "failed")
         detail = traceback.format_exc()
@@ -226,10 +242,10 @@ def taps() -> None:
     conn = store.connect()
     health.check_stale(conn)
     try:
-        counts = telegram.poll_updates(conn, load_profiles())
+        counts = telegram.poll_updates(conn, load_profiles(), broadcast.handle_message)
     except telegram.TelegramError as e:
         sys.exit(f"Taps failed: {e}")
-    print(f"Taps saved: {counts['taps']}, ignored: {counts['ignored']}, /start replies: {counts['messages']}")
+    print(f"Taps saved: {counts['taps']}, ignored: {counts['ignored']}, commands answered: {counts['messages']}")
 
 
 def forget(conn, person: str) -> None:
@@ -279,6 +295,19 @@ def main(argv: list[str]) -> None:
         match(conn)
     elif command == "digest":
         send(conn, dry_run="--dry-run" in argv)
+    elif command == "share":
+        try:  # add anyone who pressed Start since the last check, so they get this list too
+            telegram.poll_updates(conn, load_profiles(), broadcast.handle_message)
+        except telegram.TelegramError as e:
+            print(f"Could not read new bot messages: {e}")
+        skip_days = None if "--all" in argv else float(option(argv, "--days", RESCAN_AFTER_DAYS))
+        run_id, _ = store.resume_or_start_run(conn)
+        scanned, _ = collect(conn, run_id, skip_within_days=skip_days)
+        tried = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ?", (run_id,)).fetchone()[0]
+        store.finish_run(conn, run_id, "failed" if tried and not scanned else "done")
+        report_broadcast(broadcast.send_daily(conn, once_a_day=False))
+    elif command == "broadcast":
+        report_broadcast(broadcast.send_daily(conn, dry_run="--dry-run" in argv))
     elif command == "daily":
         daily(conn)
     elif command == "health":

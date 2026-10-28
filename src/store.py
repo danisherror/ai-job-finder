@@ -121,6 +121,15 @@ CREATE TABLE IF NOT EXISTS state (
     key             TEXT PRIMARY KEY,
     value           TEXT
 );
+
+-- Everyone who pressed Start in the bot. They all get the same daily internship and 2027-graduate lists.
+CREATE TABLE IF NOT EXISTS subscribers (
+    chat_id         INTEGER PRIMARY KEY,
+    name            TEXT,
+    username        TEXT,
+    joined_at       TEXT NOT NULL,
+    active          INTEGER NOT NULL DEFAULT 1   -- 0 after /stop or when they block the bot
+);
 """
 
 
@@ -470,6 +479,29 @@ def get_state(conn, key: str) -> str | None:
 def set_state(conn, key: str, value: str) -> None:
     with conn:
         conn.execute("INSERT OR REPLACE INTO state (key, value) VALUES (?, ?)", (key, value))
+
+
+# ---------------------------------------------------------------- subscribers
+
+def subscribe(conn, chat_id: int, name: str | None, username: str | None) -> bool:
+    """Add or reactivate a subscriber. Returns True if they were not already active."""
+    row = conn.execute("SELECT active FROM subscribers WHERE chat_id = ?", (chat_id,)).fetchone()
+    with conn:
+        conn.execute(
+            """INSERT INTO subscribers (chat_id, name, username, joined_at) VALUES (?, ?, ?, ?)
+               ON CONFLICT(chat_id) DO UPDATE SET active = 1, name = excluded.name, username = excluded.username""",
+            (chat_id, name, username, now()),
+        )
+    return not (row and row["active"])
+
+
+def unsubscribe(conn, chat_id: int) -> None:
+    with conn:
+        conn.execute("UPDATE subscribers SET active = 0 WHERE chat_id = ?", (chat_id,))
+
+
+def active_subscribers(conn) -> list[int]:
+    return [r[0] for r in conn.execute("SELECT chat_id FROM subscribers WHERE active = 1 ORDER BY joined_at")]
 
 
 # ---------------------------------------------------------------- retention

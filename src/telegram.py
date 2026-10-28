@@ -97,8 +97,10 @@ def handle_callback(conn, cq: dict, chat_to_profile: dict[int, str]) -> str:
     return decision
 
 
-def poll_updates(conn, profiles: list[Profile]) -> dict:
-    """Fetch new updates since the last poll and save any button taps. Returns counts."""
+def poll_updates(conn, profiles: list[Profile], on_message=None) -> dict:
+    """Fetch new updates since the last poll and save any button taps. Returns counts.
+
+    on_message(conn, message) -> bool answers bot commands; without it, /start replies with the chat ID."""
     chat_to_profile = {p.telegram_chat_id: p.id for p in profiles if p.telegram_chat_id}
     offset = int(store.get_state(conn, "telegram_offset") or 0)
     counts = {"taps": 0, "ignored": 0, "messages": 0}
@@ -110,6 +112,11 @@ def poll_updates(conn, profiles: list[Profile]) -> dict:
             if "callback_query" in u:
                 result = handle_callback(conn, u["callback_query"], chat_to_profile)
                 counts["ignored" if result == "ignored" else "taps"] += 1
+            elif on_message and u.get("message"):
+                try:
+                    counts["messages"] += bool(on_message(conn, u["message"]))
+                except TelegramError:
+                    pass  # e.g. they blocked the bot right after writing; don't stop the other updates
             elif (u.get("message") or {}).get("text", "").startswith("/start"):
                 # Lets a new person find the chat ID that goes in their profile.
                 chat_id = u["message"]["chat"]["id"]

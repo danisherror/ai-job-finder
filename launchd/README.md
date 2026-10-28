@@ -2,8 +2,10 @@
 
 Two LaunchAgents run as you (not root):
 
-- `com.jobfinder.daily` — 6:45 AM: collect, match, send lists. If the Mac was asleep at 6:45, it runs on wake.
-- `com.jobfinder.taps` — every hour: saves Applied/Skipped button taps.
+- `com.jobfinder.daily` — 6:45 AM: collect, match, send lists (and the shared lists to every bot subscriber).
+  If the Mac was asleep at 6:45, it runs on wake.
+- `com.jobfinder.taps` — every minute: answers bot commands (/start, /stop, /latest, /help) and saves
+  Applied/Skipped button taps. The bot only answers while this Mac is on and awake.
 
 Logs go to `private/logs/`.
 

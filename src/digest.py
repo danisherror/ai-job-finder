@@ -264,15 +264,30 @@ def export_all_jobs(conn, path=None) -> int:
     return _export_jobs(conn, path or EXPORTS / ALL_JOBS_CSV, lambda r: True)
 
 
+def is_india_internship(r) -> bool:
+    """An open software internship (intern/trainee/apprentice title) that someone in India can take."""
+    return (r["india_eligible"] == "yes" and r["lifecycle"] != "closed" and title_level(r["title"]) == "intern"
+            and is_software_role(r["title"], r["description"] or ""))
+
+
+def graduate_reason(r, year: int = GRAD_YEAR) -> str | None:
+    """Why an open software job in India suits a student graduating in `year`, or None."""
+    if (r["india_eligible"] != "yes" or r["lifecycle"] == "closed"
+            or not is_software_role(r["title"], r["description"] or "")):
+        return None
+    return graduate_fit(r["title"], r["description"] or "", r["experience_min"], r["experience_max"], year)
+
+
+def grad_reason_order(year: int = GRAD_YEAR) -> list[str]:
+    return [f"{year} batch"] + GRAD_REASON_ORDER[1:]
+
+
 def export_india_internships(conn, path=None) -> int:
     """Write open software internships (intern/trainee/apprentice titles) that someone in India can take.
 
     Returns the number of jobs written.
     """
-    return _export_jobs(conn, path or EXPORTS / INDIA_INTERNSHIPS_CSV,
-                        lambda r: r["india_eligible"] == "yes" and r["lifecycle"] != "closed"
-                        and title_level(r["title"]) == "intern"
-                        and is_software_role(r["title"], r["description"] or ""))
+    return _export_jobs(conn, path or EXPORTS / INDIA_INTERNSHIPS_CSV, is_india_internship)
 
 
 def export_graduates(conn, path=None, year=GRAD_YEAR) -> int:
@@ -281,16 +296,9 @@ def export_graduates(conn, path=None, year=GRAD_YEAR) -> int:
     Jobs that name the year come first, then campus/graduate roles, internships and 0-year roles.
     Returns the number of jobs written.
     """
-    order = [f"{year} batch"] + GRAD_REASON_ORDER[1:]
-
-    def why(r):
-        if (r["india_eligible"] != "yes" or r["lifecycle"] == "closed"
-                or not is_software_role(r["title"], r["description"] or "")):
-            return None
-        return graduate_fit(r["title"], r["description"] or "", r["experience_min"], r["experience_max"], year)
-
-    return _export_jobs(conn, path or EXPORTS / f"graduates_{year}.csv", why, extra="why",
-                        sort=lambda reason: order.index(reason))
+    order = grad_reason_order(year)
+    return _export_jobs(conn, path or EXPORTS / f"graduates_{year}.csv", lambda r: graduate_reason(r, year),
+                        extra="why", sort=lambda reason: order.index(reason))
 
 
 def _export_jobs(conn, path, keep, extra=None, sort=None) -> int:

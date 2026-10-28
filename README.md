@@ -110,7 +110,28 @@ location, work mode, India eligibility, experience range, salary (when listed), 
 closed) and apply link. Open it in Excel, Numbers or Google Sheets and filter it yourself.
 No Claude login or Telegram setup is needed for this.
 
-## Add a person (about 5 minutes)
+## Share the bot (no setup per person)
+
+Anyone who opens the bot and taps **Start** is subscribed. Every morning the daily run sends all subscribers the
+same two lists, with no profile and no AI: new **software internships** and new **jobs for 2027 graduates** open
+to people in India (any city, or remote). They use the rules behind `india_internships.csv` and
+`graduates_2027.csv`; an internship appears only in the first list. Each list shows up to 25 jobs a day
+(postings older than 14 days are left out), and one posting in several cities is listed once.
+
+Bot commands: `/start` subscribes and sends the newest jobs, `/latest` shows them again, `/stop` unsubscribes,
+`/help`. The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
+People who block the bot are unsubscribed automatically. Code: `src/broadcast.py`.
+
+```sh
+uv run python -m src.main share                 # collect (skips sources scanned in the last day), then send
+                                                # the new jobs to every subscriber; --days N or --all to change
+uv run python -m src.main broadcast --dry-run   # print the next list and the subscriber count, send nothing
+```
+
+`share` can run any time, more than once a day: each job is sent only once, and nothing is sent when there is
+nothing new. The scheduled daily run also sends the lists, at most once a day.
+
+## Add a person with their own AI-ranked list (about 5 minutes)
 
 1. Ask them to open the bot in Telegram and send `/start`. Within the hour the bot replies with their chat ID
    (or run `uv run python -m src.main taps` to get it now).
