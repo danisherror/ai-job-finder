@@ -273,6 +273,17 @@ def _create_schema(conn) -> None:
     conn.executescript(SCHEMA)
     _add_last_scanned_at(conn)
     _add_subscriber_settings(conn)
+    _add_list_labels(conn)
+
+
+def _add_list_labels(conn) -> None:
+    """jobs.list_kind / grad_reason: which bot list a job is on, worked out from its description during collect
+    (see digest.label_jobs), so the bot never has to read descriptions. NULL = not worked out yet."""
+    columns = {r[1] for r in conn.execute("PRAGMA table_info(jobs)")}
+    with conn:
+        for column in ("list_kind", "grad_reason"):
+            if column not in columns:
+                conn.execute(f"ALTER TABLE jobs ADD COLUMN {column} TEXT")
 
 
 def _add_subscriber_settings(conn) -> None:
@@ -556,13 +567,21 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
         for batch in _batches(seen_only):
             conn.execute(
                 """UPDATE jobs SET last_seen = ?, missed_scans = 0, lifecycle = 'open',
-                       title = COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title)
+                       title = COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title),
+                       list_kind = CASE WHEN COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title) IS title
+                                        THEN list_kind END  -- a new title: work out its list again
                    FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')""",
                 (ts, json.dumps(batch)),
             )
         for batch in _batches(refreshed):
             conn.execute(
                 """UPDATE jobs SET last_seen = ?, missed_scans = 0, lifecycle = 'open',
+                       list_kind = CASE WHEN json_extract(u.value, '$[2]') IS title
+                                         AND json_extract(u.value, '$[3]') IS description
+                                         AND json_extract(u.value, '$[7]') IS india_eligible
+                                         AND json_extract(u.value, '$[8]') IS experience_min
+                                         AND json_extract(u.value, '$[9]') IS experience_max
+                                        THEN list_kind END,  -- what decides its list changed: work it out again
                        updated_at = json_extract(u.value, '$[1]'), title = json_extract(u.value, '$[2]'),
                        description = json_extract(u.value, '$[3]'), location_raw = json_extract(u.value, '$[4]'),
                        cities = json_extract(u.value, '$[5]'), work_mode = json_extract(u.value, '$[6]'),
@@ -600,6 +619,17 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
     with conn:
         conn.execute("UPDATE sources SET usual_count = ? WHERE name = ?", (usual_count(conn, source.name), source.name))
     return new
+
+
+def set_list_labels(conn, labels: list[list]) -> None:
+    """labels: [job_key, list_kind, grad_reason] rows, saved in batches."""
+    with conn:
+        for batch in _batches(labels):
+            conn.execute(
+                """UPDATE jobs SET list_kind = json_extract(u.value, '$[1]'), grad_reason = json_extract(u.value, '$[2]')
+                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')""",
+                (json.dumps(batch),),
+            )
 
 
 # ---------------------------------------------------------------- jobs for matching

@@ -2,7 +2,7 @@
   "framework": null,
   "regions": ["iad1"],
   "functions": {
-    "api/*.py": { "maxDuration": 60, "regions": ["iad1"] }
+    "api/*.py": { "maxDuration": 300, "regions": ["iad1"] }
   },
   "crons": [
     { "path": "/api/health", "schedule": "30 6 * * *" }

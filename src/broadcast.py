@@ -12,11 +12,15 @@ import time
 from datetime import datetime, timedelta, timezone
 
 from src import health, store, telegram
-from src.digest import (GRAD_YEAR, _date, e, grad_reason_order, graduate_reason, is_india_internship, place,
-                        safe_apply_url, tz, usual_hosts)
+from src.digest import GRAD_YEAR, _date, bot_list, e, grad_reason_order, place, safe_apply_url, tz, usual_hosts
 
 MAX_AGE_DAYS = 14     # leave out postings older than this, even when a newly added source finds them today
 SEARCH_DAYS = 30      # /search, /city and /watch look this far back
+# Every jobs column except description (read only when needed; see pick_lists)
+PICK_COLUMNS = ", ".join(f"j.{c}" for c in (
+    "job_key", "source", "ats_id", "title", "company", "location_raw", "cities", "work_mode", "india_eligible",
+    "experience_min", "experience_max", "salary", "department", "apply_url", "posted_at", "updated_at",
+    "first_seen", "last_seen", "missed_scans", "lifecycle", "backfill", "list_kind", "grad_reason"))
 MESSAGE_LIMIT = 3800  # Telegram allows 4096 characters per message
 SEND_PAUSE = 0.5      # seconds between messages; stays under Telegram's rate limits
 
@@ -84,8 +88,12 @@ def pick_lists(conn, since: str | None = None, now: datetime | None = None, word
     include_backfill: also jobs that were already up before a source was first scanned."""
     now = now or datetime.now(timezone.utc)
     oldest = now - timedelta(days=max_age_days)
-    sql = """SELECT j.*, s.type AS source_type, s.board FROM jobs j JOIN sources s ON s.name = j.source
-             WHERE j.lifecycle = 'open' AND j.india_eligible = 'yes'"""
+    # Descriptions are only read for jobs whose list isn't stored yet (digest.label_jobs): over the network to
+    # Turso, reading every description would take the bot far too long.
+    sql = f"""SELECT {PICK_COLUMNS}, CASE WHEN j.list_kind IS NULL THEN j.description END AS description,
+                     s.type AS source_type, s.board
+              FROM jobs j JOIN sources s ON s.name = j.source
+              WHERE j.lifecycle = 'open' AND j.india_eligible = 'yes'"""
     params: tuple = ()
     if not include_backfill:
         sql += " AND j.backfill = 0"
@@ -109,9 +117,10 @@ def pick_lists(conn, since: str | None = None, now: datetime | None = None, word
             seen[key] += 1
             continue
         seen[key] = 0
-        if is_india_internship(r):
+        kind, reason = (r["list_kind"], r["grad_reason"]) if r["list_kind"] is not None else bot_list(r)
+        if kind == "internship":
             internships.append(r)
-        elif reason := graduate_reason(r):
+        elif kind == "graduate":
             graduates.append((r, reason))
     order = grad_reason_order()
     graduates.sort(key=lambda rr: order.index(rr[1]))  # stable: newest first inside each group

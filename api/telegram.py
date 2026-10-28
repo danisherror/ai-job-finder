@@ -6,6 +6,7 @@ Set it up with `uv run python -m src.main webhook https://<app>.vercel.app/api/t
 import hmac
 import json
 import os
+import time
 import traceback
 from http.server import BaseHTTPRequestHandler
 
@@ -19,6 +20,14 @@ def _authorized(headers) -> bool:
     return bool(secret) and hmac.compare_digest(headers.get("X-Telegram-Bot-Api-Secret-Token", ""), secret)
 
 
+def _kind(update: dict) -> str:
+    """What an update was, for the log: the command word or "button tap", never the person's text."""
+    if "callback_query" in update:
+        return "button tap"
+    text = ((update.get("message") or {}).get("text") or "").strip()
+    return text.split()[0].split("@")[0][:20] if text.startswith("/") else "message"
+
+
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not _authorized(self.headers):
@@ -28,11 +37,13 @@ class handler(BaseHTTPRequestHandler):
         try:
             update = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"{}")
             chat_to_profile = {p.telegram_chat_id: p.id for p in load_profiles() if p.telegram_chat_id}
+            started = time.monotonic()
             conn = store.connect()
             try:
                 telegram.handle_update(conn, update, chat_to_profile, commands.handle_message)
             finally:
                 conn.close()
+            print(f"answered {_kind(update)} in {time.monotonic() - started:.1f}s")
         except Exception:
             traceback.print_exc()  # logged on Vercel; still answer 200 so Telegram doesn't resend it forever
         self.send_response(200)

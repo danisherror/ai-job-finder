@@ -281,6 +281,41 @@ def graduate_reason(r, year: int = GRAD_YEAR) -> str | None:
     return graduate_fit(r["title"], r["description"] or "", r["experience_min"], r["experience_max"], year)
 
 
+def bot_list(r) -> tuple[str, str | None]:
+    """Which subscriber list a job belongs on, from its text: ("internship", None), ("graduate", reason) or
+    ("", None). Being open and India-eligible is assumed here; pick_lists checks those itself."""
+    row = {**dict(r), "lifecycle": "open", "india_eligible": "yes"}
+    if is_india_internship(row):
+        return "internship", None
+    if reason := graduate_reason(row):
+        return "graduate", reason
+    return "", None
+
+
+def _list_rules_version() -> str:
+    """Changes whenever the code that decides a job's list changes, so every job is worked out again."""
+    import hashlib
+    import inspect
+
+    from src import rules
+    code = "".join(inspect.getsource(x) for x in (rules, is_india_internship, graduate_reason, bot_list))
+    return hashlib.sha256(f"{code}{GRAD_YEAR}".encode()).hexdigest()[:16]
+
+
+def label_jobs(conn) -> int:
+    """Store each job's list (bot_list) so the bot can pick jobs without reading descriptions, which is
+    slow over the network. New and changed jobs have no label yet. Returns the number labelled."""
+    version = _list_rules_version()
+    if store.get_state(conn, "list_rules_version") != version:
+        with conn:
+            conn.execute("UPDATE jobs SET list_kind = NULL")
+    rows = conn.execute("""SELECT job_key, title, description, experience_min, experience_max FROM jobs
+                           WHERE list_kind IS NULL""").fetchall()
+    store.set_list_labels(conn, [[r["job_key"], *bot_list(r)] for r in rows])
+    store.set_state(conn, "list_rules_version", version)
+    return len(rows)
+
+
 def grad_reason_order(year: int = GRAD_YEAR) -> list[str]:
     return [f"{year} batch"] + GRAD_REASON_ORDER[1:]
 

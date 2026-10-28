@@ -118,6 +118,7 @@ def collect(conn, run_id: str, skip_within_days: float | None = None) -> tuple[i
     scanned = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ? AND result = 'ok'",
                            (run_id,)).fetchone()[0]
     print(f"Scanned {scanned} of {len(sources)} sources in {format_duration(time.monotonic() - run_clock)}")
+    print(f"Worked out the subscriber list for {digest.label_jobs(conn)} new or changed jobs")
     export_jobs(conn)
     print(f"Collect finished at {time.strftime('%H:%M')}, took {format_duration(time.monotonic() - run_clock)} in total")
     return scanned, len(sources)
