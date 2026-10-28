@@ -152,6 +152,15 @@ def test_stats_show_owner_numbers_only_to_the_owner(conn, chat):  # noqa: F811
     chat.say(conn, "/stats")
     assert "Software internships: 1" in chat.texts[0] and "Acme (2)" in chat.texts[0]
     assert "Owner only" not in chat.texts[0]
+    assert "Daily list: ▶️ on" in chat.texts[0] and "Filters: none" in chat.texts[0]
+    assert "Watching: no companies" in chat.texts[0] and "Applied: 0 jobs" in chat.texts[0]
+
+    store.set_filters(conn, 42, {"cities": ["Pune"], "type": "internships"})
+    store.add_watch(conn, 42, "google")
+    chat.say(conn, "/pause 3")
+    chat.say(conn, "/stats")
+    assert "paused until" in chat.texts[0] and "internships only · Pune" in chat.texts[0]
+    assert "Watching: google" in chat.texts[0]
     store.subscribe(conn, 1, "Owner", None)
     chat.say(conn, "/stats", chat_id=1)
     assert "Owner only" in chat.texts[0] and "2 subscribed" in chat.texts[0]

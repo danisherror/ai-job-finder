@@ -87,8 +87,28 @@ def cmd_city(conn, chat_id, arg, message):
                          f"in the last {SEARCH_DAYS} days.")
 
 
-def stats_messages(conn, owner: bool = False) -> list[str]:
-    """Numbers on the jobs of the last 2 weeks; the owner also sees how subscribers use the bot."""
+def my_settings(conn, chat_id: int) -> list[str]:
+    """One person's own settings: is their daily list on or paused, their filters, watches and applied count."""
+    sub = store.subscriber(conn, chat_id)
+    if not sub or not sub["active"]:
+        status = "off, you're not subscribed (/start)"
+    elif sub["paused_until"] and sub["paused_until"] > store.now():
+        until = datetime.fromisoformat(sub["paused_until"]).astimezone(tz()).strftime("%a %d %b")
+        status = f"⏸ paused until {until} (/resume)"
+    else:
+        status = "▶️ on, every morning by 7 AM"
+    watching = ", ".join(store.watches(conn, chat_id)) or "no companies"
+    applied = len(store.applied_jobs(conn, chat_id))
+    return ["<b>👤 You</b>",
+            f"📬 Daily list: {status}",
+            f"🔎 Filters: {e(describe_filters(store.get_filters(conn, chat_id)))} (/filters)",
+            f"🔔 Watching: {e(watching)} (/watch)",
+            f"✅ Applied: {applied} job{'s' if applied != 1 else ''} (/applied)"]
+
+
+def stats_messages(conn, owner: bool = False, chat_id: int | None = None) -> list[str]:
+    """Numbers on the jobs of the last 2 weeks, then the person's own settings (with chat_id);
+    the owner also sees how subscribers use the bot."""
     internships, graduates = pick_lists(conn)
     rows = internships + [r for r, _ in graduates]
     week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat(timespec="seconds")
@@ -107,6 +127,8 @@ def stats_messages(conn, owner: bool = False) -> list[str]:
              "",
              f"🏢 <b>Most jobs</b>: {top(companies)}",
              f"📍 <b>Top cities</b>: {top(cities)}"]
+    if chat_id is not None:
+        lines += [""] + my_settings(conn, chat_id)
     if owner:
         subs = store.all_subscribers(conn)
         active = [s for s in subs if s["active"]]
@@ -122,7 +144,7 @@ def stats_messages(conn, owner: bool = False) -> list[str]:
 
 
 def cmd_stats(conn, chat_id, arg, message):
-    send_to(conn, chat_id, stats_messages(conn, owner=chat_id == health.operator_chat()))
+    send_to(conn, chat_id, stats_messages(conn, owner=chat_id == health.operator_chat(), chat_id=chat_id))
 
 
 # ---------------------------------------------------------------- the daily list
