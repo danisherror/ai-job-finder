@@ -23,6 +23,7 @@ def conn(tmp_path, monkeypatch):
     c.execute("UPDATE jobs SET backfill = 0")
     c.commit()
     monkeypatch.setattr(broadcast.time, "sleep", lambda s: None)
+    monkeypatch.setattr(telegram, "send_document", lambda *a, **k: 1)  # tests that check the file replace this
     return c
 
 
@@ -61,7 +62,8 @@ def test_morning_list_goes_to_every_subscriber_once_a_day(conn, monkeypatch):
 def test_next_morning_only_has_jobs_first_seen_since(conn, monkeypatch):
     monkeypatch.setattr(telegram, "send_message", FakeSend())
     store.set_state(conn, "broadcast_since", store.now())
-    msgs = broadcast.build_messages(conn, store.get_state(conn, "broadcast_since"), 25)
+    msgs, table = broadcast.build_messages(conn, store.get_state(conn, "broadcast_since"))
+    assert table is None
     assert "Nothing new today" in msgs[0] and "Nothing new today" in msgs[1]
 
 
@@ -80,9 +82,9 @@ def test_start_subscribes_and_stop_unsubscribes(conn, monkeypatch):
 
 def test_long_lists_are_split_under_the_message_limit():
     lines = [f"• job {i} " + "x" * 300 for i in range(40)]
-    msgs = broadcast.section("Internships", lines, 50)
+    msgs = broadcast.section("Internships", lines, 40)
     assert len(msgs) > 1 and all(len(m) <= 4096 for m in msgs)
-    assert "+10 more not shown" in msgs[-1]
+    assert all(f"job {i} " in "".join(msgs) for i in range(40))
 
 
 def test_same_posting_in_several_cities_is_listed_once(conn):
@@ -104,3 +106,26 @@ def test_share_can_run_twice_a_day_but_sends_each_job_once(conn, monkeypatch):
     sent = len(fake.sent)
     assert broadcast.send_daily(conn, once_a_day=False) == {"skipped": "no new jobs since the last list"}
     assert len(fake.sent) == sent
+
+
+def test_every_list_comes_with_a_csv_of_every_job(conn, monkeypatch):
+    fake, files = FakeSend(), []
+    monkeypatch.setattr(telegram, "send_message", fake)
+    monkeypatch.setattr(telegram, "send_document",
+                        lambda chat_id, name, content, caption="", quiet=False: files.append((chat_id, name, content)))
+    store.subscribe(conn, 1, "P1", None)
+
+    assert broadcast.send_daily(conn)["sent"] == 1
+    [(chat, name, content)] = files
+    rows = content.decode("utf-8-sig").splitlines()
+    assert chat == 1 and name.endswith(".csv") and rows[0].startswith("list,posted,company,title")
+    assert len(rows) == 3
+    assert "Software Engineering Intern" in rows[1] and "2027 Campus Hire" in rows[2]
+
+
+def test_id_replies_with_the_chat_id(conn, monkeypatch):
+    fake = FakeSend()
+    monkeypatch.setattr(telegram, "send_message", fake)
+    assert broadcast.handle_message(conn, {"text": "/id", "chat": {"id": 42}})
+    assert fake.sent == [(42, "Your chat ID is <code>42</code>. Send it to the person who runs this bot.")]
+    assert store.active_subscribers(conn) == []                    # asking for the ID doesn't subscribe

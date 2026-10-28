@@ -118,8 +118,8 @@ to people in India (any city, or remote). They use the rules behind `india_inter
 `graduates_2027.csv`; an internship appears only in the first list. Each list shows up to 25 jobs a day
 (postings older than 14 days are left out), and one posting in several cities is listed once.
 
-Bot commands: `/start` subscribes and sends the newest jobs, `/latest` shows them again, `/stop` unsubscribes,
-`/help`. The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
+Bot commands: `/start` subscribes and sends the newest jobs, `/latest` shows them again, `/id` shows the chat ID,
+`/stop` unsubscribes, `/help`. The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
 People who block the bot are unsubscribed automatically. Code: `src/broadcast.py`.
 
 ```sh
@@ -133,7 +133,7 @@ nothing new. The scheduled daily run also sends the lists, at most once a day.
 
 ## Add a person with their own AI-ranked list (about 5 minutes)
 
-1. Ask them to open the bot in Telegram and send `/start`. Within the hour the bot replies with their chat ID
+1. Ask them to open the bot in Telegram and send `/id`. Within the hour the bot replies with their chat ID
    (or run `uv run python -m src.main taps` to get it now).
 2. Copy the template: `cp config/profiles/example.yaml config/profiles/<name>.yaml`. The file name is their ID.
 3. Fill in `name`, `telegram_chat_id`, `target_roles`, `seniority`, `experience_years`, skills and `locations`.

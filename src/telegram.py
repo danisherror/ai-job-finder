@@ -23,12 +23,18 @@ def _token() -> str:
     return token
 
 
-def api(method: str, **params):
-    """Call one Bot API method and return its `result`. Waits and retries once if rate-limited."""
+def api(method: str, files: dict | None = None, **params):
+    """Call one Bot API method and return its `result`. Waits and retries once if rate-limited.
+
+    files: {field: (filename, bytes, mime)} uploads them; the other params must then be plain values."""
     url = API.format(token=_token(), method=method)
     for attempt in range(3):
         try:
-            resp = httpx.post(url, json=params, timeout=TIMEOUT)
+            if files:
+                form = {k: str(v).lower() if isinstance(v, bool) else str(v) for k, v in params.items()}
+                resp = httpx.post(url, data=form, files=files, timeout=TIMEOUT)
+            else:
+                resp = httpx.post(url, json=params, timeout=TIMEOUT)
             data = resp.json()
         except (httpx.HTTPError, ValueError) as e:
             if attempt == 2:
@@ -64,6 +70,14 @@ def send_message(chat_id: int, text: str, buttons: dict | None = None, quiet: bo
     if buttons:
         params["reply_markup"] = buttons
     return api("sendMessage", **params)["message_id"]
+
+
+def send_document(chat_id: int, filename: str, content: bytes, caption: str = "", quiet: bool = False) -> int:
+    """Send a file (e.g. a CSV) with an optional HTML caption; returns Telegram's message ID."""
+    params = {"chat_id": chat_id, "disable_notification": quiet}
+    if caption:
+        params.update(caption=caption, parse_mode="HTML")
+    return api("sendDocument", files={"document": (filename, content, "text/csv")}, **params)["message_id"]
 
 
 # ---------------------------------------------------------------- taps

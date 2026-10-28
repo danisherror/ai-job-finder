@@ -2,7 +2,7 @@
 # Real profiles are git-ignored because they hold personal details.
 
 name: Example
-telegram_chat_id: 0            # they send /start to the bot; the hourly job replies with this ID
+telegram_chat_id: 0            # they send /id to the bot; the hourly job replies with this ID
 target_roles: [Backend Engineer, Python Developer]
 seniority: mid                 # intern | junior | mid | senior | lead (read from job titles)
 stretch_up: false              # true = also accept jobs one level up (e.g. Senior for a mid)
