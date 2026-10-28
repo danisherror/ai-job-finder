@@ -9,7 +9,7 @@ from src import store
 from src.models import Profile
 
 API = "https://api.telegram.org/bot{token}/{method}"
-TIMEOUT = 30
+TIMEOUT = httpx.Timeout(30, connect=10)  # give up fast on a stalled connection, not after 30s
 
 
 class TelegramError(Exception):
