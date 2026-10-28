@@ -2,6 +2,7 @@
 
 import os
 import time
+import traceback
 
 import httpx
 
@@ -23,18 +24,19 @@ def _token() -> str:
     return token
 
 
-def api(method: str, files: dict | None = None, **params):
+def api(method: str, files: dict | None = None, http_timeout=TIMEOUT, **params):
     """Call one Bot API method and return its `result`. Waits and retries once if rate-limited.
 
-    files: {field: (filename, bytes, mime)} uploads them; the other params must then be plain values."""
+    files: {field: (filename, bytes, mime)} uploads them; the other params must then be plain values.
+    http_timeout: how long to wait for the answer (longer for getUpdates that waits for new messages)."""
     url = API.format(token=_token(), method=method)
     for attempt in range(3):
         try:
             if files:
                 form = {k: str(v).lower() if isinstance(v, bool) else str(v) for k, v in params.items()}
-                resp = httpx.post(url, data=form, files=files, timeout=TIMEOUT)
+                resp = httpx.post(url, data=form, files=files, timeout=http_timeout)
             else:
-                resp = httpx.post(url, json=params, timeout=TIMEOUT)
+                resp = httpx.post(url, json=params, timeout=http_timeout)
             data = resp.json()
         except (httpx.HTTPError, ValueError) as e:
             if attempt == 2:
@@ -111,26 +113,35 @@ def handle_callback(conn, cq: dict, chat_to_profile: dict[int, str]) -> str:
     return decision
 
 
-def poll_updates(conn, profiles: list[Profile], on_message=None) -> dict:
+def poll_updates(conn, profiles: list[Profile], on_message=None, wait: int = 0) -> dict:
     """Fetch new updates since the last poll and save any button taps. Returns counts.
 
-    on_message(conn, message) -> bool answers bot commands; without it, /start replies with the chat ID."""
+    on_message(conn, message) -> bool answers bot commands; without it, /start replies with the chat ID.
+    wait: seconds Telegram may hold the request open until a message arrives (the always-on bot uses this,
+    so it answers within a second without asking Telegram over and over)."""
     chat_to_profile = {p.telegram_chat_id: p.id for p in profiles if p.telegram_chat_id}
     offset = int(store.get_state(conn, "telegram_offset") or 0)
     counts = {"taps": 0, "ignored": 0, "messages": 0}
     while True:
-        updates = api("getUpdates", offset=offset, timeout=0, allowed_updates=["callback_query", "message"])
+        updates = api("getUpdates", offset=offset, timeout=wait, allowed_updates=["callback_query", "message"],
+                      http_timeout=httpx.Timeout(wait + 30, connect=10))
         if not updates:
             break
         for u in updates:
+            # One bad update must never block the ones after it, or the bot would retry it forever.
             if "callback_query" in u:
-                result = handle_callback(conn, u["callback_query"], chat_to_profile)
-                counts["ignored" if result == "ignored" else "taps"] += 1
+                try:
+                    result = handle_callback(conn, u["callback_query"], chat_to_profile)
+                    counts["ignored" if result == "ignored" else "taps"] += 1
+                except TelegramError as err:
+                    print(f"Button tap not answered: {err}")  # e.g. a tap too old for Telegram to answer
             elif on_message and u.get("message"):
                 try:
                     counts["messages"] += bool(on_message(conn, u["message"]))
                 except TelegramError:
                     pass  # e.g. they blocked the bot right after writing; don't stop the other updates
+                except Exception:
+                    traceback.print_exc()  # a bug in one command; log it and answer the rest
             elif (u.get("message") or {}).get("text", "").startswith("/start"):
                 # Lets a new person find the chat ID that goes in their profile.
                 chat_id = u["message"]["chat"]["id"]

@@ -15,7 +15,7 @@ Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 flowchart LR
     subgraph sched["launchd (this Mac)"]
         daily["daily job<br/>6:45 AM IST"]
-        hourly["taps job<br/>every hour"]
+        hourly["bot<br/>always running"]
     end
 
     subgraph config["config/"]
@@ -56,7 +56,7 @@ flowchart LR
     evaluate["evaluate.py + baseline.py<br/>labelled match-quality check"]
 
     daily --> main
-    hourly -->|"button taps, /start"| telegram
+    hourly -->|"bot commands, button taps"| telegram
     sources --> adapters
     profiles --> rules
     main --> adapters --> http --> web
@@ -75,8 +75,8 @@ flowchart LR
 
 Each morning `daily` runs three stages over one SQLite file: **collect** fetches every active source in
 `config/sources.yaml` and stores new or changed jobs; **match** drops jobs that fail a person's hard rules and asks
-Claude to score the rest; **send** picks each person's best new matches and sends them on Telegram. The hourly job
-saves button taps and tells you if the daily run has stopped.
+Claude to score the rest; **send** picks each person's best new matches and sends them on Telegram. The always-on
+`bot` answers bot commands, saves button taps and tells you if the daily run has stopped.
 
 ## Setup (once)
 
@@ -118,12 +118,26 @@ to people in India (any city, or remote). They use the rules behind `india_inter
 `graduates_2027.csv`; an internship appears only in the first list. Each list shows up to 25 jobs a day
 (postings older than 14 days are left out), and one posting in several cities is listed once.
 
-Bot commands: `/start` subscribes and sends the newest jobs, `/latest` shows them again, `/id` shows the chat ID,
-`/stop` unsubscribes, `/help`.
+Bot commands (`/help` lists them in the bot):
+
+| Command | What it does |
+|---|---|
+| `/start`, `/stop` | subscribe (and get the last 2 weeks' jobs as a CSV), unsubscribe |
+| `/latest` | the last 2 weeks' jobs as a CSV, narrowed by their filters |
+| `/search react`, `/city pune` | open jobs (last 30 days) matching words, or in a city (`/city remote` too), as a CSV |
+| `/filters` | their daily list and `/latest` only for some cities and/or only internships or only jobs |
+| `/watch google`, `/unwatch` | new jobs at that company go at the top of their daily list |
+| `/pause 7`, `/resume` | no daily list for N days (up to 60) |
+| `/a_123`, `/u_123`, `/applied` | each job in the daily list ends with a tappable `/a_<number>` (also the CSV's `id` column) to mark it applied; `/applied` lists them |
+| `/stats` | counts, top companies and cities; the owner also sees subscribers, filters, watches and applications |
+| `/feedback text` | forwards the message to the owner (5 a day per person) |
+| `/id`, `/help` | their chat ID; the command list |
+
 The owner (`OPERATOR_TELEGRAM_CHAT_ID`) can also send `/active` to see who is subscribed; it appears only in
 the owner's `/` menu. The daily run refreshes the menu; `uv run python -m src.main commands` does it now.
-The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
-People who block the bot are unsubscribed automatically. Code: `src/broadcast.py`.
+`uv run python -m src.main bot` answers commands within a second (launchd keeps it running; see
+`launchd/README.md`), so the bot replies only while this Mac is on and awake. People who block the bot are
+unsubscribed automatically. Code: `src/commands.py` (commands) and `src/broadcast.py` (the lists).
 
 ```sh
 uv run python -m src.main share                 # collect (skips sources scanned in the last day), then send
@@ -136,8 +150,8 @@ nothing new. The scheduled daily run also sends the lists, at most once a day.
 
 ## Add a person with their own AI-ranked list (about 5 minutes)
 
-1. Ask them to open the bot in Telegram and send `/id`. Within the hour the bot replies with their chat ID
-   (or run `uv run python -m src.main taps` to get it now).
+1. Ask them to open the bot in Telegram and send `/id`. The bot replies with their chat ID right away
+   while `bot` is running (or run `uv run python -m src.main taps` to answer waiting messages now).
 2. Copy the template: `cp config/profiles/example.yaml config/profiles/<name>.yaml`. The file name is their ID.
 3. Fill in `name`, `telegram_chat_id`, `target_roles`, `seniority`, `experience_years`, skills and `locations`.
    The comments in the template explain each field.

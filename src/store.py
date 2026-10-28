@@ -128,7 +128,30 @@ CREATE TABLE IF NOT EXISTS subscribers (
     name            TEXT,
     username        TEXT,
     joined_at       TEXT NOT NULL,
-    active          INTEGER NOT NULL DEFAULT 1   -- 0 after /stop or when they block the bot
+    active          INTEGER NOT NULL DEFAULT 1,  -- 0 after /stop or when they block the bot
+    filters         TEXT,                -- JSON {"cities": [...], "type": "both|internships|jobs"}; NULL = everything
+    paused_until    TEXT                 -- no daily list before this time (/pause)
+);
+
+-- Companies a subscriber follows with /watch: their new jobs are pointed out at the top of the daily list.
+CREATE TABLE IF NOT EXISTS watches (
+    chat_id         INTEGER NOT NULL,
+    company         TEXT NOT NULL,       -- lowercase; matches any company name containing it
+    added_at        TEXT NOT NULL,
+    PRIMARY KEY (chat_id, company)
+);
+
+-- A short, stable number for each job sent to subscribers, so they can tap /a_<id> to mark it applied.
+CREATE TABLE IF NOT EXISTS shared_jobs (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    job_key         TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS applications (
+    chat_id         INTEGER NOT NULL,
+    job_id          INTEGER NOT NULL REFERENCES shared_jobs(id),
+    applied_at      TEXT NOT NULL,
+    PRIMARY KEY (chat_id, job_id)
 );
 """
 
@@ -146,7 +169,17 @@ def connect(path: str | Path | None = None) -> sqlite3.Connection:
     conn.execute("PRAGMA journal_mode = WAL")
     conn.executescript(SCHEMA)
     _add_last_scanned_at(conn)
+    _add_subscriber_settings(conn)
     return conn
+
+
+def _add_subscriber_settings(conn) -> None:
+    """Older databases lack subscribers.filters and paused_until: add them (empty = no filters, not paused)."""
+    columns = {r[1] for r in conn.execute("PRAGMA table_info(subscribers)")}
+    with conn:
+        for column in ("filters", "paused_until"):
+            if column not in columns:
+                conn.execute(f"ALTER TABLE subscribers ADD COLUMN {column} TEXT")
 
 
 def _add_last_scanned_at(conn) -> None:
@@ -507,6 +540,99 @@ def active_subscribers(conn) -> list[int]:
 def all_subscribers(conn) -> list:
     """Everyone who ever pressed Start, active or not, oldest first."""
     return conn.execute("SELECT * FROM subscribers ORDER BY joined_at").fetchall()
+
+
+def subscriber(conn, chat_id: int):
+    return conn.execute("SELECT * FROM subscribers WHERE chat_id = ?", (chat_id,)).fetchone()
+
+
+def get_filters(conn, chat_id: int) -> dict:
+    row = conn.execute("SELECT filters FROM subscribers WHERE chat_id = ?", (chat_id,)).fetchone()
+    return json.loads(row[0]) if row and row[0] else {}
+
+
+def set_filters(conn, chat_id: int, filters: dict) -> None:
+    filters = {k: v for k, v in filters.items() if v and v != "both"}  # only what actually narrows the list
+    with conn:
+        conn.execute("UPDATE subscribers SET filters = ? WHERE chat_id = ?",
+                     (json.dumps(filters, sort_keys=True) if filters else None, chat_id))
+
+
+def set_paused_until(conn, chat_id: int, until: str | None) -> None:
+    with conn:
+        conn.execute("UPDATE subscribers SET paused_until = ? WHERE chat_id = ?", (until, chat_id))
+
+
+def watches(conn, chat_id: int) -> list[str]:
+    return [r[0] for r in conn.execute("SELECT company FROM watches WHERE chat_id = ? ORDER BY added_at", (chat_id,))]
+
+
+def all_watches(conn) -> dict[int, list[str]]:
+    out: dict[int, list[str]] = {}
+    for r in conn.execute("SELECT chat_id, company FROM watches ORDER BY added_at"):
+        out.setdefault(r[0], []).append(r[1])
+    return out
+
+
+def add_watch(conn, chat_id: int, company: str) -> bool:
+    """Returns False if they already watch it."""
+    with conn:
+        return conn.execute("INSERT OR IGNORE INTO watches (chat_id, company, added_at) VALUES (?, ?, ?)",
+                            (chat_id, company.lower(), now())).rowcount == 1
+
+
+def remove_watch(conn, chat_id: int, company: str) -> bool:
+    with conn:
+        return conn.execute("DELETE FROM watches WHERE chat_id = ? AND company = ?",
+                            (chat_id, company.lower())).rowcount == 1
+
+
+# ---------------------------------------------------------------- applied (subscribers)
+
+def share_ids(conn, job_keys: list[str]) -> dict[str, int]:
+    """A short, permanent number for each job, created the first time the job is sent to anyone."""
+    with conn:
+        conn.executemany("INSERT OR IGNORE INTO shared_jobs (job_key) VALUES (?)", [(k,) for k in job_keys])
+    ids = {}
+    for i in range(0, len(job_keys), 500):  # SQLite limits how many ? one query may have
+        chunk = job_keys[i:i + 500]
+        ids.update(conn.execute(f"SELECT job_key, id FROM shared_jobs WHERE job_key IN ({','.join('?' * len(chunk))})",
+                                chunk).fetchall())
+    return ids
+
+
+def shared_job(conn, job_id: int):
+    """The job behind a /a_<id> number, or None."""
+    return conn.execute("""SELECT sj.id, j.* FROM shared_jobs sj JOIN jobs j ON j.job_key = sj.job_key
+                           WHERE sj.id = ?""", (job_id,)).fetchone()
+
+
+def mark_applied(conn, chat_id: int, job_id: int) -> bool:
+    """Returns False if it was already marked."""
+    with conn:
+        return conn.execute("INSERT OR IGNORE INTO applications (chat_id, job_id, applied_at) VALUES (?, ?, ?)",
+                            (chat_id, job_id, now())).rowcount == 1
+
+
+def unmark_applied(conn, chat_id: int, job_id: int) -> bool:
+    with conn:
+        return conn.execute("DELETE FROM applications WHERE chat_id = ? AND job_id = ?",
+                            (chat_id, job_id)).rowcount == 1
+
+
+def applied_jobs(conn, chat_id: int) -> list:
+    """One person's applied jobs, newest first."""
+    return conn.execute("""SELECT sj.id, a.applied_at, j.*, s.type AS source_type, s.board FROM applications a
+                           JOIN shared_jobs sj ON sj.id = a.job_id JOIN jobs j ON j.job_key = sj.job_key
+                           JOIN sources s ON s.name = j.source
+                           WHERE a.chat_id = ? ORDER BY a.applied_at DESC""", (chat_id,)).fetchall()
+
+
+def most_applied(conn, limit: int = 5) -> list:
+    """For the owner: the jobs most subscribers marked as applied."""
+    return conn.execute("""SELECT j.title, j.company, COUNT(*) AS n FROM applications a
+                           JOIN shared_jobs sj ON sj.id = a.job_id JOIN jobs j ON j.job_key = sj.job_key
+                           GROUP BY a.job_id ORDER BY n DESC, MAX(a.applied_at) DESC LIMIT ?""", (limit,)).fetchall()
 
 
 # ---------------------------------------------------------------- retention

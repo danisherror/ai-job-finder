@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.jobfinder.taps</string>
+    <string>com.jobfinder.bot</string>
     <key>ProgramArguments</key>
     <array>
         <string>/opt/homebrew/bin/uv</string>
@@ -11,7 +11,7 @@
         <string>python</string>
         <string>-m</string>
         <string>src.main</string>
-        <string>taps</string>
+        <string>bot</string>
     </array>
     <key>WorkingDirectory</key>
     <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder</string>
@@ -24,11 +24,15 @@
         <key>TZ</key>
         <string>Asia/Kolkata</string>
     </dict>
-    <key>StartInterval</key>
-    <integer>60</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>                <!-- always running; restarted if it stops -->
+    <key>ThrottleInterval</key>
+    <integer>30</integer>  <!-- wait 30s before a restart, so a crash loop stays quiet -->
     <key>StandardOutPath</key>
-    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder/private/logs/taps.log</string>
+    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder/private/logs/bot.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder/private/logs/taps.log</string>
+    <string>/Users/danishmahajan/Desktop/Claude_Project/AI Job Finder/private/logs/bot.log</string>
 </dict>
 </plist>

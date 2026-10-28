@@ -14,8 +14,9 @@
     uv run python -m src.main broadcast [--dry-run]
                                                  send (or just print) the internship and 2027-graduate lists
                                                  to every bot subscriber (the daily run does this)
-    uv run python -m src.main taps               answer bot commands (/start, /stop, /latest) and save
-                                                 Applied/Skipped button taps (the hourly job)
+    uv run python -m src.main bot                keep running and answer bot commands within a second
+                                                 (/start, /latest, /search, ...) and save button taps
+    uv run python -m src.main taps               answer the bot commands sent since the last check, then exit
     uv run python -m src.main health [--send]    print (or send to the owner) the weekly health summary
     uv run python -m src.main forget <person>    delete everything stored about someone (remove their profile first)
 """
@@ -28,7 +29,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from src import broadcast, digest, health, matcher, store, telegram
+from src import broadcast, commands, digest, health, matcher, store, telegram
 from src.collect import ADAPTERS
 from src.collect.http import SourceError
 from src.config import ROOT, load_env, load_profiles, load_sources
@@ -43,13 +44,22 @@ MAX_LANES = 8                # source types scanned at the same time
 RESCAN_AFTER_DAYS = 1.0      # `collect` skips sources successfully scanned more recently than this
 
 
-def acquire_lock(path: Path = LOCK_FILE):
-    """Exit immediately if another run holds the lock. The lock is released when the process ends."""
+def try_lock(path: Path):
+    """The lock's open file if we got it, else None. The lock is released when the process ends."""
     path.parent.mkdir(parents=True, exist_ok=True)
     handle = open(path, "w")
     try:
         fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
+        handle.close()
+        return None
+    return handle
+
+
+def acquire_lock(path: Path = LOCK_FILE):
+    """Exit immediately if another run holds the lock."""
+    handle = try_lock(path)
+    if not handle:
         print("Another run is in progress; exiting.")
         sys.exit(0)
     return handle
@@ -201,7 +211,7 @@ def report_broadcast(r: dict) -> None:
     if r.get("skipped"):
         print(f"  subscribers  skipped: {r['skipped']}")
     elif not r.get("dry_run"):
-        print(f"  subscribers  {r['subscribers']}: sent {r['sent']}, failed {r['failed']}")
+        print(f"  subscribers  {r['subscribers']}: sent {r['sent']}, failed {r['failed']}, paused {r.get('paused', 0)}")
 
 
 def daily(conn) -> None:
@@ -246,10 +256,36 @@ def taps() -> None:
     conn = store.connect()
     health.check_stale(conn)
     try:
-        counts = telegram.poll_updates(conn, load_profiles(), broadcast.handle_message)
+        counts = telegram.poll_updates(conn, load_profiles(), commands.handle_message)
     except telegram.TelegramError as e:
         sys.exit(f"Taps failed: {e}")
     print(f"Taps saved: {counts['taps']}, ignored: {counts['ignored']}, commands answered: {counts['messages']}")
+
+
+BOT_WAIT = 50          # seconds Telegram holds each request open waiting for a message
+STALE_CHECK_EVERY = 3600
+
+
+def bot() -> None:
+    """Run until stopped: answer each bot command as it arrives, and check hourly that the daily run still runs."""
+    conn = store.connect()
+    profiles = load_profiles()
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} Bot started; waiting for messages (Ctrl+C stops it)")
+    checked, failures = 0.0, 0
+    while True:
+        if time.time() - checked > STALE_CHECK_EVERY:
+            health.check_stale(conn)
+            checked = time.time()
+        try:
+            counts = telegram.poll_updates(conn, profiles, commands.handle_message, wait=BOT_WAIT)
+            failures = 0
+        except telegram.TelegramError as e:
+            failures += 1
+            print(f"{time.strftime('%H:%M:%S')} Telegram unreachable ({e}); trying again")
+            time.sleep(min(5 * failures, 60))  # wait longer while the network stays down
+            continue
+        if any(counts.values()):
+            print(f"{time.strftime('%H:%M:%S')} commands answered: {counts['messages']}, taps: {counts['taps']}")
 
 
 def forget(conn, person: str) -> None:
@@ -281,9 +317,12 @@ def option(argv: list[str], name: str, default):
 def main(argv: list[str]) -> None:
     load_env()
     command = argv[1] if len(argv) > 1 else "daily"
-    if command == "taps":
+    if command in ("taps", "bot"):  # one lock: Telegram allows only one reader of new messages at a time
         lock = acquire_lock(TAPS_LOCK_FILE)  # noqa: F841
-        taps()
+        try:
+            bot() if command == "bot" else taps()
+        except KeyboardInterrupt:
+            print("Stopped.")
         return
     lock = acquire_lock()  # noqa: F841  (kept open for the life of the process)
     conn = store.connect()
@@ -300,10 +339,14 @@ def main(argv: list[str]) -> None:
     elif command == "digest":
         send(conn, dry_run="--dry-run" in argv)
     elif command == "share":
-        try:  # add anyone who pressed Start since the last check, so they get this list too
-            telegram.poll_updates(conn, load_profiles(), broadcast.handle_message)
-        except telegram.TelegramError as e:
-            print(f"Could not read new bot messages: {e}")
+        # Add anyone who pressed Start since the last check, so they get this list too.
+        # If the always-on bot is running, it has done that already (and two readers would clash).
+        if taps_lock := try_lock(TAPS_LOCK_FILE):
+            try:
+                telegram.poll_updates(conn, load_profiles(), commands.handle_message)
+            except telegram.TelegramError as e:
+                print(f"Could not read new bot messages: {e}")
+            taps_lock.close()
         skip_days = None if "--all" in argv else float(option(argv, "--days", RESCAN_AFTER_DAYS))
         run_id, _ = store.resume_or_start_run(conn)
         scanned, _ = collect(conn, run_id, skip_within_days=skip_days)

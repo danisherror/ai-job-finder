@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from src import broadcast, store, telegram
+from src import broadcast, commands, store, telegram
 from tests.test_match_and_digest import SRC, make_job
 
 
@@ -62,7 +62,7 @@ def test_morning_list_goes_to_every_subscriber_once_a_day(conn, monkeypatch):
 def test_next_morning_only_has_jobs_first_seen_since(conn, monkeypatch):
     monkeypatch.setattr(telegram, "send_message", FakeSend())
     store.set_state(conn, "broadcast_since", store.now())
-    msgs, table = broadcast.build_messages(conn, store.get_state(conn, "broadcast_since"))
+    msgs, table = broadcast.build_messages(conn, *broadcast.pick_lists(conn, store.get_state(conn, "broadcast_since")))
     assert table is None
     assert "Nothing new today" in msgs[0] and "Nothing new today" in msgs[1]
 
@@ -73,22 +73,22 @@ def test_start_subscribes_and_stop_unsubscribes(conn, monkeypatch):
     monkeypatch.setattr(telegram, "send_document", lambda chat, name, content, caption="", quiet=False:
                         files.append((chat, name, caption)) or 1)
     msg = {"text": "/start", "chat": {"id": 42}, "from": {"first_name": "Riya", "username": "riya"}}
-    assert broadcast.handle_message(conn, msg)
+    assert commands.handle_message(conn, msg)
     assert store.active_subscribers(conn) == [42]
     assert len(fake.sent) == 1 and "Welcome" in fake.sent[0][1]   # the welcome, then only the file
     [(chat, name, caption)] = files
     assert chat == 42 and name.endswith(".csv") and "Software internships</b> · 1" in caption
 
-    assert broadcast.handle_message(conn, {"text": "/stop@Bot_Jobfinder_bot", "chat": {"id": 42}})
+    assert commands.handle_message(conn, {"text": "/stop@Bot_Jobfinder_bot", "chat": {"id": 42}})
     assert store.active_subscribers(conn) == []
-    assert not broadcast.handle_message(conn, {"text": "hello", "chat": {"id": 42}})
+    assert not commands.handle_message(conn, {"text": "hello", "chat": {"id": 42}})
 
 
 def test_latest_sends_only_the_csv(conn, monkeypatch):
     fake, files = FakeSend(), []
     monkeypatch.setattr(telegram, "send_message", fake)
     monkeypatch.setattr(telegram, "send_document", lambda *a, **k: files.append(a) or 1)
-    assert broadcast.handle_message(conn, {"text": "/latest", "chat": {"id": 42}})
+    assert commands.handle_message(conn, {"text": "/latest", "chat": {"id": 42}})
     assert fake.sent == [] and len(files) == 1
 
 
@@ -138,7 +138,7 @@ def test_every_list_comes_with_a_csv_of_every_job(conn, monkeypatch):
 def test_id_replies_with_the_chat_id(conn, monkeypatch):
     fake = FakeSend()
     monkeypatch.setattr(telegram, "send_message", fake)
-    assert broadcast.handle_message(conn, {"text": "/id", "chat": {"id": 42}})
+    assert commands.handle_message(conn, {"text": "/id", "chat": {"id": 42}})
     assert fake.sent == [(42, "Your chat ID is <code>42</code>. Send it to the person who runs this bot.")]
     assert store.active_subscribers(conn) == []                    # asking for the ID doesn't subscribe
 
@@ -152,9 +152,9 @@ def test_active_lists_subscribers_only_for_the_owner(conn, monkeypatch):
     store.subscribe(conn, 3, "Gone", None)
     store.unsubscribe(conn, 3)
 
-    assert not broadcast.handle_message(conn, {"text": "/active", "chat": {"id": 2}})   # not the owner
+    assert not commands.handle_message(conn, {"text": "/active", "chat": {"id": 2}})   # not the owner
     assert fake.sent == []
-    assert broadcast.handle_message(conn, {"text": "/active", "chat": {"id": 1}})
+    assert commands.handle_message(conn, {"text": "/active", "chat": {"id": 1}})
     [(chat, text)] = fake.sent
     assert chat == 1 and "· 2 active" in text and "Riya (@riya)" in text and "<code>2</code>" in text
     assert "Gone" not in text and "1 stopped or blocked the bot" in text

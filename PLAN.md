@@ -170,7 +170,7 @@ AI Job Finder/
 │   ├── resumes/
 │   ├── exports/
 │   └── jobs.db
-├── launchd/                 # LaunchAgent plists (daily run, hourly taps)
+├── launchd/                 # LaunchAgent plists (daily run, always-on bot)
 ├── src/
 │   ├── collect/{greenhouse,lever,ashby}.py
 │   ├── config.py  normalize.py  store.py   models.py
