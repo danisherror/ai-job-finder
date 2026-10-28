@@ -1,4 +1,4 @@
-"""SQLite storage: sources, jobs and run records."""
+"""SQLite storage: sources, jobs and run records. Local file by default, Turso (hosted SQLite) when configured."""
 
 import hashlib
 import json
@@ -160,17 +160,119 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+class Row(tuple):
+    """A libsql result row that, like sqlite3.Row, can be read by position or by column name."""
+
+    def __new__(cls, values, names: dict[str, int]):
+        row = super().__new__(cls, values)
+        row._names = names
+        return row
+
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            return super().__getitem__(self._names[key])
+        return super().__getitem__(key)
+
+    def keys(self) -> list[str]:
+        return list(self._names)
+
+
+class _Cursor:
+    def __init__(self, cur):
+        self._cur = cur
+        names: dict[str, int] = {}
+        for i, column in enumerate(cur.description or ()):
+            names.setdefault(column[0], i)  # a repeated name reads the first column, as in sqlite3
+        self._names = names
+        self.rowcount = cur.rowcount
+        self.lastrowid = cur.lastrowid
+        self.description = cur.description
+
+    def fetchone(self):
+        values = self._cur.fetchone()
+        return None if values is None else Row(values, self._names)
+
+    def fetchall(self) -> list[Row]:
+        return [Row(v, self._names) for v in self._cur.fetchall()]
+
+    def __iter__(self):
+        return iter(self.fetchall())
+
+
+class TursoConnection:
+    """Wraps a libsql connection so the rest of the code can use it exactly like sqlite3."""
+
+    def __init__(self, conn):
+        self._conn = conn
+
+    def execute(self, sql: str, params=()) -> _Cursor:
+        return _Cursor(self._conn.execute(sql, tuple(params)))
+
+    def executemany(self, sql: str, rows) -> _Cursor:
+        return _Cursor(self._conn.executemany(sql, [tuple(r) for r in rows]))
+
+    def executescript(self, script: str) -> None:
+        self._conn.executescript(script)
+
+    def commit(self) -> None:
+        self._conn.commit()
+
+    def rollback(self) -> None:
+        self._conn.rollback()
+
+    def close(self) -> None:
+        self._conn.close()
+
+    def sync(self) -> None:
+        """Pull the latest changes into the local copy (only for a TURSO_REPLICA connection)."""
+        self._conn.sync()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):  # like sqlite3: commit on success, roll back on error
+        self.commit() if exc_type is None else self.rollback()
+        return False
+
+
+def connect_turso(url: str, token: str, replica: str | None = None) -> TursoConnection:
+    """Open the Turso database. With `replica` (a local file path) reads come from a local copy kept in
+    sync and only writes cross the network: fast for the daily run. Without it every query goes to Turso:
+    right for the bot, which has no disk to keep a copy on."""
+    import libsql  # only needed with Turso
+
+    if replica:
+        Path(replica).parent.mkdir(parents=True, exist_ok=True)
+        conn = TursoConnection(libsql.connect(replica, sync_url=url, auth_token=token))
+        conn.sync()
+    else:
+        conn = TursoConnection(libsql.connect(url, auth_token=token))
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
+
 def connect(path: str | Path | None = None) -> sqlite3.Connection:
+    """The database: Turso when TURSO_DATABASE_URL is set (and no path is given), else a local SQLite file."""
+    url = os.environ.get("TURSO_DATABASE_URL", "").strip()
+    if url and path is None:
+        conn = connect_turso(url, os.environ.get("TURSO_AUTH_TOKEN", "").strip(),
+                             os.environ.get("TURSO_REPLICA", "").strip() or None)
+        _create_schema(conn)
+        return conn
     path = Path(path or os.environ.get("JOBFINDER_DB") or DEFAULT_DB)
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path, timeout=30)  # the hourly tap collector may write while a run is going
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.execute("PRAGMA journal_mode = WAL")
+    _create_schema(conn)
+    return conn
+
+
+def _create_schema(conn) -> None:
     conn.executescript(SCHEMA)
     _add_last_scanned_at(conn)
     _add_subscriber_settings(conn)
-    return conn
 
 
 def _add_subscriber_settings(conn) -> None:
