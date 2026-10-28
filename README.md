@@ -97,6 +97,7 @@ uv run python -m src.main collect            # only fetch jobs (no AI); also ref
 uv run python -m src.main export             # rewrite private/exports/all_jobs.csv from the stored jobs
 uv run python -m src.main match              # only score new jobs for each person
 uv run python -m src.main digest --dry-run   # print each person's list without sending it
+uv run python -m src.main bot                # keep running and answer bot commands within a second (Ctrl+C stops it)
 uv run python -m src.main health             # the weekly health summary (add --send to send it to you)
 uv run pytest -q                             # offline tests
 ```
