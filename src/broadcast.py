@@ -25,10 +25,10 @@ WELCOME = ("👋 <b>Welcome!</b> You're subscribed.\n\n"
            "Every morning by 7 AM IST you'll get the new <b>software internships</b> and "
            f"<b>jobs for {GRAD_YEAR} graduates</b> open to people in India, from company career sites, "
            "job boards and Indian job portals.\n\n"
-           "/latest shows the newest jobs any time\n/id shows your chat ID\n/stop unsubscribes")
+           "/latest sends the newest jobs as a file any time\n/id shows your chat ID\n/stop unsubscribes")
 HELP = ("I send new software internships and jobs for "
         f"{GRAD_YEAR} graduates in India every morning by 7 AM IST.\n\n"
-        "/latest shows the newest jobs\n/id shows your chat ID\n/stop unsubscribes\n/start subscribes again")
+        "/latest sends the newest jobs as a file\n/id shows your chat ID\n/stop unsubscribes\n/start subscribes again")
 COMMANDS = [{"command": "latest", "description": "Newest internships and 2027-graduate jobs"},
             {"command": "id", "description": "Show your chat ID"},
             {"command": "stop", "description": "Stop the daily lists"},
@@ -133,12 +133,11 @@ def jobs_csv(internships: list, graduates: list, url) -> bytes:
 
 
 def summary(internships: list, graduates: list, label: str) -> str:
-    """Counts only, for a message that comes with the CSV instead of the job list."""
+    """Counts only: the caption of a CSV sent instead of the job list."""
     if not internships and not graduates:
         return f"Nothing {label} yet. Your first list arrives tomorrow morning."
     return (f"<b>💼 Software internships</b> · {len(internships)} {label}\n"
-            f"<b>🎓 Jobs for {GRAD_YEAR} graduates</b> · {len(graduates)} {label}\n\n"
-            "📄 Every job is in the CSV file below.")
+            f"<b>🎓 Jobs for {GRAD_YEAR} graduates</b> · {len(graduates)} {label}")
 
 
 def build_messages(conn, since: str | None, label: str = "new today",
@@ -241,10 +240,12 @@ def send_daily(conn, dry_run: bool = False, once_a_day: bool = True) -> dict:
     return {"subscribers": len(chats), "sent": sent, "failed": failed, "dry_run": False}
 
 
-def send_latest(conn, chat_id: int, intro: str | None = None, summary_only: bool = False) -> bool:
-    messages, table = build_messages(conn, None, label="in the last 2 weeks", summary_only=summary_only)
-    document = (csv_name("latest_jobs"), table, "📄 All jobs from the last 2 weeks") if table else None
-    return send_to(conn, chat_id, ([intro] if intro else []) + messages, document)
+def send_latest(conn, chat_id: int, intro: str | None = None) -> bool:
+    """The last 2 weeks' jobs as one CSV file (counts in its caption), after an optional intro message."""
+    [counts], table = build_messages(conn, None, label="in the last 2 weeks", summary_only=True)
+    if not table:
+        return send_to(conn, chat_id, ([intro] if intro else []) + [counts])
+    return send_to(conn, chat_id, [intro] if intro else [], (csv_name("latest_jobs"), table, counts))
 
 
 def handle_message(conn, message: dict) -> bool:
@@ -259,7 +260,7 @@ def handle_message(conn, message: dict) -> bool:
         user = message.get("from") or {}
         name = " ".join(x for x in (user.get("first_name"), user.get("last_name")) if x) or chat.get("title")
         store.subscribe(conn, chat_id, name, user.get("username"))
-        send_latest(conn, chat_id, WELCOME, summary_only=True)  # a new subscriber gets the file, not 30 messages
+        send_latest(conn, chat_id, WELCOME)
     elif command == "/stop":
         store.unsubscribe(conn, chat_id)
         send_to(conn, chat_id, ["You're unsubscribed. Send /start any time to get the daily lists again."])
