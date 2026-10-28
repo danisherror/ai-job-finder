@@ -300,17 +300,17 @@
 # are read on purpose (see config/unsupported_sources.yaml).
 # Job portals (India; counts are what one scan found on 2026-10-25)
 - {name: LinkedIn Jobs,     type: linkedin,    board: "software engineer|software developer|data engineer|data scientist|machine learning engineer|devops engineer|full stack developer|frontend developer|backend developer|software engineer intern"}  # 10 a page; at most 150 new descriptions a scan
-- {name: Naukri (via AmbitionBox), type: ambitionbox, board: "software-engineer-jobs-prf|software-developer-jobs-prf|java-jobs-ski|python-jobs-ski|javascript-jobs-ski|react-js-jobs-ski|node-js-jobs-ski|data-engineer-jobs-prf|data-scientist-jobs-prf|devops-jobs-ski|machine-learning-jobs-ski|full-stack-developer-jobs-prf|front-end-developer-jobs-prf|backend-developer-jobs-prf|software-engineering-intern-jobs-prf"}  # 20 newest per list
+- {name: Naukri (via AmbitionBox), type: ambitionbox, board: "software-engineer-jobs-prf|software-developer-jobs-prf|java-jobs-ski|python-jobs-ski|javascript-jobs-ski|react-js-jobs-ski|node-js-jobs-ski|data-engineer-jobs-prf|data-scientist-jobs-prf|devops-jobs-ski|machine-learning-jobs-ski|full-stack-developer-jobs-prf|front-end-developer-jobs-prf|backend-developer-jobs-prf|software-engineering-intern-jobs-prf", active: false}  # 20 newest per list; off: blocks GitHub's servers
 - {name: Foundit,           type: foundit,     board: "software engineer|software developer|data engineer|data scientist|devops|full stack developer"}  # ~300 in 2 weeks
 - {name: Hirist,            type: hirist,      board: "software developer|data engineer|devops|machine learning|frontend|backend|qa automation"}  # ~35 per keyword in 2 weeks
 - {name: iimjobs,           type: iimjobs,     board: "technology|software engineer|data science|product manager"}  # mostly senior roles
-- {name: Instahyre,         type: instahyre,   board: ""}              # 12,700 listed; no dates in the list, so 100 newest pages a scan
+- {name: Instahyre,         type: instahyre,   board: "", active: false}              # 12,700 listed; no dates in the list, so 100 newest pages a scan; off: blocks GitHub's servers
 - {name: TimesJobs,         type: timesjobs,   board: "software developer|software engineer|data engineer|data scientist|devops"}  # ~300 in 2 weeks
 - {name: Shine,             type: shine,       board: "software engineer|software developer|data engineer|data scientist"}  # its API returned HTTP 502 for a while on 2026-10-25
 - {name: Cutshort,          type: cutshort,    board: ""}              # ~36,000 tech job pages in its sitemap; 200 new a scan
 - {name: Wellfound,         type: wellfound,   board: "software-engineer|backend-engineer|frontend-engineer|full-stack-engineer|data-scientist|data-engineer|machine-learning-engineer|devops-engineer|mobile-engineer"}  # ~30 per role; some are outside India
 - {name: Internshala,       type: internshala, board: "internships/computer-science-internship|internships/software-development-internship|internships/web-development-internship|internships/data-science-internship|jobs/software-development-jobs|jobs/web-development-jobs|jobs/data-science-jobs"}  # fresher jobs and internships
-- {name: Freshersworld,     type: freshersworld, board: "jobs/category/it-software-job-vacancies"}  # fresher jobs; 100 newest a scan
+- {name: Freshersworld,     type: freshersworld, board: "jobs/category/it-software-job-vacancies", active: false}  # fresher jobs; 100 newest a scan; off: blocks GitHub's servers
 - {name: Unstop,            type: unstop,      board: "jobs|internships"}  # campus and fresher hiring, all fields
 - {name: The Muse,          type: themuse,     board: ""}              # ~10 India jobs in 2 weeks
 # Big employers on their own career sites
@@ -321,6 +321,6 @@
 - {name: Wipro,             type: sapsf,       board: "https://careers.wipro.com?location=India"}           # 5,588; 150 new a scan
 - {name: HCLTech,           type: sapsf,       board: "https://careers.hcltech.com?custCountryRegion=India"}  # 12,387; 150 new a scan
 - {name: MakeMyTrip,        type: makemytrip,  board: ""}              # 31
-- {name: Uber,              type: sitemap,     board: "https://jobs.uber.com/en/jobs/sitemap.xml"}  # 717 worldwide; each opened once
+- {name: Uber,              type: sitemap,     board: "https://jobs.uber.com/en/jobs/sitemap.xml", active: false}  # 717 worldwide; each opened once; off: blocks GitHub's servers
 - {name: Intuit,            type: talentbrew,  board: "https://jobs.intuit.com"}                    # 27
 - {name: Cargill,           type: talentbrew,  board: "https://careers.cargill.com"}                # 76
