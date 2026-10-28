@@ -88,6 +88,24 @@ claude                        # log in to Claude Code once; matching runs `claud
 
 Install the daily schedule with the steps in `launchd/README.md`.
 
+## Hosting (free, always on, Mac can be off)
+
+| Part | Where | Set up in |
+| --- | --- | --- |
+| Database | [Turso](https://turso.tech) (hosted SQLite), US East | `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN` |
+| Daily run (6:45) | GitHub Actions | `.github/workflows/daily.yml`, repo secrets |
+| Bot | Vercel function; Telegram sends each message to it | `api/telegram.py`, `vercel.json`, Vercel env vars |
+| Stale-run alert | Vercel cron, once a day | `api/health.py` |
+
+- With `TURSO_DATABASE_URL` set, every command uses Turso instead of `private/jobs.db`. `TURSO_REPLICA=<file>`
+  keeps a local copy so reads are fast (the daily run uses this); without it each query goes over the network.
+- Point Telegram at the hosted bot with `uv run python -m src.main webhook https://<app>.vercel.app/api/telegram`
+  (needs `TELEGRAM_WEBHOOK_SECRET`, the same value as on Vercel). While the webhook is set, `bot` and `taps`
+  on this Mac can't read messages; `webhook --off` switches back.
+- Run the daily job by hand from the repo's Actions tab: **daily → Run workflow**.
+- GitHub stops schedules in repos with no activity for 60 days; the workflow re-enables itself after each run,
+  and the Vercel cron tells you on Telegram if a day's run is missing.
+
 ## Run
 
 ```sh
@@ -238,7 +256,7 @@ Everything personal stays on this Mac in folders git ignores:
 | --- | --- |
 | Profiles | `config/profiles/<name>.yaml` (only `example.yaml` is committed) |
 | Resumes | `private/resumes/` |
-| Jobs, matches, run history | `private/jobs.db` (SQLite) |
+| Jobs, matches, run history | `private/jobs.db` (SQLite), or Turso when hosted (see Hosting) |
 | Full list of each person's matches | `private/exports/<name>.csv` |
 | Every collected job | `private/exports/all_jobs.csv` |
 | Logs | `private/logs/` |

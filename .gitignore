@@ -20,3 +20,5 @@ config/profiles/*.yaml
 # Labels show what each person wants; keep them local like profiles
 tests/labels/*
 !tests/labels/.gitkeep
+.vercel
+.env*

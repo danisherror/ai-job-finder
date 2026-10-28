@@ -95,7 +95,10 @@ ATS_JOB_PAGE = {
 
 
 def tz() -> ZoneInfo:
-    return ZoneInfo(os.environ.get("TZ") or "Asia/Kolkata")
+    try:
+        return ZoneInfo(os.environ.get("TZ") or "Asia/Kolkata")
+    except (ValueError, KeyError):  # e.g. ":UTC", which some hosts set and ZoneInfo can't read
+        return ZoneInfo("Asia/Kolkata")
 
 
 # ---------------------------------------------------------------- picking
