@@ -214,6 +214,10 @@ def daily(conn) -> None:
         match_results = match(conn, run_id)
         send_failures = send(conn, run_id, once_a_day=True)
         report_broadcast(broadcast.send_daily(conn))
+        try:  # keep the bot's / menu in step with the code
+            broadcast.set_commands()
+        except telegram.TelegramError as e:
+            print(f"Could not update the bot menu: {e}")
     except Exception:
         store.finish_run(conn, run_id, "failed")
         detail = traceback.format_exc()
@@ -306,6 +310,9 @@ def main(argv: list[str]) -> None:
         tried = conn.execute("SELECT COUNT(*) FROM source_runs WHERE run_id = ?", (run_id,)).fetchone()[0]
         store.finish_run(conn, run_id, "failed" if tried and not scanned else "done")
         report_broadcast(broadcast.send_daily(conn, once_a_day=False))
+    elif command == "commands":
+        broadcast.set_commands()
+        print("Bot menu updated")
     elif command == "broadcast":
         report_broadcast(broadcast.send_daily(conn, dry_run="--dry-run" in argv))
     elif command == "daily":

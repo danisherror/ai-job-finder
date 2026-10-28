@@ -120,7 +120,8 @@ to people in India (any city, or remote). They use the rules behind `india_inter
 
 Bot commands: `/start` subscribes and sends the newest jobs, `/latest` shows them again, `/id` shows the chat ID,
 `/stop` unsubscribes, `/help`.
-The owner (`OPERATOR_TELEGRAM_CHAT_ID`) can also send `/active` to see who is subscribed.
+The owner (`OPERATOR_TELEGRAM_CHAT_ID`) can also send `/active` to see who is subscribed; it appears only in
+the owner's `/` menu. The daily run refreshes the menu; `uv run python -m src.main commands` does it now.
 The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
 People who block the bot are unsubscribed automatically. Code: `src/broadcast.py`.
 

@@ -34,6 +34,14 @@ COMMANDS = [{"command": "latest", "description": "Newest internships and 2027-gr
             {"command": "stop", "description": "Stop the daily lists"},
             {"command": "start", "description": "Subscribe to the daily lists"},
             {"command": "help", "description": "What this bot does"}]
+OWNER_COMMANDS = COMMANDS + [{"command": "active", "description": "Who is subscribed (owner only)"}]
+
+
+def set_commands() -> None:
+    """Show the command list in Telegram's / menu: the public list for everyone, plus /active for the owner."""
+    telegram.api("setMyCommands", commands=COMMANDS)
+    if owner := health.operator_chat():
+        telegram.api("setMyCommands", commands=OWNER_COMMANDS, scope={"type": "chat", "chat_id": owner})
 
 
 # ---------------------------------------------------------------- picking

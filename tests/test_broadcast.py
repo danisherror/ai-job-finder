@@ -148,3 +148,15 @@ def test_active_lists_subscribers_only_for_the_owner(conn, monkeypatch):
     [(chat, text)] = fake.sent
     assert chat == 1 and "· 2 active" in text and "Riya (@riya)" in text and "<code>2</code>" in text
     assert "Gone" not in text and "1 stopped or blocked the bot" in text
+
+
+def test_only_the_owner_menu_lists_active(monkeypatch):
+    calls = []
+    monkeypatch.setattr(telegram, "api", lambda method, **params: calls.append((method, params)))
+    monkeypatch.setenv("OPERATOR_TELEGRAM_CHAT_ID", "1")
+    broadcast.set_commands()
+
+    [(_, everyone), (_, owner)] = calls
+    assert "scope" not in everyone and "active" not in [c["command"] for c in everyone["commands"]]
+    assert owner["scope"] == {"type": "chat", "chat_id": 1}
+    assert "active" in [c["command"] for c in owner["commands"]]
