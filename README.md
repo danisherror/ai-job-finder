@@ -11,72 +11,77 @@ Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
 ## Architecture
 
+The tool runs on three free services, so this Mac can stay off: **GitHub Actions** collects jobs every morning,
+**Turso** (a hosted SQLite database) stores everything, and **Vercel** runs the Telegram bot.
+
 ```mermaid
 flowchart LR
-    subgraph sched["launchd (this Mac)"]
-        daily["daily job<br/>6:45 AM IST"]
-        hourly["bot<br/>always running"]
-    end
-
-    subgraph config["config/"]
-        sources["sources.yaml"]
-        profiles["profiles/*.yaml<br/>+ private/resumes/"]
-    end
-
-    subgraph web["Job sources"]
-        ats["Company job boards<br/>Greenhouse, Lever, Ashby,<br/>Workday, Oracle, Eightfold, ..."]
+    subgraph web["Job sources on the internet"]
+        ats["Company job boards<br/>Greenhouse, Lever, Ashby,<br/>Workday, Oracle, ..."]
         sites["Career sites<br/>Amazon, Google, Wipro, ..."]
         portals["India portals<br/>LinkedIn, Naukri, Foundit, ..."]
         remote["Remote boards and APIs<br/>Remote OK, Jooble, YC, ..."]
     end
 
-    main["src/main.py<br/>CLI + daily pipeline"]
-
-    subgraph collect["1. Collect (no AI)"]
-        adapters["src/collect/*<br/>one adapter per source type,<br/>run in parallel lanes"]
-        http["collect/http.py<br/>polite fetching, retries"]
-        normalize["normalize.py<br/>text, city, work mode,<br/>India eligibility, experience"]
+    subgraph gha["GitHub Actions (daily.yml, 6:45 AM IST)"]
+        daily["src.main daily"]
+        collect["1. Collect<br/>src/collect/* + normalize.py<br/>one adapter per source type"]
+        replica[("local copy<br/>private/replica/jobs.db")]
+        bcast["2. Share<br/>broadcast.py: internships +<br/>2027-grad jobs per subscriber"]
+        healthd["3. Check<br/>health.py: alerts,<br/>weekly summary"]
     end
 
-    subgraph matchstage["2. Match (per person)"]
-        rules["rules.py<br/>hard filters in code"]
-        matcher["matcher.py<br/>batches of 15 jobs"]
-        llm["llm.py + prompts.py<br/>claude -p (Haiku)"]
+    turso[("Turso (US East)<br/>jobs, subscribers, filters,<br/>watches, applications, runs")]
+
+    subgraph vercel["Vercel (US East, iad1)"]
+        bot["api/telegram.py<br/>bot webhook<br/>→ commands.py"]
+        cron["api/health.py<br/>cron, 12:00 IST"]
     end
 
-    subgraph send["3. Send"]
-        digest["digest.py<br/>pick, rank, format"]
-        telegram["telegram.py"]
-    end
+    tgapi(["Telegram servers"])
+    users(["Subscribers<br/>and the owner"])
 
-    db[("private/jobs.db<br/>SQLite: jobs, matches,<br/>runs, source runs")]
-    exports["private/exports/*.csv"]
-    health["health.py<br/>alerts + weekly summary"]
-    tg(["Telegram<br/>each person's list"])
-    evaluate["evaluate.py + baseline.py<br/>labelled match-quality check"]
+    daily --> collect -->|"fetch pages / APIs"| web
+    collect -->|"new and changed jobs"| replica
+    replica <-->|"sync: reads local,<br/>writes go to Turso"| turso
+    daily --> bcast
+    replica --> bcast
+    bcast -->|"send lists"| tgapi
+    daily --> healthd -->|"alerts to owner"| tgapi
 
-    daily --> main
-    hourly -->|"bot commands, button taps"| telegram
-    sources --> adapters
-    profiles --> rules
-    main --> adapters --> http --> web
-    adapters --> normalize --> db
-    main --> rules
-    db --> rules --> matcher --> llm
-    matcher -->|"scores"| db
-    main --> digest
-    db --> digest --> telegram --> tg
-    digest --> exports
-    db --> exports
-    main --> health --> telegram
-    db -.-> evaluate
-    llm -.-> evaluate
+    users <-->|"/start, /search, taps"| tgapi
+    tgapi -->|"POST each message<br/>(secret header)"| bot
+    bot <-->|"queries over the network"| turso
+    bot -->|"replies, CSV files"| tgapi
+    cron -->|"did today's run finish?"| turso
+    cron -->|"alert if missing"| tgapi
+    tgapi --> users
 ```
 
-Each morning `daily` runs three stages over one SQLite file: **collect** fetches every active source in
-`config/sources.yaml` and stores new or changed jobs; **match** drops jobs that fail a person's hard rules and asks
-Claude to score the rest; **send** picks each person's best new matches and sends them on Telegram. The always-on
-`bot` answers bot commands, saves button taps and tells you if the daily run has stopped.
+**How the jobs get collected and stored.** At 6:45 AM IST GitHub starts the `daily` workflow on one of its
+servers. It installs the project, opens Turso with `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` (repo secrets) and
+pulls a local copy of the database (`TURSO_REPLICA`). Each source in `config/sources.yaml` is fetched by its
+adapter, cleaned up by `normalize.py` (city, work mode, India eligibility, experience), and new or changed jobs are
+written. Reads come from the local copy, so they are fast; every write goes straight to Turso. When the run ends
+the GitHub server is thrown away, and Turso holds the only copy.
+
+**How the jobs reach people.** The same run builds each subscriber's two lists (new software internships and new
+jobs for 2027 graduates), applies their `/filters`, `/watch` and `/pause` settings stored in Turso, and sends them
+through Telegram's API with `TELEGRAM_BOT_TOKEN`. It records which jobs were sent, so nobody gets one twice.
+
+**How the bot connects.** The bot is not a program that keeps running. Telegram was told once (with the `webhook`
+command) to send every message to `https://<app>.vercel.app/api/telegram`. Each time someone sends `/start`,
+`/search react` or taps a button, Telegram makes a request to that address; Vercel starts `api/telegram.py`,
+which checks the secret header (`TELEGRAM_WEBHOOK_SECRET`), opens Turso directly (no local copy, since a Vercel
+function has no lasting disk), runs the command in `commands.py`, replies through Telegram, and stops. The
+function runs in US East next to the database, so each query is quick.
+
+**What if a run is missed.** A Vercel cron calls `api/health.py` once a day (12:00 IST). It reads the run history
+in Turso and messages the owner on Telegram if the morning run has not finished. The workflow also re-enables its
+own schedule after every run, because GitHub turns schedules off in repos with no activity for 60 days.
+
+The AI-ranked personal lists (`match` with `claude -p`, profiles and resumes) need files that stay on this Mac, so
+they run only when `daily` is run here; on GitHub there are no profiles and that step does nothing.
 
 ## Setup (once)
 
@@ -86,7 +91,9 @@ cp .env.example .env          # then fill in the Telegram bot token and your own
 claude                        # log in to Claude Code once; matching runs `claude -p` on your plan
 ```
 
-Install the daily schedule with the steps in `launchd/README.md`.
+That is enough to run commands on this Mac. The scheduled run and the bot are hosted (next section), so nothing
+has to be installed on the Mac for them. `launchd/README.md` describes the old Mac schedule, which should stay
+off while hosting is used so the two don't both send the lists.
 
 ## Hosting (free, always on, Mac can be off)
 
@@ -116,11 +123,13 @@ uv run python -m src.main export             # rewrite private/exports/all_jobs.
 uv run python -m src.main match              # only score new jobs for each person
 uv run python -m src.main digest --dry-run   # print each person's list without sending it
 uv run python -m src.main bot                # keep running and answer bot commands within a second (Ctrl+C stops it)
+                                             # only after `webhook --off`; normally the Vercel bot answers
 uv run python -m src.main health             # the weekly health summary (add --send to send it to you)
 uv run pytest -q                             # offline tests
 ```
 
-Logs from the scheduled runs are in `private/logs/`.
+Logs from the scheduled run are in the repo's Actions tab (each **daily** run), and the bot's in the Vercel
+project's logs. Runs on this Mac log to `private/logs/`.
 
 ## Browse every job yourself (no AI)
 
@@ -154,8 +163,7 @@ Bot commands (`/help` lists them in the bot):
 
 The owner (`OPERATOR_TELEGRAM_CHAT_ID`) can also send `/active` to see who is subscribed; it appears only in
 the owner's `/` menu. The daily run refreshes the menu; `uv run python -m src.main commands` does it now.
-`uv run python -m src.main bot` answers commands within a second (launchd keeps it running; see
-`launchd/README.md`), so the bot replies only while this Mac is on and awake. People who block the bot are
+The bot runs on Vercel and answers at any time, even with this Mac off (see Hosting). People who block the bot are
 unsubscribed automatically. Code: `src/commands.py` (commands) and `src/broadcast.py` (the lists).
 
 ```sh
@@ -170,7 +178,7 @@ nothing new. The scheduled daily run also sends the lists, at most once a day.
 ## Add a person with their own AI-ranked list (about 5 minutes)
 
 1. Ask them to open the bot in Telegram and send `/id`. The bot replies with their chat ID right away
-   while `bot` is running (or run `uv run python -m src.main taps` to answer waiting messages now).
+   right away (the hosted bot is always on).
 2. Copy the template: `cp config/profiles/example.yaml config/profiles/<name>.yaml`. The file name is their ID.
 3. Fill in `name`, `telegram_chat_id`, `target_roles`, `seniority`, `experience_years`, skills and `locations`.
    The comments in the template explain each field.
@@ -250,7 +258,7 @@ account to apply. Jooble, Careerjet and Adzuna use official APIs with a key in `
 
 ## Where data lives
 
-Everything personal stays on this Mac in folders git ignores:
+Profiles, resumes and exports stay on this Mac in folders git ignores; jobs and subscriber data are in Turso:
 
 | What | Where |
 | --- | --- |
@@ -259,9 +267,9 @@ Everything personal stays on this Mac in folders git ignores:
 | Jobs, matches, run history | `private/jobs.db` (SQLite), or Turso when hosted (see Hosting) |
 | Full list of each person's matches | `private/exports/<name>.csv` |
 | Every collected job | `private/exports/all_jobs.csv` |
-| Logs | `private/logs/` |
+| Logs | GitHub Actions and Vercel logs; `private/logs/` for runs on this Mac |
 | Match-quality labels | `tests/labels/<name>.csv` and `.jobs.jsonl` |
-| Telegram token, your chat ID | `.env` |
+| Telegram token, your chat ID, Turso keys | `.env` here; GitHub repo secrets and Vercel env vars when hosted |
 
 Run logs and AI call logs older than 30 days are deleted automatically. Jobs are kept.
 
