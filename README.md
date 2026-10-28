@@ -119,7 +119,9 @@ to people in India (any city, or remote). They use the rules behind `india_inter
 (postings older than 14 days are left out), and one posting in several cities is listed once.
 
 Bot commands: `/start` subscribes and sends the newest jobs, `/latest` shows them again, `/id` shows the chat ID,
-`/stop` unsubscribes, `/help`. The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
+`/stop` unsubscribes, `/help`.
+The owner (`OPERATOR_TELEGRAM_CHAT_ID`) can also send `/active` to see who is subscribed.
+The `taps` job answers them every minute, so the bot replies only while this Mac is on and awake.
 People who block the bot are unsubscribed automatically. Code: `src/broadcast.py`.
 
 ```sh

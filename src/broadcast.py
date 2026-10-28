@@ -10,7 +10,7 @@ import io
 import time
 from datetime import datetime, timedelta, timezone
 
-from src import store, telegram
+from src import health, store, telegram
 from src.digest import (GRAD_YEAR, _date, e, grad_reason_order, graduate_reason, is_india_internship, place,
                         safe_apply_url, tz, usual_hosts)
 
@@ -154,6 +154,18 @@ def build_messages(conn, since: str | None, label: str = "new today",
     return messages, table
 
 
+def subscribers_messages(conn) -> list[str]:
+    """Who uses the bot: every active subscriber, plus how many have stopped. For the owner only."""
+    rows = store.all_subscribers(conn)
+    active = [r for r in rows if r["active"]]
+    lines = [f"• {e(r['name'] or 'No name')}" + (f" (@{e(r['username'])})" if r["username"] else "")
+             + f"\n   joined {_date(r['joined_at'])} · <code>{r['chat_id']}</code>" for r in active]
+    messages = section("👥 Subscribers", lines, len(active), "active")
+    if stopped := len(rows) - len(active):
+        messages[-1] += f"\n\n<i>{stopped} stopped or blocked the bot</i>"
+    return messages
+
+
 # ---------------------------------------------------------------- sending
 
 GONE = ("blocked by the user", "user is deactivated", "chat not found", "bot was kicked")
@@ -248,6 +260,8 @@ def handle_message(conn, message: dict) -> bool:
     elif command == "/id":
         send_to(conn, chat_id, [f"Your chat ID is <code>{chat_id}</code>. "
                                 "Send it to the person who runs this bot."])
+    elif command == "/active" and chat_id == health.operator_chat():  # owner only; others get no reply
+        send_to(conn, chat_id, subscribers_messages(conn))
     elif command == "/help":
         send_to(conn, chat_id, [HELP])
     else:

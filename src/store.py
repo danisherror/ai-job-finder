@@ -504,6 +504,11 @@ def active_subscribers(conn) -> list[int]:
     return [r[0] for r in conn.execute("SELECT chat_id FROM subscribers WHERE active = 1 ORDER BY joined_at")]
 
 
+def all_subscribers(conn) -> list:
+    """Everyone who ever pressed Start, active or not, oldest first."""
+    return conn.execute("SELECT * FROM subscribers ORDER BY joined_at").fetchall()
+
+
 # ---------------------------------------------------------------- retention
 
 def delete_old_logs(conn, days: int = KEEP_LOGS_DAYS) -> dict:

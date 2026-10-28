@@ -131,3 +131,20 @@ def test_id_replies_with_the_chat_id(conn, monkeypatch):
     assert broadcast.handle_message(conn, {"text": "/id", "chat": {"id": 42}})
     assert fake.sent == [(42, "Your chat ID is <code>42</code>. Send it to the person who runs this bot.")]
     assert store.active_subscribers(conn) == []                    # asking for the ID doesn't subscribe
+
+
+def test_active_lists_subscribers_only_for_the_owner(conn, monkeypatch):
+    fake = FakeSend()
+    monkeypatch.setattr(telegram, "send_message", fake)
+    monkeypatch.setenv("OPERATOR_TELEGRAM_CHAT_ID", "1")
+    store.subscribe(conn, 1, "Owner", None)
+    store.subscribe(conn, 2, "Riya", "riya")
+    store.subscribe(conn, 3, "Gone", None)
+    store.unsubscribe(conn, 3)
+
+    assert not broadcast.handle_message(conn, {"text": "/active", "chat": {"id": 2}})   # not the owner
+    assert fake.sent == []
+    assert broadcast.handle_message(conn, {"text": "/active", "chat": {"id": 1}})
+    [(chat, text)] = fake.sent
+    assert chat == 1 and "· 2 active" in text and "Riya (@riya)" in text and "<code>2</code>" in text
+    assert "Gone" not in text and "1 stopped or blocked the bot" in text
