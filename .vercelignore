@@ -1,0 +1,10 @@
+# Never upload private data or secrets to Vercel
+private/
+.env
+.env.*
+# Not needed by the bot
+tests/
+.github/
+launchd/
+.venv/
+*.md

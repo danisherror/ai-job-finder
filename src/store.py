@@ -461,6 +461,35 @@ def _open_jobs_by_identity(conn, aggregators: bool) -> dict[tuple[str, str], lis
     return index
 
 
+BATCH_BYTES = 1_000_000  # rough cap on one statement's JSON, well under Turso's request size limit
+
+
+def _batches(items: list) -> list[list]:
+    """Split items into lists whose JSON stays near BATCH_BYTES."""
+    batches, batch, size = [], [], 0
+    for item in items:
+        n = len(json.dumps(item))
+        if batch and size + n > BATCH_BYTES:
+            batches.append(batch)
+            batch, size = [], 0
+        batch.append(item)
+        size += n
+    return batches + [batch] if batch else batches
+
+
+def _json_fields(n: int) -> str:
+    """json_extract(value, '$[0]'), ... for the first n fields of each JSON array row."""
+    return ", ".join(f"json_extract(value, '$[{i}]')" for i in range(n))
+
+
+def _fetch_column(conn, sql: str, values: list) -> list:
+    """Run `sql`, whose one ? is a JSON list of values, in batches; returns the first column of every row."""
+    out = []
+    for batch in _batches(values):
+        out += [r[0] for r in conn.execute(sql, (json.dumps(batch),)).fetchall()]
+    return out
+
+
 def save_source_result(conn, run_id: str, source: Source, started: str, jobs: list[Job]) -> int:
     """Save one source's jobs and mark it done, in a single transaction. Returns the number of new jobs.
 
@@ -479,47 +508,70 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
     new = 0
     seen: list[str] = []
     others = _open_jobs_by_identity(conn, aggregators=not source.aggregator)
+    kept = []  # (key, job, copies) for each job this source should store
+    for job in jobs:
+        key = job_key(source.type, source.board, job)
+        seen.append(key)
+        copies = others.get(same_job_key(job.company, job.title), [])
+        if source.aggregator and copies:
+            continue  # the company's own feed already has it
+        kept.append((key, job, copies))
+    known = set(_fetch_column(conn, "SELECT job_key FROM jobs WHERE job_key IN (SELECT value FROM json_each(?))",
+                              [k for k, _, _ in kept]))
+    inserts, updates, closes = [], {}, []
+    for key, job, copies in kept:
+        if key in known:
+            updates[key] = job  # listed twice in one scan: the later listing wins
+            continue
+        known.add(key)
+        new += 1
+        closes += copies  # a job board listed this first; keep the company's own posting
+        inserts.append([key, source.name, job.ats_id, job.title, job.company, job.location_raw,
+                        json.dumps(job.cities), job.work_mode, job.india_eligible, job.experience_min,
+                        job.experience_max, job.salary, job.department, job.description, str(job.apply_url),
+                        job.posted_at.isoformat() if job.posted_at else None,
+                        job.updated_at.isoformat() if job.updated_at else None,
+                        int(first_scan and _is_backfill(job, cutoff))])
+    # Known jobs whose details weren't fetched again keep what's stored; sitemap readers don't know a known
+    # job's title, so an empty one keeps the saved title. Known jobs with details refresh what changes.
+    seen_only = [[k, j.title] for k, j in updates.items() if not j.description]
+    refreshed = [[k, j.updated_at.isoformat() if j.updated_at else None, j.title, j.description, j.location_raw,
+                  json.dumps(j.cities), j.work_mode, j.india_eligible, j.experience_min, j.experience_max, j.salary]
+                 for k, j in updates.items() if j.description]
+    # Jobs go in as JSON batches, a few statements per source instead of one per job: on Turso each
+    # statement is a network round trip.
     with conn:  # one transaction: either all of this happens or none of it
-        for job in jobs:
-            key = job_key(source.type, source.board, job)
-            seen.append(key)
-            copies = others.get(same_job_key(job.company, job.title), [])
-            if source.aggregator and copies:
-                continue  # the company's own feed already has it
-            cur = conn.execute(
-                """INSERT INTO jobs (job_key, source, ats_id, title, company, location_raw, cities, work_mode,
-                       india_eligible, experience_min, experience_max, salary, department, description,
-                       apply_url, posted_at, updated_at, first_seen, last_seen, backfill)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-                   ON CONFLICT(job_key) DO NOTHING""",
-                (key, source.name, job.ats_id, job.title, job.company, job.location_raw,
-                 json.dumps(job.cities), job.work_mode, job.india_eligible, job.experience_min,
-                 job.experience_max, job.salary, job.department, job.description, str(job.apply_url),
-                 job.posted_at.isoformat() if job.posted_at else None,
-                 job.updated_at.isoformat() if job.updated_at else None,
-                 ts, ts, int(first_scan and _is_backfill(job, cutoff))),
+        for batch in _batches(inserts):
+            conn.execute(
+                f"""INSERT INTO jobs (job_key, source, ats_id, title, company, location_raw, cities, work_mode,
+                        india_eligible, experience_min, experience_max, salary, department, description,
+                        apply_url, posted_at, updated_at, backfill, first_seen, last_seen)
+                    SELECT {_json_fields(18)}, ?, ? FROM json_each(?) WHERE true
+                    ON CONFLICT(job_key) DO NOTHING""",
+                (ts, ts, json.dumps(batch)),
             )
-            if cur.rowcount:
-                new += 1
-                for copy in copies:  # a job board listed this first; keep the company's own posting
-                    conn.execute("UPDATE jobs SET lifecycle = 'closed' WHERE job_key = ?", (copy,))
-            elif not job.description:  # known, and its details weren't fetched again: keep what's stored
-                conn.execute(  # sitemap readers don't know a known job's title: keep the saved one
-                    """UPDATE jobs SET last_seen = ?, missed_scans = 0, title = COALESCE(NULLIF(?, ''), title),
-                           lifecycle = 'open' WHERE job_key = ?""",
-                    (ts, job.title, key),
-                )
-            else:  # already known: only refresh what changes over time
-                conn.execute(
-                    """UPDATE jobs SET last_seen = ?, missed_scans = 0, updated_at = ?,
-                           title = ?, description = ?, location_raw = ?, cities = ?, work_mode = ?,
-                           india_eligible = ?, experience_min = ?, experience_max = ?, salary = ?,
-                           lifecycle = 'open'
-                       WHERE job_key = ?""",
-                    (ts, job.updated_at.isoformat() if job.updated_at else None, job.title, job.description,
-                     job.location_raw, json.dumps(job.cities), job.work_mode, job.india_eligible,
-                     job.experience_min, job.experience_max, job.salary, key),
-                )
+        for batch in _batches(closes):
+            conn.execute("UPDATE jobs SET lifecycle = 'closed' WHERE job_key IN (SELECT value FROM json_each(?))",
+                         (json.dumps(batch),))
+        for batch in _batches(seen_only):
+            conn.execute(
+                """UPDATE jobs SET last_seen = ?, missed_scans = 0, lifecycle = 'open',
+                       title = COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title)
+                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')""",
+                (ts, json.dumps(batch)),
+            )
+        for batch in _batches(refreshed):
+            conn.execute(
+                """UPDATE jobs SET last_seen = ?, missed_scans = 0, lifecycle = 'open',
+                       updated_at = json_extract(u.value, '$[1]'), title = json_extract(u.value, '$[2]'),
+                       description = json_extract(u.value, '$[3]'), location_raw = json_extract(u.value, '$[4]'),
+                       cities = json_extract(u.value, '$[5]'), work_mode = json_extract(u.value, '$[6]'),
+                       india_eligible = json_extract(u.value, '$[7]'),
+                       experience_min = json_extract(u.value, '$[8]'),
+                       experience_max = json_extract(u.value, '$[9]'), salary = json_extract(u.value, '$[10]')
+                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')""",
+                (ts, json.dumps(batch)),
+            )
         if source.aggregator:
             old = (datetime.now(timezone.utc) - timedelta(days=AGGREGATOR_CLOSE_DAYS)).isoformat()
             conn.execute(
@@ -694,7 +746,9 @@ def remove_watch(conn, chat_id: int, company: str) -> bool:
 def share_ids(conn, job_keys: list[str]) -> dict[str, int]:
     """A short, permanent number for each job, created the first time the job is sent to anyone."""
     with conn:
-        conn.executemany("INSERT OR IGNORE INTO shared_jobs (job_key) VALUES (?)", [(k,) for k in job_keys])
+        for batch in _batches(job_keys):  # in order, so numbers follow the order jobs are listed
+            conn.execute("INSERT OR IGNORE INTO shared_jobs (job_key) SELECT value FROM json_each(?)",
+                         (json.dumps(batch),))
     ids = {}
     for i in range(0, len(job_keys), 500):  # SQLite limits how many ? one query may have
         chunk = job_keys[i:i + 500]

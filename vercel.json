@@ -1,0 +1,9 @@
+{
+  "regions": ["iad1"],
+  "functions": {
+    "api/*.py": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/health", "schedule": "30 6 * * *" }
+  ]
+}

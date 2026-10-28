@@ -123,31 +123,50 @@ def poll_updates(conn, profiles: list[Profile], on_message=None, wait: int = 0) 
     offset = int(store.get_state(conn, "telegram_offset") or 0)
     counts = {"taps": 0, "ignored": 0, "messages": 0}
     while True:
-        updates = api("getUpdates", offset=offset, timeout=wait, allowed_updates=["callback_query", "message"],
+        updates = api("getUpdates", offset=offset, timeout=wait, allowed_updates=UPDATE_TYPES,
                       http_timeout=httpx.Timeout(wait + 30, connect=10))
         if not updates:
             break
         for u in updates:
-            # One bad update must never block the ones after it, or the bot would retry it forever.
-            if "callback_query" in u:
-                try:
-                    result = handle_callback(conn, u["callback_query"], chat_to_profile)
-                    counts["ignored" if result == "ignored" else "taps"] += 1
-                except TelegramError as err:
-                    print(f"Button tap not answered: {err}")  # e.g. a tap too old for Telegram to answer
-            elif on_message and u.get("message"):
-                try:
-                    counts["messages"] += bool(on_message(conn, u["message"]))
-                except TelegramError:
-                    pass  # e.g. they blocked the bot right after writing; don't stop the other updates
-                except Exception:
-                    traceback.print_exc()  # a bug in one command; log it and answer the rest
-            elif (u.get("message") or {}).get("text", "").startswith("/start"):
-                # Lets a new person find the chat ID that goes in their profile.
-                chat_id = u["message"]["chat"]["id"]
-                send_message(chat_id, f"Hi! Your chat ID is <code>{chat_id}</code>. "
-                                      "Send it to the person who runs this bot.")
-                counts["messages"] += 1
+            handle_update(conn, u, chat_to_profile, on_message, counts)
             offset = u["update_id"] + 1
             store.set_state(conn, "telegram_offset", str(offset))
     return counts
+
+
+def handle_update(conn, u: dict, chat_to_profile: dict[int, str], on_message=None, counts: dict | None = None) -> None:
+    """Answer one update: a button tap or a message. Used by polling and by the webhook (api/telegram.py).
+    One bad update must never block the ones after it, or the bot would retry it forever."""
+    counts = counts if counts is not None else {"taps": 0, "ignored": 0, "messages": 0}
+    if "callback_query" in u:
+        try:
+            result = handle_callback(conn, u["callback_query"], chat_to_profile)
+            counts["ignored" if result == "ignored" else "taps"] += 1
+        except TelegramError as err:
+            print(f"Button tap not answered: {err}")  # e.g. a tap too old for Telegram to answer
+    elif on_message and u.get("message"):
+        try:
+            counts["messages"] += bool(on_message(conn, u["message"]))
+        except TelegramError:
+            pass  # e.g. they blocked the bot right after writing; don't stop the other updates
+        except Exception:
+            traceback.print_exc()  # a bug in one command; log it and answer the rest
+    elif (u.get("message") or {}).get("text", "").startswith("/start"):
+        # Lets a new person find the chat ID that goes in their profile.
+        chat_id = u["message"]["chat"]["id"]
+        send_message(chat_id, f"Hi! Your chat ID is <code>{chat_id}</code>. "
+                              "Send it to the person who runs this bot.")
+        counts["messages"] += 1
+
+
+UPDATE_TYPES = ["callback_query", "message"]
+
+
+def set_webhook(url: str, secret: str) -> None:
+    """Have Telegram send every update to `url` (polling with `bot`/`taps` then stops working)."""
+    api("setWebhook", url=url, secret_token=secret, allowed_updates=UPDATE_TYPES, drop_pending_updates=False)
+
+
+def delete_webhook() -> None:
+    """Back to polling: `bot` and `taps` can read updates again."""
+    api("deleteWebhook", drop_pending_updates=False)

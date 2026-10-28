@@ -17,11 +17,14 @@
     uv run python -m src.main bot                keep running and answer bot commands within a second
                                                  (/start, /latest, /search, ...) and save button taps
     uv run python -m src.main taps               answer the bot commands sent since the last check, then exit
+    uv run python -m src.main webhook <url>|--off
+                                                 send bot messages to the hosted bot (api/telegram.py), or back to polling
     uv run python -m src.main health [--send]    print (or send to the owner) the weekly health summary
     uv run python -m src.main forget <person>    delete everything stored about someone (remove their profile first)
 """
 
 import fcntl
+import os
 import queue
 import sys
 import time
@@ -288,6 +291,21 @@ def bot() -> None:
             print(f"{time.strftime('%H:%M:%S')} commands answered: {counts['messages']}, taps: {counts['taps']}")
 
 
+def webhook(argv: list[str]) -> None:
+    """Point Telegram at the hosted bot (api/telegram.py), or with --off go back to polling (`bot`, `taps`)."""
+    if "--off" in argv:
+        telegram.delete_webhook()
+        print("Webhook removed: `bot` and `taps` can read messages again.")
+        return
+    if len(argv) < 3 or not argv[2].startswith("https://"):
+        sys.exit("Usage: webhook https://<your-app>.vercel.app/api/telegram   (or: webhook --off)")
+    secret = os.environ.get("TELEGRAM_WEBHOOK_SECRET", "").strip()
+    if not secret:
+        sys.exit("Set TELEGRAM_WEBHOOK_SECRET in .env first (the same value as on Vercel).")
+    telegram.set_webhook(argv[2], secret)
+    print(f"Telegram now sends bot messages to {argv[2]}. Stop the bot on this Mac; it can't read them any more.")
+
+
 def forget(conn, person: str) -> None:
     """Delete a person's matches, AI call log, list export, labels and cached AI results."""
     from src import evaluate  # only needed here
@@ -323,6 +341,9 @@ def main(argv: list[str]) -> None:
             bot() if command == "bot" else taps()
         except KeyboardInterrupt:
             print("Stopped.")
+        return
+    if command == "webhook":
+        webhook(argv)
         return
     lock = acquire_lock()  # noqa: F841  (kept open for the life of the process)
     conn = store.connect()

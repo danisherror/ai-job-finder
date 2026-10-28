@@ -1,0 +1,41 @@
+# The daily run on GitHub's servers: collect jobs, match, send digests. Data lives in Turso.
+name: daily
+
+on:
+  schedule:
+    - cron: "15 1 * * *"   # 06:45 in India (01:15 UTC). GitHub may start it up to ~30 min late.
+  workflow_dispatch:         # "Run workflow" button in the Actions tab
+
+concurrency:
+  group: daily               # never two runs at once
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write             # for the keep-alive step below
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340     # GitHub stops any job at 6 hours
+    env:
+      TZ: Asia/Kolkata
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      TURSO_REPLICA: private/replica/jobs.db   # local copy: reads stay fast, writes go to Turso
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      OPERATOR_TELEGRAM_CHAT_ID: ${{ secrets.OPERATOR_TELEGRAM_CHAT_ID }}
+      JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+      CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Daily run
+        run: uv run python -m src.main daily
+      - name: Keep the schedule alive
+        # GitHub turns off schedules in a repo with no commits for 60 days; re-enabling resets that clock.
+        if: always()
+        run: gh workflow enable daily.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
