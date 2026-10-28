@@ -124,8 +124,19 @@ def jobs_csv(internships: list, graduates: list, url) -> bytes:
     return out.getvalue().encode("utf-8-sig")  # -sig: Excel then reads ₹, é, etc. correctly
 
 
-def build_messages(conn, since: str | None, label: str = "new today") -> tuple[list[str], bytes | None]:
-    """The chat messages listing every job, plus a CSV of them all (None when there are no jobs)."""
+def summary(internships: list, graduates: list, label: str) -> str:
+    """Counts only, for a message that comes with the CSV instead of the job list."""
+    if not internships and not graduates:
+        return f"Nothing {label} yet. Your first list arrives tomorrow morning."
+    return (f"<b>💼 Software internships</b> · {len(internships)} {label}\n"
+            f"<b>🎓 Jobs for {GRAD_YEAR} graduates</b> · {len(graduates)} {label}\n\n"
+            "📄 Every job is in the CSV file below.")
+
+
+def build_messages(conn, since: str | None, label: str = "new today",
+                   summary_only: bool = False) -> tuple[list[str], bytes | None]:
+    """The chat messages listing every job (or, with summary_only, just the counts),
+    plus a CSV of them all (None when there are no jobs)."""
     internships, graduates = pick_lists(conn, since)
     hosts = usual_hosts(conn)
 
@@ -133,11 +144,14 @@ def build_messages(conn, since: str | None, label: str = "new today") -> tuple[l
         return safe_apply_url(r["apply_url"], r["source_type"], r["board"], r["ats_id"] or "",
                               hosts.get(r["source"], set()))
 
+    table = jobs_csv(internships, graduates, url) if internships or graduates else None
+    if summary_only:
+        return [summary(internships, graduates, label)], table
     intern_lines = [job_line(r, url(r)) for r in internships]
     grad_lines = [job_line(r, url(r), SHORT_REASON.get(reason)) for r, reason in graduates]
     messages = (section("💼 Software internships", intern_lines, len(internships), label)
                 + section(f"🎓 Jobs for {GRAD_YEAR} graduates", grad_lines, len(graduates), label))
-    return messages, jobs_csv(internships, graduates, url) if internships or graduates else None
+    return messages, table
 
 
 # ---------------------------------------------------------------- sending
@@ -207,8 +221,8 @@ def send_daily(conn, dry_run: bool = False, once_a_day: bool = True) -> dict:
     return {"subscribers": len(chats), "sent": sent, "failed": failed, "dry_run": False}
 
 
-def send_latest(conn, chat_id: int, intro: str | None = None) -> bool:
-    messages, table = build_messages(conn, None, label="in the last 2 weeks")
+def send_latest(conn, chat_id: int, intro: str | None = None, summary_only: bool = False) -> bool:
+    messages, table = build_messages(conn, None, label="in the last 2 weeks", summary_only=summary_only)
     document = (csv_name("latest_jobs"), table, "📄 All jobs from the last 2 weeks") if table else None
     return send_to(conn, chat_id, ([intro] if intro else []) + messages, document)
 
@@ -225,7 +239,7 @@ def handle_message(conn, message: dict) -> bool:
         user = message.get("from") or {}
         name = " ".join(x for x in (user.get("first_name"), user.get("last_name")) if x) or chat.get("title")
         store.subscribe(conn, chat_id, name, user.get("username"))
-        send_latest(conn, chat_id, WELCOME)
+        send_latest(conn, chat_id, WELCOME, summary_only=True)  # a new subscriber gets the file, not 30 messages
     elif command == "/stop":
         store.unsubscribe(conn, chat_id)
         send_to(conn, chat_id, ["You're unsubscribed. Send /start any time to get the daily lists again."])

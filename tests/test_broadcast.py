@@ -73,7 +73,9 @@ def test_start_subscribes_and_stop_unsubscribes(conn, monkeypatch):
     msg = {"text": "/start", "chat": {"id": 42}, "from": {"first_name": "Riya", "username": "riya"}}
     assert broadcast.handle_message(conn, msg)
     assert store.active_subscribers(conn) == [42]
-    assert "Welcome" in fake.sent[0][1] and "Software Engineering Intern" in fake.sent[1][1]
+    assert "Welcome" in fake.sent[0][1]
+    assert len(fake.sent) == 2 and "Software internships</b> · 1" in fake.sent[1][1]   # counts, not the jobs
+    assert "Software Engineering Intern" not in fake.sent[1][1]
 
     assert broadcast.handle_message(conn, {"text": "/stop@Bot_Jobfinder_bot", "chat": {"id": 42}})
     assert store.active_subscribers(conn) == []
