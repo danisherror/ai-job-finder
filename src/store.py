@@ -20,6 +20,7 @@ SUSPICIOUS_MIN_USUAL = 3   # a source that usually has at least this many jobs a
 ACCEPT_ZERO_AFTER = 3      # ...unless it has had 0 this many runs in a row; then the zero is believed
 USUAL_FROM_LAST = 7        # usual job count = median of the last N successful scans
 KEEP_LOGS_DAYS = 30
+KEEP_CLOSED_JOBS_DAYS = 30  # closed jobs not seen for this long are deleted (unless someone applied)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sources (
@@ -243,8 +244,16 @@ def connect_turso(url: str, token: str, replica: str | None = None) -> TursoConn
 
     if replica:
         Path(replica).parent.mkdir(parents=True, exist_ok=True)
-        conn = TursoConnection(libsql.connect(replica, sync_url=url, auth_token=token))
-        conn.sync()
+        try:
+            conn = TursoConnection(libsql.connect(replica, sync_url=url, auth_token=token))
+            conn.sync()  # a copy kept from the last run only pulls what changed since
+        except Exception as e:
+            # The kept copy no longer fits the database (for example after a restore): start a fresh one.
+            print(f"Local copy could not sync ({e}); downloading a fresh one")
+            for f in Path(replica).parent.glob(Path(replica).name + "*"):
+                f.unlink()
+            conn = TursoConnection(libsql.connect(replica, sync_url=url, auth_token=token))
+            conn.sync()
     else:
         conn = TursoConnection(libsql.connect(url, auth_token=token))
     conn.execute("PRAGMA foreign_keys = ON")
@@ -832,6 +841,21 @@ def delete_old_logs(conn, days: int = KEEP_LOGS_DAYS) -> dict:
         runs = conn.execute(f"DELETE FROM runs WHERE run_id IN ({old_runs})", (cutoff,)).rowcount
         calls = conn.execute("DELETE FROM llm_calls WHERE at < ?", (cutoff,)).rowcount
     return {"runs": runs, "source_runs": source_runs, "llm_calls": calls}
+
+
+def delete_old_jobs(conn, days: int = KEEP_CLOSED_JOBS_DAYS) -> dict:
+    """Delete jobs that are closed and haven't been seen for `days`, with their AI scores and /a_<id> numbers.
+    Jobs someone marked as applied are kept, so /applied still lists them. Keeps the database (and the
+    data each daily run pulls from Turso) from growing forever."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat(timespec="seconds")
+    old = """SELECT job_key FROM jobs WHERE lifecycle = 'closed' AND last_seen < ?
+               AND job_key NOT IN (SELECT sj.job_key FROM shared_jobs sj JOIN applications a ON a.job_id = sj.id)
+               AND job_key NOT IN (SELECT job_key FROM matches WHERE decision = 'applied')"""
+    with conn:
+        matches = conn.execute(f"DELETE FROM matches WHERE job_key IN ({old})", (cutoff,)).rowcount
+        numbers = conn.execute(f"DELETE FROM shared_jobs WHERE job_key IN ({old})", (cutoff,)).rowcount
+        jobs = conn.execute(f"DELETE FROM jobs WHERE job_key IN ({old})", (cutoff,)).rowcount
+    return {"jobs": jobs, "matches": matches, "job numbers": numbers}
 
 
 def forget_profile(conn, profile_id: str) -> dict:

@@ -286,3 +286,21 @@ def test_a_crashing_source_in_a_lane_does_not_stop_the_rest(conn, monkeypatch):
     assert rows == {"Acme": "failed", "Bolt": "ok"}
     detail = conn.execute("SELECT error_detail FROM source_runs WHERE source = 'Acme'").fetchone()[0]
     assert "feed changed shape" in detail and "Traceback" in detail
+
+
+def test_long_closed_jobs_are_deleted_unless_someone_applied(conn, monkeypatch):
+    scan(conn, monkeypatch, Acme=["a1", "a2", "a3"], Bolt=["b1"])
+    keys = [r[0] for r in conn.execute("SELECT job_key FROM jobs WHERE source = 'Acme' ORDER BY job_key")]
+    ids = store.share_ids(conn, keys)
+    store.mark_applied(conn, 42, ids[keys[1]])
+    long_ago = (datetime.now(timezone.utc) - timedelta(days=31)).isoformat()
+    conn.execute("UPDATE jobs SET lifecycle = 'closed', last_seen = ? WHERE source = 'Acme'", (long_ago,))
+    conn.execute("UPDATE jobs SET lifecycle = 'closed' WHERE job_key = ?", (keys[2],))  # closed, seen recently
+    conn.execute("UPDATE jobs SET last_seen = ? WHERE job_key = ?", (datetime.now(timezone.utc).isoformat(), keys[2]))
+    conn.commit()
+    removed = store.delete_old_jobs(conn)
+    assert removed == {"jobs": 1, "matches": 0, "job numbers": 1}
+    left = {r[0] for r in conn.execute("SELECT job_key FROM jobs")}
+    assert keys[0] not in left and {keys[1], keys[2]} <= left
+    assert [r["title"] for r in store.applied_jobs(conn, 42)] == ["Backend Engineer"]
+    assert store.shared_job(conn, ids[keys[0]]) is None

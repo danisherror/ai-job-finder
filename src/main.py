@@ -245,8 +245,8 @@ def daily(conn) -> None:
 
 
 def cleanup(conn) -> None:
-    """Delete run logs older than KEEP_LOGS_DAYS and keep the log files from growing forever."""
-    removed = store.delete_old_logs(conn)
+    """Delete run logs older than KEEP_LOGS_DAYS, long-closed jobs, and keep the log files from growing forever."""
+    removed = store.delete_old_logs(conn) | store.delete_old_jobs(conn)
     if any(removed.values()):
         print("Deleted old records: " + ", ".join(f"{k} {v}" for k, v in removed.items()))
     for log in LOGS_DIR.glob("*.log"):

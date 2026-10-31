@@ -31,8 +31,22 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --frozen
+      # Keep the local copy of the database between runs, so each run downloads only what changed
+      # instead of the whole database (Turso counts every byte downloaded against the monthly quota).
+      - name: Restore the local database copy
+        uses: actions/cache/restore@v4
+        with:
+          path: private/replica
+          key: turso-replica-${{ github.run_id }}
+          restore-keys: turso-replica-
       - name: Daily run
         run: uv run python -m src.main daily
+      - name: Save the local database copy
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: private/replica
+          key: turso-replica-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Keep the schedule alive
         # GitHub turns off schedules in a repo with no commits for 60 days; re-enabling resets that clock.
         if: always()
