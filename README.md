@@ -7,6 +7,8 @@ AmbitionBox, Foundit, Hirist, Instahyre, TimesJobs, Shine, Cutshort, Wellfound, 
 Unstop) and remote job boards, keeps the ones open to people in India, and sends each person a short ranked list
 on Telegram by 7:00 AM IST.
 
+**Try the bot:** [@Bot_Jobfinder_bot](https://t.me/Bot_Jobfinder_bot). Send `/start` to subscribe.
+
 Design: `AI_Job_Finder_Project_Report.md`. Build plan and status: `PLAN.md`.
 
 ## Architecture
