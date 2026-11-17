@@ -560,6 +560,9 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
                  for k, j in updates.items() if j.description]
     # Jobs go in as JSON batches, a few statements per source instead of one per job: on Turso each
     # statement is a network round trip.
+    # A job seen again unchanged is not written: every rewritten row is downloaded again by the daily run's
+    # local copy, which counts against Turso's monthly sync quota. So last_seen is only stamped when a row is
+    # written anyway, and when a job is first missed or closed (it was seen up to that scan).
     with conn:  # one transaction: either all of this happens or none of it
         for batch in _batches(inserts):
             conn.execute(
@@ -571,18 +574,22 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
                 (ts, ts, json.dumps(batch)),
             )
         for batch in _batches(closes):
-            conn.execute("UPDATE jobs SET lifecycle = 'closed' WHERE job_key IN (SELECT value FROM json_each(?))",
-                         (json.dumps(batch),))
+            conn.execute("""UPDATE jobs SET lifecycle = 'closed', last_seen = ?
+                            WHERE job_key IN (SELECT value FROM json_each(?))""",
+                         (ts, json.dumps(batch)))
         for batch in _batches(seen_only):
             conn.execute(
                 """UPDATE jobs SET last_seen = ?, missed_scans = 0, lifecycle = 'open',
                        title = COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title),
                        list_kind = CASE WHEN COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title) IS title
                                         THEN list_kind END  -- a new title: work out its list again
-                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')""",
+                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')
+                     AND (missed_scans != 0 OR lifecycle != 'open'
+                          OR COALESCE(NULLIF(json_extract(u.value, '$[1]'), ''), title) IS NOT title)""",
                 (ts, json.dumps(batch)),
             )
         for batch in _batches(refreshed):
+            # updated_at alone doesn't count as a change: some boards bump it on every job daily.
             conn.execute(
                 """UPDATE jobs SET last_seen = ?, missed_scans = 0, lifecycle = 'open',
                        list_kind = CASE WHEN json_extract(u.value, '$[2]') IS title
@@ -597,24 +604,35 @@ def save_source_result(conn, run_id: str, source: Source, started: str, jobs: li
                        india_eligible = json_extract(u.value, '$[7]'),
                        experience_min = json_extract(u.value, '$[8]'),
                        experience_max = json_extract(u.value, '$[9]'), salary = json_extract(u.value, '$[10]')
-                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')""",
+                   FROM json_each(?) AS u WHERE jobs.job_key = json_extract(u.value, '$[0]')
+                     AND (missed_scans != 0 OR lifecycle != 'open'
+                          OR json_extract(u.value, '$[2]') IS NOT title
+                          OR json_extract(u.value, '$[3]') IS NOT description
+                          OR json_extract(u.value, '$[4]') IS NOT location_raw
+                          OR json_extract(u.value, '$[5]') IS NOT cities
+                          OR json_extract(u.value, '$[6]') IS NOT work_mode
+                          OR json_extract(u.value, '$[7]') IS NOT india_eligible
+                          OR json_extract(u.value, '$[8]') IS NOT experience_min
+                          OR json_extract(u.value, '$[9]') IS NOT experience_max
+                          OR json_extract(u.value, '$[10]') IS NOT salary)""",
                 (ts, json.dumps(batch)),
             )
         if source.aggregator:
             old = (datetime.now(timezone.utc) - timedelta(days=AGGREGATOR_CLOSE_DAYS)).isoformat()
             conn.execute(
-                """UPDATE jobs SET lifecycle = 'closed'
+                """UPDATE jobs SET lifecycle = 'closed', last_seen = ?
                    WHERE source = ? AND lifecycle != 'closed' AND COALESCE(posted_at, first_seen) < ?""",
-                (source.name, old),
+                (ts, source.name, old),
             )
         else:
             # This source's jobs that weren't in this scan were missed once more.
             conn.execute(
                 """UPDATE jobs SET missed_scans = missed_scans + 1,
+                       last_seen = CASE WHEN missed_scans = 0 THEN ? ELSE last_seen END,
                        lifecycle = CASE WHEN missed_scans + 1 >= ? THEN 'closed' ELSE 'possibly_closed' END
                    WHERE source = ? AND lifecycle != 'closed'
                      AND job_key NOT IN (SELECT value FROM json_each(?))""",
-                (CLOSE_AFTER_MISSES, source.name, json.dumps(seen)),
+                (ts, CLOSE_AFTER_MISSES, source.name, json.dumps(seen)),
             )
         conn.execute(
             """INSERT OR REPLACE INTO source_runs (run_id, source, result, started, finished, jobs_found, jobs_new)

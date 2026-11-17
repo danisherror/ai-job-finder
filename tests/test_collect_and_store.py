@@ -67,6 +67,20 @@ def test_second_run_adds_no_duplicates(conn):
     assert conn.execute("SELECT COUNT(*) FROM jobs").fetchone()[0] == 4
 
 
+def test_unchanged_jobs_are_not_rewritten(conn):
+    # Every rewritten row is downloaded again by the daily run's copy of the Turso database.
+    run_once(conn, GH, gh_jobs())
+    with conn:
+        conn.execute("UPDATE jobs SET last_seen = 'old'")
+    jobs = gh_jobs()
+    for j in jobs:
+        j.updated_at = datetime.now(timezone.utc)  # some boards bump this daily; not a real change
+    jobs[0].title = "Renamed Engineer"
+    run_once(conn, GH, jobs)
+    rewritten = conn.execute("SELECT title FROM jobs WHERE last_seen != 'old'").fetchall()
+    assert [r[0] for r in rewritten] == ["Renamed Engineer"]
+
+
 def test_job_key_uses_ats_id():
     job = gh_jobs()[0]
     assert store.job_key("greenhouse", "hackerrank", job) == f"greenhouse:hackerrank:{job.ats_id}"
